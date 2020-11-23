@@ -5,7 +5,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
 
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/ZLImageEditor.png)
+<img src="https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/ZLImageEditor.png" width = "277" height = "600" div align=center/>
 
 ---------------
 
@@ -95,4 +95,4 @@ $ carthage update ZLImageEditor
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="DemoEffect"></a> Demo Effect
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/editImage.gif)
+<div align=center>![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/editImage.gif)
