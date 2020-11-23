@@ -20,12 +20,12 @@ ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping,
 * [Demo Effect](#DemoEffect)
 
 ### <a id="Features"></a>Features
-[x] Draw (Support customize the line color).
-[x] Crop (Support customize crop ratios).
-[x] Image sticker (Support customize image sticker containe view).
-[x] Text sticker.
-[x] Mosaic.
-[x] Filter (Support customize filters).
+- [x] Draw (Support customize the line color).
+- [x] Crop (Support customize crop ratios).
+- [x] Image sticker (Support customize image sticker containe view).
+- [x] Text sticker.
+- [x] Mosaic.
+- [x] Filter (Support customize filters).
 
 ### <a id="Requirements"></a>Requirements
  * iOS 9.0
