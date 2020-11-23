@@ -95,4 +95,4 @@ $ carthage update ZLImageEditor
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="DemoEffect"></a> Demo Effect
-<div align=center>![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/editImage.gif)
+![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/editImage.gif)
