@@ -11,6 +11,8 @@
 
 ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping, mosaic, text stickers, picture stickers, filters.
 
+ZLImageEditor is a part of [ZLPhotoBrowser](https://github.com/longitachi/ZLPhotoBrowser).
+
 ### Directory
 * [Features](#Features)
 * [Requirements](#Requirements)
@@ -20,12 +22,12 @@ ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping,
 * [Demo Effect](#DemoEffect)
 
 ### <a id="Features"></a>Features
-- [x] Draw (Support customize the line color).
-- [x] Crop (Support customize crop ratios).
-- [x] Image sticker (Support customize image sticker containe view).
-- [x] Text sticker.
+- [x] Draw (Support custom line color).
+- [x] Crop (Support custom crop ratios).
+- [x] Image sticker (Support custom image sticker containe view).
+- [x] Text sticker  (Support custom text color).
 - [x] Mosaic.
-- [x] Filter (Support customize filters).
+- [x] Filter (Support custom filters).
 
 ### <a id="Requirements"></a>Requirements
  * iOS 9.0
@@ -37,8 +39,7 @@ ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping,
 ZLImageEditorConfiguration.default().editImageTools = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
 
 ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
-    self?.resultImageView.image = resImage
-    self?.resultImageEditModel = editModel
+    // your code
 }
 ```
 
@@ -58,7 +59,7 @@ To integrate ZLImageEditor into your Xcode project using CocoaPods, specify it t
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target 'MyApp' do

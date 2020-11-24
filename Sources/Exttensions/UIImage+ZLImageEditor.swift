@@ -28,7 +28,6 @@ import UIKit
 
 extension UIImage {
 
-    // 旋转方向
     func rotate(orientation: UIImage.Orientation) -> UIImage {
         guard let imagRef = self.cgImage else {
             return self
@@ -122,7 +121,6 @@ extension UIImage {
         return newImage ?? self
     }
     
-    // 加马赛克
     func mosaicImage() -> UIImage? {
         guard let currCgImage = self.cgImage else {
             return nil

@@ -36,6 +36,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setupUI()
+    }
+    
+    func setupUI() {
         self.title = "Main"
         self.view.backgroundColor = .white
         
@@ -53,8 +58,8 @@ class ViewController: UIViewController {
         self.view.addSubview(self.editImageToolView)
         self.editImageToolView.snp.makeConstraints { (make) in
             make.top.equalTo(self.view.snp.topMargin).offset(5)
-            make.left.equalTo(self.view).offset(30)
-            make.right.equalTo(self.view)
+            make.left.equalTo(self.view).offset(20)
+            make.right.equalTo(self.view).offset(-20)
         }
         
         let drawToolLabel = createLabel("Draw")
@@ -73,11 +78,11 @@ class ViewController: UIViewController {
             make.centerY.equalTo(drawToolLabel)
         }
         
-        let clipToolLabel = createLabel("Crop")
-        self.editImageToolView.addSubview(clipToolLabel)
-        clipToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(drawToolLabel.snp.bottom).offset(spacing)
-            make.left.equalTo(self.editImageToolView)
+        let cropToolLabel = createLabel("Crop")
+        self.editImageToolView.addSubview(cropToolLabel)
+        cropToolLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(drawToolLabel)
+            make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
         self.editImageClipToolSwitch = UISwitch()
@@ -85,14 +90,14 @@ class ViewController: UIViewController {
         self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageClipToolSwitch)
         self.editImageClipToolSwitch.snp.makeConstraints { (make) in
-            make.left.equalTo(clipToolLabel.snp.right).offset(spacing)
-            make.centerY.equalTo(clipToolLabel)
+            make.left.equalTo(cropToolLabel.snp.right).offset(spacing)
+            make.centerY.equalTo(cropToolLabel)
         }
         
         let imageStickerToolLabel = createLabel("Image sticker")
         self.editImageToolView.addSubview(imageStickerToolLabel)
         imageStickerToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(clipToolLabel.snp.bottom).offset(spacing)
+            make.top.equalTo(drawToolLabel.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
@@ -108,8 +113,8 @@ class ViewController: UIViewController {
         let textStickerToolLabel = createLabel("Text sticker")
         self.editImageToolView.addSubview(textStickerToolLabel)
         textStickerToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(imageStickerToolLabel.snp.bottom).offset(spacing)
-            make.left.equalTo(self.editImageToolView)
+            make.centerY.equalTo(imageStickerToolLabel)
+            make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
         self.editImageTextStickerToolSwitch = UISwitch()
@@ -124,7 +129,7 @@ class ViewController: UIViewController {
         let mosaicToolLabel = createLabel("Mosaic")
         self.editImageToolView.addSubview(mosaicToolLabel)
         mosaicToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(textStickerToolLabel.snp.bottom).offset(spacing)
+            make.top.equalTo(imageStickerToolLabel.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
@@ -140,8 +145,8 @@ class ViewController: UIViewController {
         let filterToolLabel = createLabel("Filter")
         self.editImageToolView.addSubview(filterToolLabel)
         filterToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(mosaicToolLabel.snp.bottom).offset(spacing)
-            make.left.equalTo(self.editImageToolView)
+            make.centerY.equalTo(mosaicToolLabel)
+            make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
         self.editImageFilterToolSwitch = UISwitch()
@@ -249,7 +254,11 @@ class ViewController: UIViewController {
     }
     
     func editImage(_ image: UIImage, editModel: ZLEditImageModel?) {
+        // Provide a image sticker container view
         ZLImageEditorConfiguration.default().imageStickerContainerView = ImageStickerContainerView()
+        // Custom filter
+//        ZLImageEditorConfiguration.default().filters = [.normal, .apply1977, ZLFilter(name: "Custom", applier: CustomFilter.hazeRemovalFilter)]
+        
         ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
             self?.resultImageView.image = resImage
             self?.resultImageEditModel = editModel

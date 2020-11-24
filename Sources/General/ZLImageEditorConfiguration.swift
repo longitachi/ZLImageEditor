@@ -129,7 +129,7 @@ public class ZLImageEditorConfiguration: NSObject {
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
-    @objc public var showClipDirectlyIfOnlyHasClipTool = true
+    @objc public var showClipDirectlyIfOnlyHasClipTool = false
     
     /// The background color of edit done button.
     @objc public var editDoneBtnBgColor: UIColor = zlRGB(80, 169, 56)

@@ -51,13 +51,13 @@ class ZLClipImageViewController: UIViewController {
     
     var animateDismiss = true
     
-    /// 用作进入裁剪界面首次动画frame
+    /// Animation starting frame when first enter
     var presentAnimateFrame: CGRect?
     
-    /// 用作进入裁剪界面首次动画和取消裁剪时动画的image
+    /// Animation image
     var presentAnimateImage: UIImage?
     
-    /// 取消裁剪时动画frame
+    /// Animation starting frame when cancel clip
     var cancelClipAnimateFrame: CGRect = .zero
     
     var viewDidAppearCount = 0
@@ -68,7 +68,6 @@ class ZLClipImageViewController: UIViewController {
     
     var editImage: UIImage
     
-    /// 初次进入界面时候，裁剪范围
     var editRect: CGRect
     
     var scrollView: UIScrollView!
@@ -136,7 +135,7 @@ class ZLClipImageViewController: UIViewController {
     
     var dismissAnimateImage: UIImage? = nil
     
-    /// 传回旋转角度，图片编辑区域的rect
+    // Angle, edit rect, clip ratio
     var clipDoneBlock: ( (CGFloat, CGRect, ZLImageClipRatio) -> Void )?
     
     var cancelClipBlock: ( () -> Void )?

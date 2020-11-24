@@ -70,10 +70,9 @@ public class ZLEditImageViewController: UIViewController {
     
     var originalImage: UIImage
     
-    // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
+    // The frame after first layout, used in dismiss animation.
     var originalFrame: CGRect = .zero
     
-    // 图片可编辑rect
     var editRect: CGRect
     
     let tools: [ZLImageEditorConfiguration.EditImageTool]
@@ -97,21 +96,18 @@ public class ZLEditImageViewController: UIViewController {
     // Show text and image stickers.
     var stickersContainer: UIView!
     
-    // 处理好的马赛克图片
     var mosaicImage: UIImage?
     
-    // 显示马赛克图片的layer
+    // Show mosaic image
     var mosaicImageLayer: CALayer?
     
-    // 显示马赛克图片的layer的mask
+    // The mask layer of mosaicImageLayer
     var mosaicImageLayerMaskLayer: CAShapeLayer?
     
-    // 上方渐变阴影层
     var topShadowView: UIView!
     
     var topShadowLayer: CAGradientLayer!
      
-    // 下方渐变阴影层
     var bottomShadowView: UIView!
     
     var bottomShadowLayer: CAGradientLayer!
@@ -144,10 +140,9 @@ public class ZLEditImageViewController: UIViewController {
     
     var mosaicLineWidth: CGFloat = 25
     
-    // collectionview 中的添加滤镜的小图
     var thumbnailFilterImages: [UIImage] = []
     
-    // 选择滤镜后对原图添加滤镜后的图片
+    // Cache the filter image of original image
     var filterImages: [String: UIImage] = [:]
     
     var currentFilter: ZLFilter
@@ -355,7 +350,7 @@ public class ZLEditImageViewController: UIViewController {
         self.drawingImageView.frame = self.imageView.frame
         self.stickersContainer.frame = self.imageView.frame
         
-        // 针对于长图的优化
+        // Optimization for long pictures.
         if (self.editRect.height / self.editRect.width) > (self.view.frame.height / self.view.frame.width * 1.1) {
             let widthScale = self.view.frame.width / w
             self.scrollView.maximumZoomScale = widthScale
@@ -507,7 +502,7 @@ public class ZLEditImageViewController: UIViewController {
         self.ashbinView.addSubview(asbinTipLabel)
         
         if self.tools.contains(.mosaic) {
-            // 之前选择过滤镜
+            // Had selected filter.
             if let applier = self.currentFilter.applier {
                 let image = applier(self.originalImage)
                 self.editImage = image
@@ -591,7 +586,7 @@ public class ZLEditImageViewController: UIViewController {
     
     func clipBtnClick() {
         let currentEditImage = self.buildImage()
-        // 这里要传store_editRect，因为第一次进入编辑界面时候需要编辑界面根据这个判断是不是第一次进入
+        
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
@@ -714,7 +709,7 @@ public class ZLEditImageViewController: UIViewController {
                 let originalRatio = min(self.scrollView.frame.width / self.originalImage.size.width, self.scrollView.frame.height / self.originalImage.size.height)
                 let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
                 let scale = ratio / originalRatio
-                // 缩放到最初的size
+                // Zoom to original size
                 var size = self.drawingImageView.frame.size
                 size.width /= scale
                 size.height /= scale
@@ -876,7 +871,7 @@ public class ZLEditImageViewController: UIViewController {
         let originalRatio = min(self.scrollView.frame.width / self.originalImage.size.width, self.scrollView.frame.height / self.originalImage.size.height)
         let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
         let scale = ratio / originalRatio
-        // 缩放到最初的size
+        // Zoom to original size
         var size = self.drawingImageView.frame.size
         size.width /= scale
         size.height /= scale
@@ -892,7 +887,7 @@ public class ZLEditImageViewController: UIViewController {
         
         UIGraphicsBeginImageContextWithOptions(size, false, self.editImage.scale)
         let context = UIGraphicsGetCurrentContext()
-        // 去掉锯齿
+        
         context?.setAllowsAntialiasing(true)
         context?.setShouldAntialias(true)
         for path in self.drawPaths {
@@ -1379,7 +1374,7 @@ class ZLFilterImageCell: UICollectionViewCell {
 }
 
 
-// MARK: 涂鸦path
+// MARK: Draw path
 
 public class ZLDrawPath: NSObject {
     
@@ -1425,7 +1420,7 @@ public class ZLDrawPath: NSObject {
 }
 
 
-// MARK: 马赛克path
+// MARK: Mosaic path
 
 public class ZLMosaicPath: NSObject {
     
@@ -1437,11 +1432,6 @@ public class ZLMosaicPath: NSObject {
     
     var linePoints: [CGPoint] = []
     
-    /// 初始化 mosaic path
-    /// - Parameters:
-    ///   - pathWidth: 线宽
-    ///   - startPoint: path 起始点
-    ///   - actualStartPoint: startPoint 相对于图片的真实起始点
     init(pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.path = UIBezierPath()
         self.path.lineWidth = pathWidth

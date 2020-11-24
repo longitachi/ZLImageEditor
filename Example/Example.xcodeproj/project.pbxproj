@@ -52,6 +52,7 @@
 		E402098F256BAC560077F5DC /* ZLImageEditor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E402098E256BAC560077F5DC /* ZLImageEditor.framework */; };
 		E4020990256BAC560077F5DC /* ZLImageEditor.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E402098E256BAC560077F5DC /* ZLImageEditor.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4020999256BB2480077F5DC /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */; };
+		E4CAF827256CACE800C7B04E /* CustomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CAF826256CACE800C7B04E /* CustomFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -116,6 +117,7 @@
 		E4020964256BAA420077F5DC /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
 		E402098E256BAC560077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
+		E4CAF826256CACE800C7B04E /* CustomFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				E4020927256BA9D70077F5DC /* AppDelegate.swift */,
 				E402092B256BA9D70077F5DC /* ViewController.swift */,
 				E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */,
+				E4CAF826256CACE800C7B04E /* CustomFilter.swift */,
 				E402092D256BA9D70077F5DC /* Main.storyboard */,
 				E4020930256BA9D90077F5DC /* Assets.xcassets */,
 				E4020932256BA9D90077F5DC /* LaunchScreen.storyboard */,
@@ -287,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E402097E256BAA420077F5DC /* ConstraintRelation.swift in Sources */,
+				E4CAF827256CACE800C7B04E /* CustomFilter.swift in Sources */,
 				E402097C256BAA420077F5DC /* ConstraintMakerEditable.swift in Sources */,
 				E4020989256BAA420077F5DC /* ConstraintMakerRelatable.swift in Sources */,
 				E4020968256BAA420077F5DC /* ConstraintMakerPriortizable.swift in Sources */,
@@ -480,7 +484,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example1;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -500,7 +504,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example1;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
