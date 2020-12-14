@@ -3,7 +3,7 @@
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
 [![Platform](https://img.shields.io/cocoapods/p/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
-![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
+![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/ZLImageEditor.png" width = "277" height = "600" div align=center/>
 
@@ -11,7 +11,7 @@
 
 ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping, mosaic, text stickers, picture stickers, filters.
 
-ZLImageEditor is a part of [ZLPhotoBrowser](https://github.com/longitachi/ZLPhotoBrowser).
+ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/ZLPhotoBrowser).
 
 ### Directory
 * [Features](#Features)
@@ -24,7 +24,7 @@ ZLImageEditor is a part of [ZLPhotoBrowser](https://github.com/longitachi/ZLPhot
 ### <a id="Features"></a>Features
 - [x] Draw (Support custom line color).
 - [x] Crop (Support custom crop ratios).
-- [x] Image sticker (Support custom image sticker containe view).
+- [x] Image sticker (Support custom image sticker container view).
 - [x] Text sticker  (Support custom text color).
 - [x] Mosaic.
 - [x] Filter (Support custom filters).
