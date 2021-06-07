@@ -83,7 +83,7 @@
 				E40208DA256B9BA60077F5DC /* ZLImageEditor.h */,
 				E4020904256BA0390077F5DC /* ZLImageEditor.bundle */,
 				E4020902256BA00D0077F5DC /* General */,
-				E4020903256BA01F0077F5DC /* Exttensions */,
+				E4020903256BA01F0077F5DC /* Extensions */,
 				E40208DB256B9BA60077F5DC /* Info.plist */,
 			);
 			path = Sources;
@@ -106,7 +106,7 @@
 			path = General;
 			sourceTree = "<group>";
 		};
-		E4020903256BA01F0077F5DC /* Exttensions */ = {
+		E4020903256BA01F0077F5DC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				E4020917256BA6840077F5DC /* UIControl+ZLImageEditor.swift */,
@@ -116,7 +116,7 @@
 				E40208FA256BA0080077F5DC /* String+ZLImageEditor.swift */,
 				E40208F9256BA0070077F5DC /* UIImage+ZLImageEditor.swift */,
 			);
-			path = Exttensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

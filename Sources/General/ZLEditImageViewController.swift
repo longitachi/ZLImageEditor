@@ -668,9 +668,22 @@ public class ZLEditImageViewController: UIViewController {
             }
         }
         
-        var image = self.buildImage()
-        image = image.clipImage(self.angle, self.editRect) ?? image
-        self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers, imageStickers: imageStickers))
+        var hasEdit = true
+        if self.drawPaths.isEmpty, self.editRect.size == self.imageSize, self.angle == 0, self.mosaicPaths.isEmpty, imageStickers.isEmpty, textStickers.isEmpty, self.currentFilter.applier == nil {
+            hasEdit = false
+        }
+        
+        var resImage = self.originalImage
+        let editModel = ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers, imageStickers: imageStickers)
+        if hasEdit {
+            resImage = self.buildImage()
+            resImage = resImage.clipImage(self.angle, self.editRect) ?? resImage
+            if let resizeImage = resImage.resize_vI(CGSize(width: resImage.size.width / 2, height: resImage.size.height / 2)) {
+                resImage = resizeImage
+            }
+        }
+        self.editFinishBlock?(resImage, editModel)
+        
         self.dismiss(animated: self.animateDismiss, completion: nil)
     }
     
