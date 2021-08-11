@@ -25,6 +25,7 @@
 		E402090E256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402090D256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift */; };
 		E4020912256BA27D0077F5DC /* ZLImageEditorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4020911256BA27D0077F5DC /* ZLImageEditorConfiguration.swift */; };
 		E4020918256BA6840077F5DC /* UIControl+ZLImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4020917256BA6840077F5DC /* UIControl+ZLImageEditor.swift */; };
+		FDD5289226C3FFCA00338B06 /* ZLImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		E402090D256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLImageEditorLanguageDefine.swift; sourceTree = "<group>"; };
 		E4020911256BA27D0077F5DC /* ZLImageEditorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLImageEditorConfiguration.swift; sourceTree = "<group>"; };
 		E4020917256BA6840077F5DC /* UIControl+ZLImageEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+ZLImageEditor.swift"; sourceTree = "<group>"; };
+		FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLImageEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				E40208E6256B9F9C0077F5DC /* ZLTextStickerView.swift */,
 				E40208EA256B9F9C0077F5DC /* ZLFilter.swift */,
 				E40208F3256B9FA70077F5DC /* ZLClipImageDismissAnimatedTransition.swift */,
+				FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				E40208FD256BA0080077F5DC /* UIImage+ZLImageEditor.swift in Sources */,
 				E40208FF256BA0080077F5DC /* Bundle+ZLImageEditor.swift in Sources */,
 				E40208F0256B9F9C0077F5DC /* ZLClipImageViewController.swift in Sources */,
+				FDD5289226C3FFCA00338B06 /* ZLImageEditor.swift in Sources */,
 				E4020900256BA0080077F5DC /* Cell+ZLImageEditor.swift in Sources */,
 				E4020918256BA6840077F5DC /* UIControl+ZLImageEditor.swift in Sources */,
 				E40208EC256B9F9C0077F5DC /* ZLImageStickerView.swift in Sources */,
