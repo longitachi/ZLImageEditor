@@ -29,6 +29,62 @@ import Accelerate
 
 extension UIImage {
 
+    // 修复转向
+    func fixOrientation() -> UIImage {
+        if self.imageOrientation == .up {
+            return self
+        }
+        
+        var transform = CGAffineTransform.identity
+        
+        switch self.imageOrientation {
+        case .down, .downMirrored:
+            transform = CGAffineTransform(translationX: self.size.width, y: self.size.height)
+            transform = transform.rotated(by: .pi)
+        
+        case .left, .leftMirrored:
+            transform = CGAffineTransform(translationX: self.size.width, y: 0)
+            transform = transform.rotated(by: CGFloat.pi / 2)
+            
+        case .right, .rightMirrored:
+            transform = CGAffineTransform(translationX: 0, y: self.size.height)
+            transform = transform.rotated(by: -CGFloat.pi / 2)
+            
+        default:
+            break
+        }
+        
+        switch self.imageOrientation {
+        case .upMirrored, .downMirrored:
+            transform = transform.translatedBy(x: self.size.width, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+            
+        case .leftMirrored, .rightMirrored:
+            transform = transform.translatedBy(x: self.size.height, y: 0)
+            transform = transform.scaledBy(x: -1, y: 1)
+        
+        default:
+            break
+        }
+        
+        guard let ci = self.cgImage, let colorSpace = ci.colorSpace else {
+            return self
+        }
+        let context = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: ci.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: ci.bitmapInfo.rawValue)
+        context?.concatenate(transform)
+        switch self.imageOrientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            context?.draw(ci, in: CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width))
+        default:
+            context?.draw(ci, in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        }
+        
+        guard let newCgimg = context?.makeImage() else {
+            return self
+        }
+        return UIImage(cgImage: newCgimg)
+    }
+    
     func rotate(orientation: UIImage.Orientation) -> UIImage {
         guard let imagRef = self.cgImage else {
             return self
@@ -245,6 +301,31 @@ extension UIImage {
             return nil
         }
         return UIImage(cgImage: cgImage)
+    }
+    
+    func compress(to maxSize: Int) -> UIImage {
+        if let size = self.jpegData(compressionQuality: 1)?.count, size <= maxSize {
+            return self
+        }
+        var min: CGFloat = 0
+        var max: CGFloat = 1
+        var data: Data?
+        for _ in 0..<6 {
+            let mid = (min + max) / 2
+            data = self.jpegData(compressionQuality: mid)
+            let compressSize = data?.count ?? 0
+            if compressSize > maxSize {
+                max = mid
+            } else if compressSize < maxSize {
+                min = mid
+            } else {
+                break
+            }
+        }
+        guard let d = data else {
+            return self
+        }
+        return UIImage(data: d) ?? self
     }
     
 }

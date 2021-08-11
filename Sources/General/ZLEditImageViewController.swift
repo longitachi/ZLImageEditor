@@ -203,8 +203,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc init(image: UIImage, editModel: ZLEditImageModel? = nil) {
-        self.originalImage = image
-        self.editImage = image
+        self.originalImage = image.fixOrientation()
+        self.editImage = self.originalImage
         self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         self.drawColors = ZLImageEditorConfiguration.default().editImageDrawColors
         self.currentFilter = editModel?.selectFilter ?? .normal
@@ -678,8 +678,8 @@ public class ZLEditImageViewController: UIViewController {
         if hasEdit {
             resImage = self.buildImage()
             resImage = resImage.clipImage(self.angle, self.editRect) ?? resImage
-            if let resizeImage = resImage.resize_vI(CGSize(width: resImage.size.width / 2, height: resImage.size.height / 2)) {
-                resImage = resizeImage
+            if let oriDataSize = self.originalImage.jpegData(compressionQuality: 1)?.count {
+                resImage = resImage.compress(to: oriDataSize)
             }
         }
         self.editFinishBlock?(resImage, editModel)
