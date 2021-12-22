@@ -24,6 +24,8 @@ class ViewController: UIViewController {
     
     var editImageFilterToolSwitch: UISwitch!
     
+    var editImageAdjustToolSwitch: UISwitch!
+    
     var pickImageBtn: UIButton!
     
     var resultImageView: UIImageView!
@@ -70,7 +72,7 @@ class ViewController: UIViewController {
         }
         
         self.editImageDrawToolSwitch = UISwitch()
-        self.editImageDrawToolSwitch.isOn = config.editImageTools.contains(.draw)
+        self.editImageDrawToolSwitch.isOn = config.tools.contains(.draw)
         self.editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageDrawToolSwitch)
         self.editImageDrawToolSwitch.snp.makeConstraints { (make) in
@@ -86,7 +88,7 @@ class ViewController: UIViewController {
         }
         
         self.editImageClipToolSwitch = UISwitch()
-        self.editImageClipToolSwitch.isOn = config.editImageTools.contains(.clip)
+        self.editImageClipToolSwitch.isOn = config.tools.contains(.clip)
         self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageClipToolSwitch)
         self.editImageClipToolSwitch.snp.makeConstraints { (make) in
@@ -102,7 +104,7 @@ class ViewController: UIViewController {
         }
         
         self.editImageImageStickerToolSwitch = UISwitch()
-        self.editImageImageStickerToolSwitch.isOn = config.editImageTools.contains(.imageSticker)
+        self.editImageImageStickerToolSwitch.isOn = config.tools.contains(.imageSticker)
         self.editImageImageStickerToolSwitch.addTarget(self, action: #selector(imageStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageImageStickerToolSwitch)
         self.editImageImageStickerToolSwitch.snp.makeConstraints { (make) in
@@ -118,7 +120,7 @@ class ViewController: UIViewController {
         }
         
         self.editImageTextStickerToolSwitch = UISwitch()
-        self.editImageTextStickerToolSwitch.isOn = config.editImageTools.contains(.textSticker)
+        self.editImageTextStickerToolSwitch.isOn = config.tools.contains(.textSticker)
         self.editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageTextStickerToolSwitch)
         self.editImageTextStickerToolSwitch.snp.makeConstraints { (make) in
@@ -134,7 +136,7 @@ class ViewController: UIViewController {
         }
         
         self.editImageMosaicToolSwitch = UISwitch()
-        self.editImageMosaicToolSwitch.isOn = config.editImageTools.contains(.mosaic)
+        self.editImageMosaicToolSwitch.isOn = config.tools.contains(.mosaic)
         self.editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageMosaicToolSwitch)
         self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
@@ -150,12 +152,28 @@ class ViewController: UIViewController {
         }
         
         self.editImageFilterToolSwitch = UISwitch()
-        self.editImageFilterToolSwitch.isOn = config.editImageTools.contains(.filter)
+        self.editImageFilterToolSwitch.isOn = config.tools.contains(.filter)
         self.editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageFilterToolSwitch)
         self.editImageFilterToolSwitch.snp.makeConstraints { (make) in
             make.left.equalTo(filterToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(filterToolLabel)
+        }
+        
+        let adjustToolLabel = createLabel("Adjust")
+        self.editImageToolView.addSubview(adjustToolLabel)
+        adjustToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(mosaicToolLabel.snp.bottom).offset(spacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageAdjustToolSwitch = UISwitch()
+        self.editImageAdjustToolSwitch.isOn = config.tools.contains(.adjust)
+        self.editImageAdjustToolSwitch.addTarget(self, action: #selector(adjustToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageAdjustToolSwitch)
+        self.editImageAdjustToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(adjustToolLabel.snp.right).offset(spacing)
+            make.centerY.equalTo(adjustToolLabel)
             make.bottom.equalTo(self.editImageToolView)
         }
         
@@ -199,50 +217,58 @@ class ViewController: UIViewController {
     }
     
     @objc func drawToolChanged() {
-        if config.editImageTools.contains(.draw) {
-            config.editImageTools.removeAll { $0 == .draw }
+        if config.tools.contains(.draw) {
+            config.tools.removeAll { $0 == .draw }
         } else {
-            config.editImageTools.append(.draw)
+            config.tools.append(.draw)
         }
     }
     
     @objc func clipToolChanged() {
-        if config.editImageTools.contains(.clip) {
-            config.editImageTools.removeAll { $0 == .clip }
+        if config.tools.contains(.clip) {
+            config.tools.removeAll { $0 == .clip }
         } else {
-            config.editImageTools.append(.clip)
+            config.tools.append(.clip)
         }
     }
     
     @objc func imageStickerToolChanged() {
-        if config.editImageTools.contains(.imageSticker) {
-            config.editImageTools.removeAll { $0 == .imageSticker }
+        if config.tools.contains(.imageSticker) {
+            config.tools.removeAll { $0 == .imageSticker }
         } else {
-            config.editImageTools.append(.imageSticker)
+            config.tools.append(.imageSticker)
         }
     }
     
     @objc func textStickerToolChanged() {
-        if config.editImageTools.contains(.textSticker) {
-            config.editImageTools.removeAll { $0 == .textSticker }
+        if config.tools.contains(.textSticker) {
+            config.tools.removeAll { $0 == .textSticker }
         } else {
-            config.editImageTools.append(.textSticker)
+            config.tools.append(.textSticker)
         }
     }
     
     @objc func mosaicToolChanged() {
-        if config.editImageTools.contains(.mosaic) {
-            config.editImageTools.removeAll { $0 == .mosaic }
+        if config.tools.contains(.mosaic) {
+            config.tools.removeAll { $0 == .mosaic }
         } else {
-            config.editImageTools.append(.mosaic)
+            config.tools.append(.mosaic)
         }
     }
     
     @objc func filterToolChanged() {
-        if config.editImageTools.contains(.filter) {
-            config.editImageTools.removeAll { $0 == .filter }
+        if config.tools.contains(.filter) {
+            config.tools.removeAll { $0 == .filter }
         } else {
-            config.editImageTools.append(.filter)
+            config.tools.append(.filter)
+        }
+    }
+    
+    @objc func adjustToolChanged() {
+        if config.tools.contains(.adjust) {
+            config.tools.removeAll { $0 == .adjust }
+        } else {
+            config.tools.append(.adjust)
         }
     }
     
@@ -254,10 +280,11 @@ class ViewController: UIViewController {
     }
     
     func editImage(_ image: UIImage, editModel: ZLEditImageModel?) {
-        // Provide a image sticker container view
-        ZLImageEditorConfiguration.default().imageStickerContainerView = ImageStickerContainerView()
-        // Custom filter
-//        ZLImageEditorConfiguration.default().filters = [.normal, .apply1977, ZLFilter(name: "Custom", applier: CustomFilter.hazeRemovalFilter)]
+        ZLImageEditorConfiguration.default()
+            // Provide a image sticker container view
+            .imageStickerContainerView(ImageStickerContainerView())
+            // Custom filter
+//            .filters = [.normal]
         
         ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
             self?.resultImageView.image = resImage

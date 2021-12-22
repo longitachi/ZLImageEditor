@@ -43,68 +43,68 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    private var pri_editImageTools: [ZLImageEditorConfiguration.EditImageTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
+    private var pri_tools: [ZLImageEditorConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
     /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is not available in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
-    public var editImageTools: [ZLImageEditorConfiguration.EditImageTool] {
-        set {
-            pri_editImageTools = newValue
-        }
+    public var tools: [ZLImageEditorConfiguration.EditTool] {
         get {
-            if pri_editImageTools.isEmpty {
-                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
+            if pri_tools.isEmpty {
+                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
             } else {
-                return pri_editImageTools
+                return pri_tools
             }
+        }
+        set {
+            pri_tools = newValue
         }
     }
     
-    private var pri_editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    private var pri_drawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
     /// Draw colors for image editor.
-    @objc public var editImageDrawColors: [UIColor] {
-        set {
-            pri_editImageDrawColors = newValue
-        }
+    @objc public var drawColors: [UIColor] {
         get {
-            if pri_editImageDrawColors.isEmpty {
+            if pri_drawColors.isEmpty {
                 return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
             } else {
-                return pri_editImageDrawColors
+                return pri_drawColors
             }
+        }
+        set {
+            pri_drawColors = newValue
         }
     }
     
     /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
-    @objc public var editImageDefaultDrawColor = zlRGB(241, 79, 79)
+    @objc public var defaultDrawColor = zlRGB(241, 79, 79)
     
-    private var pri_editImageClipRatios: [ZLImageClipRatio] = [.custom]
+    private var pri_clipRatios: [ZLImageClipRatio] = [.custom]
     /// Edit ratios for image editor.
-    @objc public var editImageClipRatios: [ZLImageClipRatio] {
-        set {
-            pri_editImageClipRatios = newValue
-        }
+    @objc public var clipRatios: [ZLImageClipRatio] {
         get {
-            if pri_editImageClipRatios.isEmpty {
+            if pri_clipRatios.isEmpty {
                 return [.custom]
             } else {
-                return pri_editImageClipRatios
+                return pri_clipRatios
             }
+        }
+        set {
+            pri_clipRatios = newValue
         }
     }
     
     private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
     /// Text sticker colors for image editor.
     @objc public var textStickerTextColors: [UIColor] {
-        set {
-            pri_textStickerTextColors = newValue
-        }
         get {
             if pri_textStickerTextColors.isEmpty {
                 return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
             } else {
                 return pri_textStickerTextColors
             }
+        }
+        set {
+            pri_textStickerTextColors = newValue
         }
     }
     
@@ -114,9 +114,6 @@ public class ZLImageEditorConfiguration: NSObject {
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.
     @objc public var filters: [ZLFilter] {
-        set {
-            pri_filters = newValue
-        }
         get {
             if pri_filters.isEmpty {
                 return ZLFilter.all
@@ -124,35 +121,174 @@ public class ZLImageEditorConfiguration: NSObject {
                 return pri_filters
             }
         }
+        set {
+            pri_filters = newValue
+        }
     }
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
+    private var pri_adjustTools: [ZLImageEditorConfiguration.AdjustTool] = [.brightness, .contrast, .saturation]
+    /// Adjust image tools. (Default order is brightness, contrast, saturation)
+    /// Valid when the tools contain EditTool.adjust
+    /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
+    public var adjustTools: [ZLImageEditorConfiguration.AdjustTool] {
+        get {
+            if pri_adjustTools.isEmpty {
+                return [.brightness, .contrast, .saturation]
+            } else {
+                return pri_adjustTools
+            }
+        }
+        set {
+            pri_adjustTools = newValue
+        }
+    }
+    
+    private var pri_impactFeedbackWhenAdjustSliderValueIsZero = true
+    /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
+    @available(iOS 10.0, *)
+    @objc public var impactFeedbackWhenAdjustSliderValueIsZero: Bool {
+        get {
+            return pri_impactFeedbackWhenAdjustSliderValueIsZero
+        }
+        set {
+            pri_impactFeedbackWhenAdjustSliderValueIsZero = newValue
+        }
+    }
+    
+    private var pri_impactFeedbackStyle: ZLImageEditorConfiguration.FeedbackStyle = .medium
+    /// Impact feedback style. Defaults to .medium
+    @available(iOS 10.0, *)
+    @objc public var impactFeedbackStyle: ZLImageEditorConfiguration.FeedbackStyle {
+        get {
+            return pri_impactFeedbackStyle
+        }
+        set {
+            pri_impactFeedbackStyle = .medium
+        }
+    }
+    
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected", "zl_btn_unselected"].
+    @objc public var customImageNames: [String] = [] {
+        didSet {
+            ZLCustomImageDeploy.imageNames = customImageNames
+        }
+    }
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
+    public var customImageForKey: [String: UIImage?] = [:] {
+        didSet {
+            customImageForKey.forEach { ZLCustomImageDeploy.imageForKey[$0.key] = $0.value }
+        }
+    }
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
+    @objc public var customImageForKey_objc: [String: UIImage] = [:] {
+        didSet {
+            ZLCustomImageDeploy.imageForKey = customImageForKey_objc
+        }
+    }
+    
+    /// The normal color of adjust slider.
+    @objc public var adjustSliderNormalColor = UIColor.white
+    
+    /// The tint color of adjust slider.
+    @objc public var adjustSliderTintColor = zlRGB(80, 169, 56)
     
     /// The background color of edit done button.
     @objc public var editDoneBtnBgColor: UIColor = zlRGB(80, 169, 56)
     
 }
 
-
 extension ZLImageEditorConfiguration {
     
-    @objc public enum EditImageTool: Int {
+    @objc public enum EditTool: Int {
         case draw
         case clip
         case imageSticker
         case textSticker
         case mosaic
         case filter
+        case adjust
+    }
+    
+    @objc public enum AdjustTool: Int {
+        case brightness
+        case contrast
+        case saturation
+        
+        var key: String {
+            switch self {
+            case .brightness:
+                return kCIInputBrightnessKey
+            case .contrast:
+                return kCIInputContrastKey
+            case .saturation:
+                return kCIInputSaturationKey
+            }
+        }
+        
+        func filterValue(_ value: Float) -> Float {
+            switch self {
+            case .brightness:
+                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
+                return value / 3
+            case .contrast:
+                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
+                let v: Float
+                if value < 0 {
+                    v = 1 + value * (1 / 2)
+                } else {
+                    v = 1 + value * (3 / 2)
+                }
+                return v
+            case .saturation:
+                // 饱和度范围0---2，默认1
+                return value + 1
+            }
+        }
+    }
+    
+    @objc public enum FeedbackStyle: Int {
+        case light
+        case medium
+        case heavy
+        
+        @available(iOS 10.0, *)
+        var uiFeedback: UIImpactFeedbackGenerator.FeedbackStyle {
+            switch self {
+            case .light:
+                return .light
+            case .medium:
+                return .medium
+            case .heavy:
+                return .heavy
+            }
+        }
     }
     
 }
 
+// MARK: Image source deploy
+struct ZLCustomImageDeploy {
+    
+    static var imageNames: [String] = []
+    
+    static var imageForKey: [String: UIImage] = [:]
+    
+}
 
 // MARK: Clip ratio.
-
 public class ZLImageClipRatio: NSObject {
     
     let title: String
@@ -166,11 +302,13 @@ public class ZLImageClipRatio: NSObject {
     
 }
 
-
-func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
-    return lhs.whRatio == rhs.whRatio
+extension ZLImageClipRatio {
+ 
+    static func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
+        return lhs.whRatio == rhs.whRatio
+    }
+    
 }
-
 
 extension ZLImageClipRatio {
     
@@ -191,7 +329,6 @@ extension ZLImageClipRatio {
     @objc public static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0/9.0)
     
 }
-
 
 @objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
     

@@ -2,4 +2,7 @@
 "done" = "確定";
 "editFinish" = "完成";
 "revert" = "還原";
+"brightness" = "亮度";
+"contrast" = "對比度";
+"saturation" = "飽和度";
 "textStickerRemoveTips" = "拖到此處刪除";

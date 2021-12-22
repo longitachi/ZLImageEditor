@@ -2,4 +2,7 @@
 "done" = "Готово";
 "editFinish" = "Готово";
 "revert" = "Отменить";
+"brightness" = "Яркость";
+"contrast" = "Контраст";
+"saturation" = "Насыщенность";
 "textStickerRemoveTips" = "Перетащите сюда, чтобы удалить";

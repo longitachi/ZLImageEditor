@@ -2,4 +2,7 @@
 "done" = "Erledigt";
 "editFinish" = "Fertig";
 "revert" = "Rückgängig";
+"brightness" = "Helligkeit";
+"contrast" = "Kontrast";
+"saturation" = "Sättigung";
 "textStickerRemoveTips" = "Zum Entfernen hierher ziehen";

@@ -1,6 +1,14 @@
 # Change Log
 
 -----
+## [1.0.4](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.4) (2021-12-22)
+### Add:
+* Support adjusting the brightness and contrast and saturation of an image.
+* Support Indonesian.
+* Support chained calls.
+* Support customize images.
+
+-----
 ## [1.0.3](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.3) (2021-08-11)
 ### Add:
 * Fix image orientation before image.

@@ -4,8 +4,6 @@
 //
 //  Created by long on 2020/11/23.
 //
-//  Created by long on 2020/8/17.
-//
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,6 +41,12 @@ func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
 }
 
 func getImage(_ named: String) -> UIImage? {
+    if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
+        return image
+    }
+    if let image = ZLCustomImageDeploy.imageForKey[named] {
+        return image
+    }
     return UIImage(named: named, in: Bundle.zlImageEditorBundle, compatibleWith: nil)
 }
 

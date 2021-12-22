@@ -9,7 +9,7 @@
 
 ---------------
 
-ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping, mosaic, text stickers, picture stickers, filters.
+ZLImageEditor is a powerful image editor framework. Supports graffiti, cropping, mosaic, text stickers, picture stickers, filters, adjust(brightness, contrast, saturation).
 
 ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/ZLPhotoBrowser).
 
@@ -17,6 +17,7 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 * [Features](#Features)
 * [Requirements](#Requirements)
 * [Usage](#Usage)
+* [Change Log](#ChangeLog)
 * [Languages](#Languages)
 * [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
 * [Demo Effect](#DemoEffect)
@@ -28,6 +29,7 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 - [x] Text sticker  (Support custom text color).
 - [x] Mosaic.
 - [x] Filter (Support custom filters).
+- [x] Adjust (Brightness, Contrast, Saturation).
 
 ### <a id="Requirements"></a>Requirements
  * iOS 9.0
@@ -36,15 +38,29 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 
 ### <a id="Usage"></a>Usage
 ```swift
-ZLImageEditorConfiguration.default().editImageTools = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
+ZLImageEditorConfiguration.default()
+    .editImageTools([.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust])
+    .adjustTools([.brightness, .contrast, .saturation])
 
 ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
     // your code
 }
 ```
 
+### <a id="ChangeLog"></a>Change Log
+> [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
+```
+● 1.0.4
+  Add:
+    Support adjusting the brightness and contrast and saturation of an image.
+    Support Indonesian.
+    Support chained calls.
+    Support customize images.
+...
+```
+
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLImageEditor in your project:

@@ -2,4 +2,7 @@
 "done" = "끝난";
 "editFinish" = "완료";
 "revert" = "실행 취소";
+"brightness" = "밝기";
+"contrast" = "대비";
+"saturation" = "채도";
 "textStickerRemoveTips" = "제거하려면 여기로 드래그하세요";
