@@ -1,7 +1,7 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
+[![Version](https://img.shields.io/cocoapods/v/ZLImageEditor.svg?style=flat)](https://cocoapods.org/pods/ZLImageEditor)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
+[![License](https://img.shields.io/cocoapods/l/ZLImageEditor.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLImageEditor/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/ZLImageEditor.svg?style=flat)](http://cocoadocs.org/docsets/ZLImageEditor)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 

@@ -813,8 +813,10 @@ public class ZLEditImageViewController: UIViewController {
         if hasEdit {
             resImage = buildImage()
             resImage = resImage.clipImage(angle, editRect) ?? resImage
-            if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
-                resImage = resImage.compress(to: oriDataSize)
+            if let oriDataSize = originalImage.pngData()?.count,
+               let resDataSize = resImage.pngData()?.count,
+               resDataSize > oriDataSize {
+                resImage = resImage.resize_vI(resImage.size, bitsPerComponent: 4, bitsPerPixel: 16) ?? resImage
             }
         }
         

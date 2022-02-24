@@ -210,10 +210,11 @@ extension UIImage {
     }
     
     /// Processing speed is better than resize(:) method
-    func resize_vI(_ size: CGSize) -> UIImage? {
+    /// bitsPerPixel = bitsPerComponent * 4
+    func resize_vI(_ size: CGSize, bitsPerComponent: UInt32 = 8, bitsPerPixel: UInt32 = 32) -> UIImage? {
         guard  let cgImage = self.cgImage else { return nil }
         
-        var format = vImage_CGImageFormat(bitsPerComponent: 8, bitsPerPixel: 32, colorSpace: nil,
+        var format = vImage_CGImageFormat(bitsPerComponent: bitsPerComponent, bitsPerPixel: bitsPerPixel, colorSpace: nil,
                                           bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
                                           version: 0, decode: nil, renderingIntent: .defaultIntent)
         
@@ -303,6 +304,9 @@ extension UIImage {
         return UIImage(cgImage: cgImage)
     }
     
+    
+    /// Compress an image to the max size
+    /// - Warning: If the image has a transparent background color, this method will change it as jpeg doesn't support it.
     func compress(to maxSize: Int) -> UIImage {
         if let size = self.jpegData(compressionQuality: 1)?.count, size <= maxSize {
             return self
