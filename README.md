@@ -50,6 +50,9 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.0.5
+  Fix:
+    Fix the bug of changing the background color of the image after editing.
 ● 1.0.4
   Add:
     Support adjusting the brightness and contrast and saturation of an image.
