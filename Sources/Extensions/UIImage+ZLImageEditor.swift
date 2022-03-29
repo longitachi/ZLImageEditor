@@ -212,7 +212,7 @@ extension UIImage {
     /// Processing speed is better than resize(:) method
     /// bitsPerPixel = bitsPerComponent * 4
     func resize_vI(_ size: CGSize, bitsPerComponent: UInt32 = 8, bitsPerPixel: UInt32 = 32) -> UIImage? {
-        guard  let cgImage = self.cgImage else { return nil }
+        guard let cgImage = self.cgImage else { return nil }
         
         var format = vImage_CGImageFormat(bitsPerComponent: bitsPerComponent, bitsPerPixel: bitsPerPixel, colorSpace: nil,
                                           bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),

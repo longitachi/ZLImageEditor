@@ -683,7 +683,10 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func clipBtnClick() {
-        let currentEditImage = buildImage()
+        var currentEditImage = editImage
+        autoreleasepool {
+             currentEditImage = buildImage()
+        }
         
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: editRect, angle: angle, selectRatio: selectRatio)
         let rect = scrollView.convert(containerView.frame, to: view)
@@ -811,12 +814,11 @@ public class ZLEditImageViewController: UIViewController {
         var resImage = self.originalImage
         let editModel = ZLEditImageModel(drawPaths: drawPaths, mosaicPaths: mosaicPaths, editRect: editRect, angle: angle, brightness: brightness, contrast: contrast, saturation: saturation, selectRatio: selectRatio, selectFilter: currentFilter, textStickers: textStickers, imageStickers: imageStickers)
         if hasEdit {
-            resImage = buildImage()
-            resImage = resImage.clipImage(angle, editRect) ?? resImage
-            if let oriDataSize = originalImage.pngData()?.count,
-               let resDataSize = resImage.pngData()?.count,
-               resDataSize > oriDataSize {
-                resImage = resImage.resize_vI(resImage.size, bitsPerComponent: 4, bitsPerPixel: 16) ?? resImage
+            autoreleasepool {
+                resImage = buildImage()
+                if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
+                    resImage = resImage.compress(to: oriDataSize)
+                }
             }
         }
         
@@ -980,17 +982,21 @@ public class ZLEditImageViewController: UIViewController {
         }
     }
     
-    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil, completion: @escaping ( (String, UIColor, UIColor) -> Void )) {
-        // Calculate image displayed frame on the screen.
-        var r = self.scrollView.convert(self.view.frame, to: self.containerView)
-        r.origin.x += self.scrollView.contentOffset.x / self.scrollView.zoomScale
-        r.origin.y += self.scrollView.contentOffset.y / self.scrollView.zoomScale
-        let scale = self.imageSize.width / self.imageView.frame.width
-        r.origin.x *= scale
-        r.origin.y *= scale
-        r.size.width *= scale
-        r.size.height *= scale
-        let bgImage = self.buildImage().clipImage(self.angle, self.editRect)?.clipImage(0, r)
+    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIColor, UIColor) -> Void) {
+        var bgImage: UIImage?
+        autoreleasepool {
+            // Calculate image displayed frame on the screen.
+            var r = scrollView.convert(view.frame, to: containerView)
+            r.origin.x += scrollView.contentOffset.x / scrollView.zoomScale
+            r.origin.y += scrollView.contentOffset.y / scrollView.zoomScale
+            let scale = imageSize.width / imageView.frame.width
+            r.origin.x *= scale
+            r.origin.y *= scale
+            r.size.width *= scale
+            r.size.height *= scale
+            bgImage = buildImage().clipImage(angle, editRect)?.clipImage(0, r)
+        }
+        
         let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, bgColor: bgColor)
         
         vc.endInput = { (text, textColor, bgColor) in
@@ -998,7 +1004,7 @@ public class ZLEditImageViewController: UIViewController {
         }
         
         vc.modalPresentationStyle = .fullScreen
-        self.showDetailViewController(vc, sender: nil)
+        showDetailViewController(vc, sender: nil)
     }
     
     func getStickerOriginFrame(_ size: CGSize) -> CGRect {
