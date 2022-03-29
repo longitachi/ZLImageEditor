@@ -50,6 +50,8 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.0.6
+    Revert the code for image compression.
 ● 1.0.5
   Fix:
     Fix the bug of changing the background color of the image after editing.

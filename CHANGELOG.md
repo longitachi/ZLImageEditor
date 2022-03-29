@@ -1,6 +1,12 @@
 # Change Log
 
 -----
+
+## [1.0.6](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-03-29)
+* Revert the code for image compression.
+
+-----
+
 ## [1.0.5](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-02-24)
 ### Fix:
 * Fix the bug of changing the background color of the image after editing.[#9](https://github.com/longitachi/ZLImageEditor/issues/9)
