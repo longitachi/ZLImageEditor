@@ -2,6 +2,11 @@
 
 -----
 
+## [1.0.7](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-04-26)
+* Fix the bug that crop does not work.[#14](https://github.com/longitachi/ZLImageEditor/issues/14)
+
+-----
+
 ## [1.0.6](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-03-29)
 * Revert the code for image compression.
 
