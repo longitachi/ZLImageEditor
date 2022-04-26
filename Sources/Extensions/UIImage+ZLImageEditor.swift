@@ -153,9 +153,16 @@ extension UIImage {
         return r
     }
     
-    func rotate(degress: CGFloat) -> UIImage {
-        let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        let t = CGAffineTransform(rotationAngle: degress)
+    func rotate(degree: CGFloat) -> UIImage? {
+        guard let cgImage = cgImage else {
+            return nil
+        }
+        
+        // 将角度转换为相对于 π 的值
+        let transformDegree = degree / 180 * .pi
+        
+        let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        let t = CGAffineTransform(rotationAngle: transformDegree)
         rotatedViewBox.transform = t
         let rotatedSize = rotatedViewBox.frame.size
 
@@ -164,18 +171,15 @@ extension UIImage {
 
         bitmap?.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
 
-        bitmap?.rotate(by: degress)
+        bitmap?.rotate(by: transformDegree)
 
         bitmap?.scaleBy(x: 1.0, y: -1.0)
-        guard let cgImg = self.cgImage else {
-            return self
-        }
-        bitmap?.draw(cgImg, in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+        bitmap?.draw(cgImage, in: CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height))
 
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        return newImage ?? self
+        return newImage
     }
     
     func mosaicImage() -> UIImage? {
