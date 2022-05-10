@@ -146,10 +146,9 @@ class FontChooserContainerView: UIView, ZLTextStickerContainerDelegate {
 
         self.collectionView.register(FontCell.self, forCellWithReuseIdentifier: NSStringFromClass(FontCell.classForCoder()))
 
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(hideBtnClick))
-//        tap.delegate = self
-//        tap.cancelsTouchesInView = false
-//        self.addGestureRecognizer(tap)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(hideBtnClick))
+        tap.delegate = self
+        self.addGestureRecognizer(tap)
     }
 
     @objc func hideBtnClick() {
