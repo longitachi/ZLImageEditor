@@ -127,7 +127,9 @@ public class ZLImageEditorConfiguration: NSObject {
     }
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
-    
+
+    @objc public var fontChooserContainerView: (UIView & ZLTextStickerContainerDelegate)? = nil
+
     private var pri_adjustTools: [ZLImageEditorConfiguration.AdjustTool] = [.brightness, .contrast, .saturation]
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
     /// Valid when the tools contain EditTool.adjust
@@ -338,4 +340,14 @@ extension ZLImageClipRatio {
     
     @objc func show(in view: UIView)
     
+}
+
+@objc public protocol ZLTextStickerContainerDelegate where Self: UIView {
+
+    @objc var selectFontBlock: ( (UIFont) -> Void )? { get set }
+
+    @objc var hideBlock: ( () -> Void )? { get set }
+
+    @objc func show(in view: UIView)
+
 }

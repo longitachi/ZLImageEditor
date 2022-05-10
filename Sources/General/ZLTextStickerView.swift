@@ -65,6 +65,12 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
             label.textColor = textColor
         }
     }
+
+    var textFont: UIFont? {
+        didSet {
+            label.font = textFont
+        }
+    }
     
     // TODO: add text background color
     var bgColor: UIColor {
@@ -97,7 +103,7 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
     
     // Conver all states to model.
     var state: ZLTextStickerState {
-        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, originScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+        return ZLTextStickerState(text: self.text, textColor: self.textColor, font: self.textFont, bgColor: self.bgColor, originScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
     }
     
     deinit {
@@ -105,16 +111,17 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
     }
     
     convenience init(from state: ZLTextStickerState) {
-        self.init(text: state.text, textColor: state.textColor, bgColor: state.bgColor, originScale: state.originScale, originAngle: state.originAngle, originFrame: state.originFrame, gesScale: state.gesScale, gesRotation: state.gesRotation, totalTranslationPoint: state.totalTranslationPoint, showBorder: false)
+        self.init(text: state.text, textColor: state.textColor, font: state.textFont,  bgColor: state.bgColor, originScale: state.originScale, originAngle: state.originAngle, originFrame: state.originFrame, gesScale: state.gesScale, gesRotation: state.gesRotation, totalTranslationPoint: state.totalTranslationPoint, showBorder: false)
     }
     
-    init(text: String, textColor: UIColor, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
+    init(text: String, textColor: UIColor, font: UIFont? = nil, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
         self.originScale = originScale
         self.text = text
         self.textColor = textColor
         self.bgColor = bgColor
         self.originAngle = originAngle
         self.originFrame = originFrame
+        self.textFont = font
         
         super.init(frame: .zero)
         
@@ -132,7 +139,7 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         
         self.label = UILabel()
         self.label.text = text
-        self.label.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
+        self.label.font = textFont ?? UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
         self.label.textColor = textColor
         self.label.backgroundColor = bgColor
         self.label.numberOfLines = 0
@@ -441,8 +448,9 @@ public class ZLTextStickerState: NSObject {
     let gesScale: CGFloat
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
+    let textFont: UIFont?
     
-    init(text: String, textColor: UIColor, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat, gesRotation: CGFloat, totalTranslationPoint: CGPoint) {
+    init(text: String, textColor: UIColor, font: UIFont?, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat, gesRotation: CGFloat, totalTranslationPoint: CGPoint) {
         self.text = text
         self.textColor = textColor
         self.bgColor = bgColor
@@ -452,6 +460,7 @@ public class ZLTextStickerState: NSObject {
         self.gesScale = gesScale
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
+        self.textFont = font
         super.init()
     }
     

@@ -191,6 +191,8 @@ public class ZLEditImageViewController: UIViewController {
     var shouldLayout = true
     
     var imageStickerContainerIsHidden = true
+
+    var fontChooserContainerIsHidden = true
     
     var angle: CGFloat
     
@@ -633,9 +635,24 @@ public class ZLEditImageViewController: UIViewController {
                 self?.addImageStickerView(image)
             }
         }
+
+        if self.tools.contains(.textSticker) {
+            ZLImageEditorConfiguration.default().fontChooserContainerView?.hideBlock = { [weak self] in
+                self?.setToolView(show: true)
+                self?.fontChooserContainerIsHidden = true
+            }
+
+            ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] (font) in
+                self?.showInputTextVC(font: font) { [weak self] (text, font, textColor, bgColor) in
+                    self?.addTextStickersView(text, textColor: textColor, font: font, bgColor: bgColor)
+                }
+            }
+
+        }
         
         let tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         tapGes.delegate = self
+        tapGes.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGes)
         
         self.panGes = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
@@ -727,8 +744,14 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func textStickerBtnClick() {
-        showInputTextVC { [weak self] (text, textColor, bgColor) in
-            self?.addTextStickersView(text, textColor: textColor, bgColor: bgColor)
+        if let fontChooserContainerView = ZLImageEditorConfiguration.default().fontChooserContainerView {
+            fontChooserContainerView.show(in: view)
+            setToolView(show: false)
+            fontChooserContainerIsHidden = false
+        } else {
+            showInputTextVC { [weak self] (text, font, textColor, bgColor) in
+                self?.addTextStickersView(text, textColor: textColor, bgColor: bgColor)
+            }
         }
     }
     
@@ -983,7 +1006,7 @@ public class ZLEditImageViewController: UIViewController {
         }
     }
     
-    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIColor, UIColor) -> Void) {
+    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIFont, UIColor, UIColor) -> Void) {
         var bgImage: UIImage?
         autoreleasepool {
             // Calculate image displayed frame on the screen.
@@ -998,10 +1021,10 @@ public class ZLEditImageViewController: UIViewController {
             bgImage = buildImage().clipImage(angle, editRect)?.clipImage(0, r)
         }
         
-        let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, bgColor: bgColor)
+        let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, bgColor: bgColor)
         
-        vc.endInput = { (text, textColor, bgColor) in
-            completion(text, textColor, bgColor)
+        vc.endInput = { (text, font, textColor, bgColor) in
+            completion(text, font, textColor, bgColor)
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -1036,13 +1059,13 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     /// Add text sticker
-    func addTextStickersView(_ text: String, textColor: UIColor, bgColor: UIColor) {
+    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont? = nil,  bgColor: UIColor) {
         guard !text.isEmpty else { return }
         let scale = self.scrollView.zoomScale
         let size = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
         let originFrame = self.getStickerOriginFrame(size)
         
-        let textSticker = ZLTextStickerView(text: text, textColor: textColor, bgColor: bgColor, originScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
+        let textSticker = ZLTextStickerView(text: text, textColor: textColor, font: font, bgColor: bgColor, originScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
         self.stickersContainer.addSubview(textSticker)
         textSticker.frame = originFrame
         
@@ -1491,7 +1514,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     }
     
     func sticker(_ textSticker: ZLTextStickerView, editText text: String) {
-        self.showInputTextVC(text, textColor: textSticker.textColor, bgColor: textSticker.bgColor) { [weak self] (text, textColor, bgColor) in
+        self.showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.textFont, bgColor: textSticker.bgColor) { [weak self] (text, font, textColor, bgColor) in
             guard let `self` = self else { return }
             if text.isEmpty {
                 textSticker.moveToAshbin()
@@ -1503,6 +1526,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 textSticker.text = text
                 textSticker.textColor = textColor
                 textSticker.bgColor = bgColor
+                textSticker.textFont = font
                 let newSize = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
                 textSticker.changeSize(to: newSize)
             }
