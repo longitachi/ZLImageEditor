@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		985A2DA9282B92F2007AE0C6 /* UIView+ZLImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985A2DA8282B92F2007AE0C6 /* UIView+ZLImageEditor.swift */; };
 		E40208DC256B9BA60077F5DC /* ZLImageEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = E40208DA256B9BA60077F5DC /* ZLImageEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */; };
 		E40208EC256B9F9C0077F5DC /* ZLImageStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E5256B9F9C0077F5DC /* ZLImageStickerView.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		985A2DA8282B92F2007AE0C6 /* UIView+ZLImageEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ZLImageEditor.swift"; sourceTree = "<group>"; };
 		E40208D7256B9BA60077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40208DA256B9BA60077F5DC /* ZLImageEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLImageEditor.h; sourceTree = "<group>"; };
 		E40208DB256B9BA60077F5DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				E40208FC256BA0080077F5DC /* Cell+ZLImageEditor.swift */,
 				E40208FA256BA0080077F5DC /* String+ZLImageEditor.swift */,
 				E40208F9256BA0070077F5DC /* UIImage+ZLImageEditor.swift */,
+				985A2DA8282B92F2007AE0C6 /* UIView+ZLImageEditor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				E4020912256BA27D0077F5DC /* ZLImageEditorConfiguration.swift in Sources */,
 				E40208F4256B9FA70077F5DC /* ZLClipImageDismissAnimatedTransition.swift in Sources */,
 				E40208FE256BA0080077F5DC /* String+ZLImageEditor.swift in Sources */,
+				985A2DA9282B92F2007AE0C6 /* UIView+ZLImageEditor.swift in Sources */,
 				E40208FD256BA0080077F5DC /* UIImage+ZLImageEditor.swift in Sources */,
 				FD8EFA54277206D30067ADF1 /* ZLEditToolCells.swift in Sources */,
 				E40208FF256BA0080077F5DC /* Bundle+ZLImageEditor.swift in Sources */,

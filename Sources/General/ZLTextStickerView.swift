@@ -145,7 +145,8 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         self.label.numberOfLines = 0
         self.label.lineBreakMode = .byCharWrapping
         self.borderView.addSubview(self.label)
-        
+        self.label.fillInSuperview()
+
         self.tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         self.addGestureRecognizer(self.tapGes)
         
@@ -463,5 +464,4 @@ public class ZLTextStickerState: NSObject {
         self.textFont = font
         super.init()
     }
-    
 }
