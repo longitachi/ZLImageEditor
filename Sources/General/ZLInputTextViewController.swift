@@ -33,6 +33,8 @@ class ZLInputTextViewController: UIViewController {
     let image: UIImage?
     
     var text: String
+
+    var font: UIFont?
     
     var cancelBtn: UIButton!
     
@@ -45,7 +47,7 @@ class ZLInputTextViewController: UIViewController {
     var currentTextColor: UIColor
     
     /// text, textColor, bgColor
-    var endInput: ( (String, UIColor, UIColor) -> Void )?
+    var endInput: ( (String, UIFont, UIColor, UIColor) -> Void )?
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -55,9 +57,10 @@ class ZLInputTextViewController: UIViewController {
         return true
     }
     
-    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil) {
+    init(image: UIImage?, text: String? = nil, font: UIFont? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil) {
         self.image = image
         self.text = text ?? ""
+        self.font = font
         if let _ = textColor {
             self.currentTextColor = textColor!
         } else {
@@ -142,7 +145,7 @@ class ZLInputTextViewController: UIViewController {
         self.textView.tintColor = ZLImageEditorConfiguration.default().editDoneBtnBgColor
         self.textView.textColor = self.currentTextColor
         self.textView.text = self.text
-        self.textView.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
+        self.textView.font = font?.withSize(ZLTextStickerView.fontSize) ?? UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
         view.addSubview(self.textView)
         
         let layout = UICollectionViewFlowLayout()
@@ -166,7 +169,7 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        self.endInput?(self.textView.text, self.currentTextColor, .clear)
+        self.endInput?(self.textView.text, self.textView.font ?? UIFont.systemFont(ofSize: ZLTextStickerView.fontSize), self.currentTextColor, .clear)
         self.dismiss(animated: true, completion: nil)
     }
     

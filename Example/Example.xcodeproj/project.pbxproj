@@ -7,6 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		985A2D6A282A85B5007AE0C6 /* cubano-regular-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D57282A85B4007AE0C6 /* cubano-regular-webfont.ttf */; };
+		985A2D6B282A85B5007AE0C6 /* Homestead-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D58282A85B4007AE0C6 /* Homestead-Regular.ttf */; };
+		985A2D6C282A85B5007AE0C6 /* Haymaker.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D59282A85B4007AE0C6 /* Haymaker.ttf */; };
+		985A2D6D282A85B5007AE0C6 /* Liberator.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5A282A85B4007AE0C6 /* Liberator.ttf */; };
+		985A2D6E282A85B5007AE0C6 /* AbrahamLincoln.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5B282A85B4007AE0C6 /* AbrahamLincoln.ttf */; };
+		985A2D6F282A85B5007AE0C6 /* mensch.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5C282A85B5007AE0C6 /* mensch.ttf */; };
+		985A2D70282A85B5007AE0C6 /* Franchise-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5D282A85B5007AE0C6 /* Franchise-Bold.ttf */; };
+		985A2D71282A85B5007AE0C6 /* GearedSlab.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5E282A85B5007AE0C6 /* GearedSlab.ttf */; };
+		985A2D72282A85B5007AE0C6 /* Airship 27-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D5F282A85B5007AE0C6 /* Airship 27-Regular.ttf */; };
+		985A2D73282A85B5007AE0C6 /* ValenciaRegular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D60282A85B5007AE0C6 /* ValenciaRegular.otf */; };
+		985A2D74282A85B5007AE0C6 /* Muncie.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D61282A85B5007AE0C6 /* Muncie.ttf */; };
+		985A2D75282A85B5007AE0C6 /* governor.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D62282A85B5007AE0C6 /* governor.ttf */; };
+		985A2D76282A85B5007AE0C6 /* Tommaso.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D63282A85B5007AE0C6 /* Tommaso.ttf */; };
+		985A2D77282A85B5007AE0C6 /* Bender-Inline.otf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D64282A85B5007AE0C6 /* Bender-Inline.otf */; };
+		985A2D78282A85B5007AE0C6 /* MavenProLight-200.otf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D65282A85B5007AE0C6 /* MavenProLight-200.otf */; };
+		985A2D79282A85B5007AE0C6 /* Sullivan-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D66282A85B5007AE0C6 /* Sullivan-Regular.otf */; };
+		985A2D7A282A85B5007AE0C6 /* BLANCH_CONDENSED.otf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D67282A85B5007AE0C6 /* BLANCH_CONDENSED.otf */; };
+		985A2D7B282A85B5007AE0C6 /* vevey.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D68282A85B5007AE0C6 /* vevey.ttf */; };
+		985A2D7C282A85B5007AE0C6 /* Arvil_Sans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985A2D69282A85B5007AE0C6 /* Arvil_Sans.ttf */; };
+		985A2D7E282A8BC5007AE0C6 /* FontChooserContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985A2D7D282A8BC5007AE0C6 /* FontChooserContainerView.swift */; };
 		E4020928256BA9D70077F5DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4020927256BA9D70077F5DC /* AppDelegate.swift */; };
 		E402092C256BA9D70077F5DC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402092B256BA9D70077F5DC /* ViewController.swift */; };
 		E402092F256BA9D70077F5DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E402092D256BA9D70077F5DC /* Main.storyboard */; };
@@ -70,6 +90,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		985A2D57282A85B4007AE0C6 /* cubano-regular-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cubano-regular-webfont.ttf"; sourceTree = "<group>"; };
+		985A2D58282A85B4007AE0C6 /* Homestead-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Homestead-Regular.ttf"; sourceTree = "<group>"; };
+		985A2D59282A85B4007AE0C6 /* Haymaker.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Haymaker.ttf; sourceTree = "<group>"; };
+		985A2D5A282A85B4007AE0C6 /* Liberator.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Liberator.ttf; sourceTree = "<group>"; };
+		985A2D5B282A85B4007AE0C6 /* AbrahamLincoln.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AbrahamLincoln.ttf; sourceTree = "<group>"; };
+		985A2D5C282A85B5007AE0C6 /* mensch.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = mensch.ttf; sourceTree = "<group>"; };
+		985A2D5D282A85B5007AE0C6 /* Franchise-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Franchise-Bold.ttf"; sourceTree = "<group>"; };
+		985A2D5E282A85B5007AE0C6 /* GearedSlab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GearedSlab.ttf; sourceTree = "<group>"; };
+		985A2D5F282A85B5007AE0C6 /* Airship 27-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Airship 27-Regular.ttf"; sourceTree = "<group>"; };
+		985A2D60282A85B5007AE0C6 /* ValenciaRegular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ValenciaRegular.otf; sourceTree = "<group>"; };
+		985A2D61282A85B5007AE0C6 /* Muncie.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Muncie.ttf; sourceTree = "<group>"; };
+		985A2D62282A85B5007AE0C6 /* governor.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = governor.ttf; sourceTree = "<group>"; };
+		985A2D63282A85B5007AE0C6 /* Tommaso.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tommaso.ttf; sourceTree = "<group>"; };
+		985A2D64282A85B5007AE0C6 /* Bender-Inline.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bender-Inline.otf"; sourceTree = "<group>"; };
+		985A2D65282A85B5007AE0C6 /* MavenProLight-200.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MavenProLight-200.otf"; sourceTree = "<group>"; };
+		985A2D66282A85B5007AE0C6 /* Sullivan-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sullivan-Regular.otf"; sourceTree = "<group>"; };
+		985A2D67282A85B5007AE0C6 /* BLANCH_CONDENSED.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BLANCH_CONDENSED.otf; sourceTree = "<group>"; };
+		985A2D68282A85B5007AE0C6 /* vevey.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = vevey.ttf; sourceTree = "<group>"; };
+		985A2D69282A85B5007AE0C6 /* Arvil_Sans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Arvil_Sans.ttf; sourceTree = "<group>"; };
+		985A2D7D282A8BC5007AE0C6 /* FontChooserContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontChooserContainerView.swift; sourceTree = "<group>"; };
 		E4020924256BA9D70077F5DC /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4020927256BA9D70077F5DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E402092B256BA9D70077F5DC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +172,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		985A2D56282A85B4007AE0C6 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				985A2D57282A85B4007AE0C6 /* cubano-regular-webfont.ttf */,
+				985A2D58282A85B4007AE0C6 /* Homestead-Regular.ttf */,
+				985A2D59282A85B4007AE0C6 /* Haymaker.ttf */,
+				985A2D5A282A85B4007AE0C6 /* Liberator.ttf */,
+				985A2D5B282A85B4007AE0C6 /* AbrahamLincoln.ttf */,
+				985A2D5C282A85B5007AE0C6 /* mensch.ttf */,
+				985A2D5D282A85B5007AE0C6 /* Franchise-Bold.ttf */,
+				985A2D5E282A85B5007AE0C6 /* GearedSlab.ttf */,
+				985A2D5F282A85B5007AE0C6 /* Airship 27-Regular.ttf */,
+				985A2D60282A85B5007AE0C6 /* ValenciaRegular.otf */,
+				985A2D61282A85B5007AE0C6 /* Muncie.ttf */,
+				985A2D62282A85B5007AE0C6 /* governor.ttf */,
+				985A2D63282A85B5007AE0C6 /* Tommaso.ttf */,
+				985A2D64282A85B5007AE0C6 /* Bender-Inline.otf */,
+				985A2D65282A85B5007AE0C6 /* MavenProLight-200.otf */,
+				985A2D66282A85B5007AE0C6 /* Sullivan-Regular.otf */,
+				985A2D67282A85B5007AE0C6 /* BLANCH_CONDENSED.otf */,
+				985A2D68282A85B5007AE0C6 /* vevey.ttf */,
+				985A2D69282A85B5007AE0C6 /* Arvil_Sans.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		E402091B256BA9D70077F5DC = {
 			isa = PBXGroup;
 			children = (
@@ -152,10 +218,12 @@
 		E4020926256BA9D70077F5DC /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				985A2D56282A85B4007AE0C6 /* Fonts */,
 				E402093E256BAA420077F5DC /* SnapKit */,
 				E4020927256BA9D70077F5DC /* AppDelegate.swift */,
 				E402092B256BA9D70077F5DC /* ViewController.swift */,
 				E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */,
+				985A2D7D282A8BC5007AE0C6 /* FontChooserContainerView.swift */,
 				E4CAF826256CACE800C7B04E /* CustomFilter.swift */,
 				E402092D256BA9D70077F5DC /* Main.storyboard */,
 				E4020930256BA9D90077F5DC /* Assets.xcassets */,
@@ -246,7 +314,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1210;
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					E4020923256BA9D70077F5DC = {
 						CreatedOnToolsVersion = 12.1;
@@ -276,9 +344,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				985A2D6D282A85B5007AE0C6 /* Liberator.ttf in Resources */,
+				985A2D6F282A85B5007AE0C6 /* mensch.ttf in Resources */,
+				985A2D79282A85B5007AE0C6 /* Sullivan-Regular.otf in Resources */,
+				985A2D72282A85B5007AE0C6 /* Airship 27-Regular.ttf in Resources */,
+				985A2D6E282A85B5007AE0C6 /* AbrahamLincoln.ttf in Resources */,
+				985A2D6B282A85B5007AE0C6 /* Homestead-Regular.ttf in Resources */,
+				985A2D74282A85B5007AE0C6 /* Muncie.ttf in Resources */,
 				E4020934256BA9D90077F5DC /* LaunchScreen.storyboard in Resources */,
+				985A2D77282A85B5007AE0C6 /* Bender-Inline.otf in Resources */,
+				985A2D7A282A85B5007AE0C6 /* BLANCH_CONDENSED.otf in Resources */,
+				985A2D76282A85B5007AE0C6 /* Tommaso.ttf in Resources */,
+				985A2D73282A85B5007AE0C6 /* ValenciaRegular.otf in Resources */,
 				E4020931256BA9D90077F5DC /* Assets.xcassets in Resources */,
+				985A2D7B282A85B5007AE0C6 /* vevey.ttf in Resources */,
+				985A2D78282A85B5007AE0C6 /* MavenProLight-200.otf in Resources */,
+				985A2D71282A85B5007AE0C6 /* GearedSlab.ttf in Resources */,
 				E402092F256BA9D70077F5DC /* Main.storyboard in Resources */,
+				985A2D70282A85B5007AE0C6 /* Franchise-Bold.ttf in Resources */,
+				985A2D7C282A85B5007AE0C6 /* Arvil_Sans.ttf in Resources */,
+				985A2D6C282A85B5007AE0C6 /* Haymaker.ttf in Resources */,
+				985A2D75282A85B5007AE0C6 /* governor.ttf in Resources */,
+				985A2D6A282A85B5007AE0C6 /* cubano-regular-webfont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +405,7 @@
 				E402096C256BAA420077F5DC /* ConstraintInsets.swift in Sources */,
 				E4020975256BAA420077F5DC /* UILayoutSupport+Extensions.swift in Sources */,
 				E4020928256BA9D70077F5DC /* AppDelegate.swift in Sources */,
+				985A2D7E282A8BC5007AE0C6 /* FontChooserContainerView.swift in Sources */,
 				E4020987256BAA420077F5DC /* ConstraintDirectionalInsets.swift in Sources */,
 				E402096B256BAA420077F5DC /* ConstraintPriorityTarget.swift in Sources */,
 				E402097A256BAA420077F5DC /* ConstraintConstantTarget.swift in Sources */,

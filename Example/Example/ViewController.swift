@@ -283,6 +283,7 @@ class ViewController: UIViewController {
         ZLImageEditorConfiguration.default()
             // Provide a image sticker container view
             .imageStickerContainerView(ImageStickerContainerView())
+            .fontChooserContainerView(FontChooserContainerView())
             // Custom filter
 //            .filters = [.normal]
         
