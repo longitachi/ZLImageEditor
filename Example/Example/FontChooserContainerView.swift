@@ -8,7 +8,7 @@
 import UIKit
 import ZLImageEditor
 
-class FontChooserContainerView: UIView, ZLTextStickerContainerDelegate {
+class FontChooserContainerView: UIView, ZLTextFontChooserDelegate {
     static let baseViewH: CGFloat = 400
 
     var baseView: UIView!

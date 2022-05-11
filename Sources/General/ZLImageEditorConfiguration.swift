@@ -128,7 +128,7 @@ public class ZLImageEditorConfiguration: NSObject {
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
 
-    @objc public var fontChooserContainerView: (UIView & ZLTextStickerContainerDelegate)? = nil
+    @objc public var fontChooserContainerView: (UIView & ZLTextFontChooserDelegate)? = nil
 
     private var pri_adjustTools: [ZLImageEditorConfiguration.AdjustTool] = [.brightness, .contrast, .saturation]
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
@@ -332,7 +332,8 @@ extension ZLImageClipRatio {
     
 }
 
-@objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
+/// Provide an image sticker container view that conform to this protocol must be a subclass of UIView
+@objc public protocol ZLImageStickerContainerDelegate {
     
     @objc var selectImageBlock: ( (UIImage) -> Void )? { get set }
     
@@ -342,7 +343,8 @@ extension ZLImageClipRatio {
     
 }
 
-@objc public protocol ZLTextStickerContainerDelegate where Self: UIView {
+/// Provide an text font choose view that conform to this protocol must be a subclass of UIView
+@objc public protocol ZLTextFontChooserDelegate {
 
     @objc var selectFontBlock: ( (UIFont) -> Void )? { get set }
 

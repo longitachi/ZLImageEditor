@@ -1062,7 +1062,7 @@ public class ZLEditImageViewController: UIViewController {
     func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont? = nil,  bgColor: UIColor) {
         guard !text.isEmpty else { return }
         let scale = self.scrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
+        let size = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width, font: font)
         let originFrame = self.getStickerOriginFrame(size)
         
         let textSticker = ZLTextStickerView(text: text, textColor: textColor, font: font, bgColor: bgColor, originScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
@@ -1527,7 +1527,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 textSticker.textColor = textColor
                 textSticker.bgColor = bgColor
                 textSticker.textFont = font
-                let newSize = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
+                let newSize = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width, font: font)
                 textSticker.changeSize(to: newSize)
             }
         }

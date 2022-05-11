@@ -419,9 +419,9 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         self.transform = self.transform.rotated(by: self.originAngle.toPi)
     }
     
-    class func calculateSize(text: String, width: CGFloat) -> CGSize {
+    class func calculateSize(text: String, width: CGFloat, font: UIFont? = nil) -> CGSize {
         let diff = ZLTextStickerView.edgeInset * 2
-        let size = text.boundingRect(font: UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize), limitSize: CGSize(width: width - diff, height: CGFloat.greatestFiniteMagnitude))
+        let size = text.boundingRect(font: font ?? UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize), limitSize: CGSize(width: width - diff, height: CGFloat.greatestFiniteMagnitude))
         return CGSize(width: size.width + diff * 2, height: size.height + diff * 2)
     }
     
