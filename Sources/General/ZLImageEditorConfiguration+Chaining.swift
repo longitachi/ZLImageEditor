@@ -83,7 +83,7 @@ extension ZLImageEditorConfiguration {
     }
 
     @discardableResult
-    public func fontChooserContainerView(_ view: (UIView & ZLTextStickerContainerDelegate)?) -> ZLImageEditorConfiguration {
+    public func fontChooserContainerView(_ view: (UIView & ZLTextFontChooserDelegate)?) -> ZLImageEditorConfiguration {
         fontChooserContainerView = view
         return self
     }
