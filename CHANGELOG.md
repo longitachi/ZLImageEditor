@@ -2,6 +2,14 @@
 
 -----
 
+## [1.1.0](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-05-13)
+### Add:
+* Can select custom font before adding text sticker.[#15](https://github.com/longitachi/ZLImageEditor/pull/15)
+* Change the authority of ZLEditImageViewController to open.
+* Add ZLImageEditorUIConfiguration.
+
+-----
+
 ## [1.0.7](https://github.com/longitachi/ZLImageEditor/releases/tag/1.0.5) (2022-04-26)
 * Fix the bug that crop does not work.[#14](https://github.com/longitachi/ZLImageEditor/issues/14)
 

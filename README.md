@@ -50,19 +50,15 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.0
+  Add:
+    Can select custom font before adding text sticker.
+    Change the authority of ZLEditImageViewController to open.
+    Add ZLImageEditorUIConfiguration.
 ● 1.0.7
     Fix the bug that crop does not work.
 ● 1.0.6
     Revert the code for image compression.
-● 1.0.5
-  Fix:
-    Fix the bug of changing the background color of the image after editing.
-● 1.0.4
-  Add:
-    Support adjusting the brightness and contrast and saturation of an image.
-    Support Indonesian.
-    Support chained calls.
-    Support customize images.
 ...
 ```
 
