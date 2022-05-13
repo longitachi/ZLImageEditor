@@ -29,12 +29,6 @@ import UIKit
 extension ZLImageEditorConfiguration {
     
     @discardableResult
-    public func languageType(_ type: ZLImageEditorLanguageType) -> ZLImageEditorConfiguration {
-        languageType = type
-        return self
-    }
-    
-    @discardableResult
     public func editImageTools(_ tools: [ZLImageEditorConfiguration.EditTool]) -> ZLImageEditorConfiguration {
         self.tools = tools
         return self
@@ -111,36 +105,6 @@ extension ZLImageEditorConfiguration {
     @discardableResult
     public func showClipDirectlyIfOnlyHasClipTool(_ value: Bool) -> ZLImageEditorConfiguration {
         showClipDirectlyIfOnlyHasClipTool = value
-        return self
-    }
-    
-    @discardableResult
-    public func customImageNames(_ names: [String]) -> ZLImageEditorConfiguration {
-        customImageNames = names
-        return self
-    }
-    
-    @discardableResult
-    public func customImageForKey(_ map: [String: UIImage?]) -> ZLImageEditorConfiguration {
-        customImageForKey = map
-        return self
-    }
-    
-    @discardableResult
-    public func adjustSliderNormalColor(_ color: UIColor) -> ZLImageEditorConfiguration {
-        adjustSliderNormalColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func adjustSliderTintColor(_ color: UIColor) -> ZLImageEditorConfiguration {
-        adjustSliderTintColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func editDoneBtnBgColor(_ color: UIColor) -> ZLImageEditorConfiguration {
-        editDoneBtnBgColor = color
         return self
     }
     

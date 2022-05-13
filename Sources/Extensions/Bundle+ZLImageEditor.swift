@@ -108,7 +108,7 @@ extension Bundle {
     private class func getLanguage() -> String {
         var language = "en"
         
-        switch ZLImageEditorConfiguration.default().languageType {
+        switch ZLImageEditorUIConfiguration.default().languageType {
         case .system:
             language = Locale.preferredLanguages.first ?? "en"
             

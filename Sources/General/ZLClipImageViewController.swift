@@ -88,13 +88,13 @@ class ZLClipImageViewController: UIViewController {
     
     var bottomToolLineView: UIView!
     
-    var cancelBtn: UIButton!
+    lazy var cancelBtn = ZLEnlargeButton(type: .custom)
     
-    var revertBtn: UIButton!
+    lazy var revertBtn = ZLEnlargeButton(type: .custom)
     
-    var doneBtn: UIButton!
+    lazy var doneBtn = ZLEnlargeButton(type: .custom)
     
-    var rotateBtn: UIButton!
+    lazy var rotateBtn = ZLEnlargeButton(type: .custom)
     
     var clipRatioColView: UICollectionView!
     
@@ -313,32 +313,28 @@ class ZLClipImageViewController: UIViewController {
         self.bottomToolLineView.backgroundColor = zlRGB(240, 240, 240)
         self.bottomToolView.addSubview(self.bottomToolLineView)
         
-        self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.setImage(getImage("zl_close"), for: .normal)
         self.cancelBtn.adjustsImageWhenHighlighted = false
-        self.cancelBtn.zl_enlargeValidTouchArea(inset: 20)
+        self.cancelBtn.enlargeInset = 20
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.bottomToolView.addSubview(self.cancelBtn)
         
-        self.revertBtn = UIButton(type: .custom)
         self.revertBtn.setTitleColor(.white, for: .normal)
         self.revertBtn.setTitle(localLanguageTextValue(.revert), for: .normal)
-        self.revertBtn.zl_enlargeValidTouchArea(inset: 20)
+        self.revertBtn.enlargeInset = 20
         self.revertBtn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
         self.revertBtn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         self.bottomToolView.addSubview(self.revertBtn)
         
-        self.doneBtn = UIButton(type: .custom)
         self.doneBtn.setImage(getImage("zl_right"), for: .normal)
         self.doneBtn.adjustsImageWhenHighlighted = false
-        self.doneBtn.zl_enlargeValidTouchArea(inset: 20)
+        self.doneBtn.enlargeInset = 20
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.bottomToolView.addSubview(self.doneBtn)
         
-        self.rotateBtn = UIButton(type: .custom)
         self.rotateBtn.setImage(getImage("zl_rotateimage"), for: .normal)
         self.rotateBtn.adjustsImageWhenHighlighted = false
-        self.rotateBtn.zl_enlargeValidTouchArea(inset: 20)
+        self.rotateBtn.enlargeInset = 20
         self.rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         self.view.addSubview(self.rotateBtn)
         

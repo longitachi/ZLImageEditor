@@ -4,8 +4,6 @@
 //
 //  Created by long on 2020/11/23.
 //
-//  Created by long on 2020/8/17.
-//
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,17 +28,14 @@ import UIKit
 
 public class ZLImageEditorConfiguration: NSObject {
     
-    private static let single = ZLImageEditorConfiguration()
+    private static var single = ZLImageEditorConfiguration()
     
     @objc public class func `default`() -> ZLImageEditorConfiguration {
         return ZLImageEditorConfiguration.single
     }
     
-    /// Language for framework.
-    @objc public var languageType: ZLImageEditorLanguageType = .system {
-        didSet {
-            Bundle.resetLanguage()
-        }
+    @objc public class func resetConfiguration() {
+        ZLImageEditorConfiguration.single = ZLImageEditorConfiguration()
     }
     
     private var pri_tools: [ZLImageEditorConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
@@ -173,42 +168,6 @@ public class ZLImageEditorConfiguration: NSObject {
     
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
-    
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected", "zl_btn_unselected"].
-    @objc public var customImageNames: [String] = [] {
-        didSet {
-            ZLCustomImageDeploy.imageNames = customImageNames
-        }
-    }
-    
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
-    public var customImageForKey: [String: UIImage?] = [:] {
-        didSet {
-            customImageForKey.forEach { ZLCustomImageDeploy.imageForKey[$0.key] = $0.value }
-        }
-    }
-    
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
-    @objc public var customImageForKey_objc: [String: UIImage] = [:] {
-        didSet {
-            ZLCustomImageDeploy.imageForKey = customImageForKey_objc
-        }
-    }
-    
-    /// The normal color of adjust slider.
-    @objc public var adjustSliderNormalColor = UIColor.white
-    
-    /// The tint color of adjust slider.
-    @objc public var adjustSliderTintColor = zlRGB(80, 169, 56)
-    
-    /// The background color of edit done button.
-    @objc public var editDoneBtnBgColor: UIColor = zlRGB(80, 169, 56)
     
 }
 

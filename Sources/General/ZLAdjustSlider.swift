@@ -1,6 +1,6 @@
 //
 //  ZLAdjustSlider.swift
-//  ZLPhotoBrowser
+//  ZLImageEditor
 //
 //  Created by long on 2021/12/17.
 //
@@ -86,7 +86,7 @@ class ZLAdjustSlider: UIView {
     }
     
     private func setupUI() {
-        shadowView.backgroundColor = ZLImageEditorConfiguration.default().adjustSliderNormalColor
+        shadowView.backgroundColor = .adjustSliderNormalColor
         shadowView.layer.cornerRadius = sliderWidth / 2
         shadowView.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
         shadowView.layer.shadowOffset = .zero
@@ -94,12 +94,12 @@ class ZLAdjustSlider: UIView {
         shadowView.layer.shadowRadius = 3
         addSubview(shadowView)
         
-        whiteView.backgroundColor = ZLImageEditorConfiguration.default().adjustSliderNormalColor
+        whiteView.backgroundColor = .adjustSliderNormalColor
         whiteView.layer.cornerRadius = sliderWidth / 2
         whiteView.layer.masksToBounds = true
         addSubview(whiteView)
         
-        tintView.backgroundColor = ZLImageEditorConfiguration.default().adjustSliderTintColor
+        tintView.backgroundColor = .adjustSliderTintColor
         whiteView.addSubview(tintView)
         
         separator.backgroundColor = zlRGB(230, 230, 230)

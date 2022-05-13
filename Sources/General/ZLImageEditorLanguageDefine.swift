@@ -4,8 +4,6 @@
 //
 //  Created by long on 2020/11/23.
 //
-//  Created by long on 2020/8/17.
-//
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy

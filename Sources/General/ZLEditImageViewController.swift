@@ -79,17 +79,59 @@ public class ZLEditImageModel: NSObject {
     
 }
 
-public class ZLEditImageViewController: UIViewController {
+open class ZLEditImageViewController: UIViewController {
 
-    static let drawColViewH: CGFloat = 50
-    
-    static let filterColViewH: CGFloat = 80
-    
-    static let adjustColViewH: CGFloat = 60
-    
     static let maxDrawLineImageWidth: CGFloat = 600
     
-    static let ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
+    public var drawColViewH: CGFloat = 50
+    
+    public var filterColViewH: CGFloat = 80
+    
+    public var adjustColViewH: CGFloat = 60
+    
+    public var ashbinSize = CGSize(width: 160, height: 80)
+    
+    open lazy var mainScrollView = UIScrollView()
+    
+    open lazy var containerView = UIView()
+    
+    // Show image.
+    open lazy var imageView = UIImageView(image: originalImage)
+    
+    open lazy var topShadowView = UIView()
+    
+    open lazy var topShadowLayer = CAGradientLayer()
+     
+    open lazy var bottomShadowView = UIView()
+    
+    open lazy var bottomShadowLayer = CAGradientLayer()
+    
+    open lazy var cancelBtn = ZLEnlargeButton(type: .custom)
+    
+    open lazy var doneBtn = UIButton(type: .custom)
+    
+    open lazy var revokeBtn = UIButton(type: .custom)
+    
+    open lazy var editToolCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 30, height: 30)
+        layout.minimumLineSpacing = 20
+        layout.minimumInteritemSpacing = 20
+        layout.scrollDirection = .horizontal
+        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
+    
+    open var drawColorCollectionView: UICollectionView?
+    
+    open var filterCollectionView: UICollectionView?
+    
+    open var adjustCollectionView: UICollectionView?
+    
+    open lazy var ashbinView = UIView()
+    
+    open lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
+    
+    var adjustSlider: ZLAdjustSlider?
     
     var animateDismiss = true
     
@@ -112,20 +154,11 @@ public class ZLEditImageViewController: UIViewController {
     
     var editImageAdjustRef: UIImage?
     
-    var cancelBtn: UIButton!
-    
-    var scrollView: UIScrollView!
-    
-    var containerView: UIView!
-    
-    // Show image.
-    var imageView: UIImageView!
-    
     // Show draw lines.
-    var drawingImageView: UIImageView!
+    lazy var drawingImageView = UIImageView()
     
     // Show text and image stickers.
-    var stickersContainer: UIView!
+    lazy var stickersContainer = UIView()
     
     var mosaicImage: UIImage?
     
@@ -135,35 +168,9 @@ public class ZLEditImageViewController: UIViewController {
     // The mask layer of mosaicImageLayer
     var mosaicImageLayerMaskLayer: CAShapeLayer?
     
-    var topShadowView: UIView!
-    
-    var topShadowLayer: CAGradientLayer!
-     
-    var bottomShadowView: UIView!
-    
-    var bottomShadowLayer: CAGradientLayer!
-    
-    var doneBtn: UIButton!
-    
-    var revokeBtn: UIButton!
-    
     var selectedTool: ZLImageEditorConfiguration.EditTool?
     
     var selectedAdjustTool: ZLImageEditorConfiguration.AdjustTool?
-    
-    var editToolCollectionView: UICollectionView!
-    
-    var drawColorCollectionView: UICollectionView?
-    
-    var filterCollectionView: UICollectionView?
-    
-    var adjustCollectionView: UICollectionView?
-    
-    var adjustSlider: ZLAdjustSlider?
-    
-    var ashbinView: UIView!
-    
-    var ashbinImgView: UIImageView!
     
     let drawColors: [UIColor]
     
@@ -211,13 +218,13 @@ public class ZLEditImageViewController: UIViewController {
         return self.originalImage.size
     }
     
-    @objc public var editFinishBlock: ( (UIImage, ZLEditImageModel) -> Void )?
+    @objc public var editFinishBlock: ((UIImage, ZLEditImageModel) -> Void)?
     
-    public override var prefersStatusBarHidden: Bool {
+    open override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     
@@ -292,11 +299,11 @@ public class ZLEditImageViewController: UIViewController {
         self.stickers = stickers.compactMap { $0 }
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupUI()
@@ -307,7 +314,7 @@ public class ZLEditImageViewController: UIViewController {
         }
     }
     
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard self.shouldLayout else {
             return
@@ -319,7 +326,7 @@ public class ZLEditImageViewController: UIViewController {
             insets = self.view.safeAreaInsets
         }
         
-        self.scrollView.frame = self.view.bounds
+        self.mainScrollView.frame = self.view.bounds
         self.resetContainerViewFrame()
         
         self.topShadowView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 150)
@@ -329,13 +336,26 @@ public class ZLEditImageViewController: UIViewController {
         self.bottomShadowView.frame = CGRect(x: 0, y: self.view.frame.height - 140 - insets.bottom, width: self.view.frame.width, height: 140 + insets.bottom)
         self.bottomShadowLayer.frame = self.bottomShadowView.bounds
         
-        self.drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 80, height: ZLEditImageViewController.drawColViewH)
+        self.drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 80, height: drawColViewH)
         self.revokeBtn.frame = CGRect(x: self.view.frame.width - 15 - 35, y: 30, width: 35, height: 30)
         
-        self.adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.frame.width - 40, height: ZLEditImageViewController.adjustColViewH)
+        self.adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.frame.width - 40, height: adjustColViewH)
         self.adjustSlider?.frame = CGRect(x: view.frame.width - 60, y: view.frame.height / 2 - 100, width: 60, height: 200)
         
-        self.filterCollectionView?.frame = CGRect(x: 20, y: 0, width: self.view.frame.width - 40, height: ZLEditImageViewController.filterColViewH)
+        self.filterCollectionView?.frame = CGRect(x: 20, y: 0, width: self.view.frame.width - 40, height: filterColViewH)
+        
+        self.ashbinView.frame = CGRect(
+            x: (view.frame.width - ashbinSize.width) / 2,
+            y: view.frame.height - ashbinSize.height - 40,
+            width: ashbinSize.width,
+            height: ashbinSize.height
+        )
+        self.ashbinImgView.frame = CGRect(
+            x: (ashbinSize.width - 25) / 2,
+            y: 15,
+            width: 25,
+            height: 25
+        )
         
         let toolY: CGFloat = 85
         
@@ -385,14 +405,14 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func resetContainerViewFrame() {
-        self.scrollView.setZoomScale(1, animated: true)
+        self.mainScrollView.setZoomScale(1, animated: true)
         self.imageView.image = self.editImage
         
         let editSize = self.editRect.size
-        let scrollViewSize = self.scrollView.frame.size
+        let scrollViewSize = self.mainScrollView.frame.size
         let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)
-        let w = ratio * editSize.width * self.scrollView.zoomScale
-        let h = ratio * editSize.height * self.scrollView.zoomScale
+        let w = ratio * editSize.width * self.mainScrollView.zoomScale
+        let h = ratio * editSize.height * self.mainScrollView.zoomScale
         self.containerView.frame = CGRect(x: max(0, (scrollViewSize.width-w)/2), y: max(0, (scrollViewSize.height-h)/2), width: w, height: h)
         
         let scaleImageOrigin = CGPoint(x: -self.editRect.origin.x*ratio, y: -self.editRect.origin.y*ratio)
@@ -406,76 +426,61 @@ public class ZLEditImageViewController: UIViewController {
         // Optimization for long pictures.
         if (self.editRect.height / self.editRect.width) > (self.view.frame.height / self.view.frame.width * 1.1) {
             let widthScale = self.view.frame.width / w
-            self.scrollView.maximumZoomScale = widthScale
-            self.scrollView.zoomScale = widthScale
-            self.scrollView.contentOffset = .zero
+            self.mainScrollView.maximumZoomScale = widthScale
+            self.mainScrollView.zoomScale = widthScale
+            self.mainScrollView.contentOffset = .zero
         } else if self.editRect.width / self.editRect.height > 1 {
-            self.scrollView.maximumZoomScale = max(3, self.view.frame.height / h)
+            self.mainScrollView.maximumZoomScale = max(3, self.view.frame.height / h)
         }
         
-        self.originalFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
+        self.originalFrame = self.view.convert(self.containerView.frame, from: self.mainScrollView)
         self.isScrolling = false
     }
     
     func setupUI() {
         self.view.backgroundColor = .black
         
-        self.scrollView = UIScrollView()
-        self.scrollView.backgroundColor = .black
-        self.scrollView.minimumZoomScale = 1
-        self.scrollView.maximumZoomScale = 3
-        self.scrollView.delegate = self
-        self.view.addSubview(self.scrollView)
+        self.mainScrollView.backgroundColor = .black
+        self.mainScrollView.minimumZoomScale = 1
+        self.mainScrollView.maximumZoomScale = 3
+        self.mainScrollView.delegate = self
+        self.view.addSubview(self.mainScrollView)
         
-        self.containerView = UIView()
         self.containerView.clipsToBounds = true
-        self.scrollView.addSubview(self.containerView)
+        self.mainScrollView.addSubview(self.containerView)
         
-        self.imageView = UIImageView(image: self.originalImage)
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.clipsToBounds = true
         self.imageView.backgroundColor = .black
         self.containerView.addSubview(self.imageView)
         
-        self.drawingImageView = UIImageView()
         self.drawingImageView.contentMode = .scaleAspectFit
         self.drawingImageView.isUserInteractionEnabled = true
         self.containerView.addSubview(self.drawingImageView)
         
-        self.stickersContainer = UIView()
         self.containerView.addSubview(self.stickersContainer)
         
         let color1 = UIColor.black.withAlphaComponent(0.35).cgColor
         let color2 = UIColor.black.withAlphaComponent(0).cgColor
-        self.topShadowView = UIView()
         self.view.addSubview(self.topShadowView)
         
-        self.topShadowLayer = CAGradientLayer()
         self.topShadowLayer.colors = [color1, color2]
         self.topShadowLayer.locations = [0, 1]
         self.topShadowView.layer.addSublayer(self.topShadowLayer)
         
-        self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.setImage(getImage("zl_retake"), for: .normal)
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.cancelBtn.adjustsImageWhenHighlighted = false
-        self.cancelBtn.zl_enlargeValidTouchArea(inset: 30)
+        self.cancelBtn.enlargeInset = 30
         self.topShadowView.addSubview(self.cancelBtn)
         
         self.bottomShadowView = UIView()
         self.view.addSubview(self.bottomShadowView)
         
-        self.bottomShadowLayer = CAGradientLayer()
         self.bottomShadowLayer.colors = [color2, color1]
         self.bottomShadowLayer.locations = [0, 1]
         self.bottomShadowView.layer.addSublayer(self.bottomShadowLayer)
         
-        let editToolLayout = UICollectionViewFlowLayout()
-        editToolLayout.itemSize = CGSize(width: 30, height: 30)
-        editToolLayout.minimumLineSpacing = 20
-        editToolLayout.minimumInteritemSpacing = 20
-        editToolLayout.scrollDirection = .horizontal
-        self.editToolCollectionView = UICollectionView(frame: .zero, collectionViewLayout: editToolLayout)
         self.editToolCollectionView.backgroundColor = .clear
         self.editToolCollectionView.delegate = self
         self.editToolCollectionView.dataSource = self
@@ -484,10 +489,10 @@ public class ZLEditImageViewController: UIViewController {
         
         ZLEditToolCell.zl_register(self.editToolCollectionView)
         
-        self.doneBtn = UIButton(type: .custom)
         self.doneBtn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        self.doneBtn.backgroundColor = ZLImageEditorConfiguration.default().editDoneBtnBgColor
+        self.doneBtn.backgroundColor = .editDoneBtnBgColor
         self.doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
+        self.doneBtn.setTitleColor(.editDoneBtnTitleColor, for: .normal)
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
@@ -500,7 +505,7 @@ public class ZLEditImageViewController: UIViewController {
             drawColorLayout.minimumLineSpacing = 15
             drawColorLayout.minimumInteritemSpacing = 15
             drawColorLayout.scrollDirection = .horizontal
-            let drawColorTopBottomInset = (ZLEditImageViewController.drawColViewH - drawColorItemWidth) / 2
+            let drawColorTopBottomInset = (drawColViewH - drawColorItemWidth) / 2
             drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 0, bottom: drawColorTopBottomInset, right: 0)
             
             let drawCV = UICollectionView(frame: .zero, collectionViewLayout: drawColorLayout)
@@ -524,7 +529,7 @@ public class ZLEditImageViewController: UIViewController {
             }
             
             let filterLayout = UICollectionViewFlowLayout()
-            filterLayout.itemSize = CGSize(width: ZLEditImageViewController.filterColViewH - 20, height: ZLEditImageViewController.filterColViewH)
+            filterLayout.itemSize = CGSize(width: filterColViewH - 20, height: filterColViewH)
             filterLayout.minimumLineSpacing = 15
             filterLayout.minimumInteritemSpacing = 15
             filterLayout.scrollDirection = .horizontal
@@ -545,7 +550,7 @@ public class ZLEditImageViewController: UIViewController {
             editImage = editImage.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
             
             let adjustLayout = UICollectionViewFlowLayout()
-            adjustLayout.itemSize = CGSize(width: ZLEditImageViewController.adjustColViewH, height: ZLEditImageViewController.adjustColViewH)
+            adjustLayout.itemSize = CGSize(width: adjustColViewH, height: adjustColViewH)
             adjustLayout.minimumLineSpacing = 10
             adjustLayout.minimumInteritemSpacing = 10
             adjustLayout.scrollDirection = .horizontal
@@ -578,7 +583,6 @@ public class ZLEditImageViewController: UIViewController {
             view.addSubview(adjustSlider!)
         }
         
-        self.revokeBtn = UIButton(type: .custom)
         self.revokeBtn.setImage(getImage("zl_revoke_disable"), for: .disabled)
         self.revokeBtn.setImage(getImage("zl_revoke"), for: .normal)
         self.revokeBtn.adjustsImageWhenHighlighted = false
@@ -587,16 +591,12 @@ public class ZLEditImageViewController: UIViewController {
         self.revokeBtn.addTarget(self, action: #selector(revokeBtnClick), for: .touchUpInside)
         self.bottomShadowView.addSubview(self.revokeBtn)
         
-        let ashbinSize = CGSize(width: 160, height: 80)
-        self.ashbinView = UIView(frame: CGRect(x: (self.view.frame.width-ashbinSize.width)/2, y: self.view.frame.height-ashbinSize.height-40, width: ashbinSize.width, height: ashbinSize.height))
-        self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
+        self.ashbinView.backgroundColor = .ashbinNormalBgColor
         self.ashbinView.layer.cornerRadius = 15
         self.ashbinView.layer.masksToBounds = true
         self.ashbinView.isHidden = true
         self.view.addSubview(self.ashbinView)
         
-        self.ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
-        self.ashbinImgView.frame = CGRect(x: (ashbinSize.width-25)/2, y: 15, width: 25, height: 25)
         self.ashbinView.addSubview(self.ashbinImgView)
         
         let asbinTipLabel = UILabel(frame: CGRect(x: 0, y: ashbinSize.height-34, width: ashbinSize.width, height: 34))
@@ -652,14 +652,13 @@ public class ZLEditImageViewController: UIViewController {
         
         let tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         tapGes.delegate = self
-        tapGes.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGes)
         
         self.panGes = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
         self.panGes.maximumNumberOfTouches = 1
         self.panGes.delegate = self
         self.view.addGestureRecognizer(self.panGes)
-        self.scrollView.panGestureRecognizer.require(toFail: self.panGes)
+        self.mainScrollView.panGestureRecognizer.require(toFail: self.panGes)
         
         self.stickers.forEach { (view) in
             self.stickersContainer.addSubview(view)
@@ -706,7 +705,7 @@ public class ZLEditImageViewController: UIViewController {
         }
         
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: editRect, angle: angle, selectRatio: selectRatio)
-        let rect = scrollView.convert(containerView.frame, to: view)
+        let rect = mainScrollView.convert(containerView.frame, to: view)
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = currentEditImage.clipImage(angle, editRect)
         vc.modalPresentationStyle = .fullScreen
@@ -730,7 +729,7 @@ public class ZLEditImageViewController: UIViewController {
         }
         
         present(vc, animated: false) {
-            self.scrollView.alpha = 0
+            self.mainScrollView.alpha = 0
             self.topShadowView.alpha = 0
             self.bottomShadowView.alpha = 0
             self.adjustSlider?.alpha = 0
@@ -883,8 +882,8 @@ public class ZLEditImageViewController: UIViewController {
             if pan.state == .began {
                 self.setToolView(show: false)
                 
-                let originalRatio = min(self.scrollView.frame.width / self.originalImage.size.width, self.scrollView.frame.height / self.originalImage.size.height)
-                let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
+                let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
+                let ratio = min(self.mainScrollView.frame.width / self.editRect.width, self.mainScrollView.frame.height / self.editRect.height)
                 let scale = ratio / originalRatio
                 // Zoom to original size
                 var size = self.drawingImageView.frame.size
@@ -899,7 +898,7 @@ public class ZLEditImageViewController: UIViewController {
                     toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
                 }
                 
-                let path = ZLDrawPath(pathColor: self.currentDrawColor, pathWidth: self.drawLineWidth / self.scrollView.zoomScale, ratio: ratio / originalRatio / toImageScale, startPoint: point)
+                let path = ZLDrawPath(pathColor: self.currentDrawColor, pathWidth: self.drawLineWidth / self.mainScrollView.zoomScale, ratio: ratio / originalRatio / toImageScale, startPoint: point)
                 self.drawPaths.append(path)
             } else if pan.state == .changed {
                 let path = self.drawPaths.last
@@ -918,9 +917,9 @@ public class ZLEditImageViewController: UIViewController {
                 if self.angle == -90 || self.angle == -270 {
                     swap(&actualSize.width, &actualSize.height)
                 }
-                let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
+                let ratio = min(self.mainScrollView.frame.width / self.editRect.width, self.mainScrollView.frame.height / self.editRect.height)
                 
-                let pathW = self.mosaicLineWidth / self.scrollView.zoomScale
+                let pathW = self.mosaicLineWidth / self.mainScrollView.zoomScale
                 let path = ZLMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
                 
                 self.mosaicImageLayerMaskLayer?.lineWidth = pathW
@@ -1010,9 +1009,9 @@ public class ZLEditImageViewController: UIViewController {
         var bgImage: UIImage?
         autoreleasepool {
             // Calculate image displayed frame on the screen.
-            var r = scrollView.convert(view.frame, to: containerView)
-            r.origin.x += scrollView.contentOffset.x / scrollView.zoomScale
-            r.origin.y += scrollView.contentOffset.y / scrollView.zoomScale
+            var r = mainScrollView.convert(view.frame, to: containerView)
+            r.origin.x += mainScrollView.contentOffset.x / mainScrollView.zoomScale
+            r.origin.y += mainScrollView.contentOffset.y / mainScrollView.zoomScale
             let scale = imageSize.width / imageView.frame.width
             r.origin.x *= scale
             r.origin.y *= scale
@@ -1032,10 +1031,10 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func getStickerOriginFrame(_ size: CGSize) -> CGRect {
-        let scale = self.scrollView.zoomScale
+        let scale = self.mainScrollView.zoomScale
         // Calculate the display rect of container view.
-        let x = (self.scrollView.contentOffset.x - self.containerView.frame.minX) / scale
-        let y = (self.scrollView.contentOffset.y - self.containerView.frame.minY) / scale
+        let x = (self.mainScrollView.contentOffset.x - self.containerView.frame.minX) / scale
+        let y = (self.mainScrollView.contentOffset.y - self.containerView.frame.minY) / scale
         let w = view.frame.width / scale
         let h = view.frame.height / scale
         // Convert to text stickers container view.
@@ -1046,7 +1045,7 @@ public class ZLEditImageViewController: UIViewController {
     
     /// Add image sticker
     func addImageStickerView(_ image: UIImage) {
-        let scale = self.scrollView.zoomScale
+        let scale = self.mainScrollView.zoomScale
         let size = ZLImageStickerView.calculateSize(image: image, width: self.view.frame.width)
         let originFrame = self.getStickerOriginFrame(size)
         
@@ -1061,7 +1060,7 @@ public class ZLEditImageViewController: UIViewController {
     /// Add text sticker
     func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont? = nil,  bgColor: UIColor) {
         guard !text.isEmpty else { return }
-        let scale = self.scrollView.zoomScale
+        let scale = self.mainScrollView.zoomScale
         let size = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width, font: font)
         let originFrame = self.getStickerOriginFrame(size)
         
@@ -1074,15 +1073,15 @@ public class ZLEditImageViewController: UIViewController {
     
     func configTextSticker(_ textSticker: ZLTextStickerView) {
         textSticker.delegate = self
-        self.scrollView.pinchGestureRecognizer?.require(toFail: textSticker.pinchGes)
-        self.scrollView.panGestureRecognizer.require(toFail: textSticker.panGes)
+        self.mainScrollView.pinchGestureRecognizer?.require(toFail: textSticker.pinchGes)
+        self.mainScrollView.panGestureRecognizer.require(toFail: textSticker.panGes)
         self.panGes.require(toFail: textSticker.panGes)
     }
     
     func configImageSticker(_ imageSticker: ZLImageStickerView) {
         imageSticker.delegate = self
-        self.scrollView.pinchGestureRecognizer?.require(toFail: imageSticker.pinchGes)
-        self.scrollView.panGestureRecognizer.require(toFail: imageSticker.panGes)
+        self.mainScrollView.pinchGestureRecognizer?.require(toFail: imageSticker.pinchGes)
+        self.mainScrollView.panGestureRecognizer.require(toFail: imageSticker.panGes)
         self.panGes.require(toFail: imageSticker.panGes)
     }
     
@@ -1101,8 +1100,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func drawLine() {
-        let originalRatio = min(self.scrollView.frame.width / self.originalImage.size.width, self.scrollView.frame.height / self.originalImage.size.height)
-        let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
+        let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
+        let ratio = min(self.mainScrollView.frame.width / self.editRect.width, self.mainScrollView.frame.height / self.editRect.height)
         let scale = ratio / originalRatio
         // Zoom to original size
         var size = self.drawingImageView.frame.size
@@ -1230,7 +1229,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func finishClipDismissAnimate() {
-        self.scrollView.alpha = 1
+        self.mainScrollView.alpha = 1
         UIView.animate(withDuration: 0.1) {
             self.topShadowView.alpha = 1
             self.bottomShadowView.alpha = 1
@@ -1244,7 +1243,7 @@ public class ZLEditImageViewController: UIViewController {
 extension ZLEditImageViewController: UIGestureRecognizerDelegate {
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard self.imageStickerContainerIsHidden else {
+        guard imageStickerContainerIsHidden, fontChooserContainerIsHidden else {
             return false
         }
         if gestureRecognizer is UITapGestureRecognizer {
@@ -1285,28 +1284,28 @@ extension ZLEditImageViewController: UIScrollViewDelegate {
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView == self.scrollView else {
+        guard scrollView == self.mainScrollView else {
             return
         }
         self.isScrolling = true
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard scrollView == self.scrollView else {
+        guard scrollView == self.mainScrollView else {
             return
         }
         self.isScrolling = decelerate
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard scrollView == self.scrollView else {
+        guard scrollView == self.mainScrollView else {
             return
         }
         self.isScrolling = false
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        guard scrollView == self.scrollView else {
+        guard scrollView == self.mainScrollView else {
             return
         }
         self.isScrolling = false
@@ -1470,7 +1469,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func stickerOnOperation(_ sticker: UIView, panGes: UIPanGestureRecognizer) {
         let point = panGes.location(in: self.view)
         if self.ashbinView.frame.contains(point) {
-            self.ashbinView.backgroundColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
+            self.ashbinView.backgroundColor = .ashbinTintBgColor
             self.ashbinImgView.isHighlighted = true
             if sticker.alpha == 1 {
                 sticker.layer.removeAllAnimations()
@@ -1479,7 +1478,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 }
             }
         } else {
-            self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
+            self.ashbinView.backgroundColor = .ashbinNormalBgColor
             self.ashbinImgView.isHighlighted = false
             if sticker.alpha != 1 {
                 sticker.layer.removeAllAnimations()
