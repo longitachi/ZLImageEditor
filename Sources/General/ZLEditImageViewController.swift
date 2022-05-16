@@ -254,7 +254,7 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
-    @objc init(image: UIImage, editModel: ZLEditImageModel? = nil) {
+    @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
         originalImage = image.fixOrientation()
         editImage = originalImage
         editImageWithoutAdjust = originalImage

@@ -50,7 +50,7 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
-● 1.1.0
+● 1.1.1
   Add:
     Can select custom font before adding text sticker.
     Change the authority of ZLEditImageViewController to open.
