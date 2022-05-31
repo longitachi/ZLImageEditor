@@ -38,6 +38,9 @@ class ZLImageEditorUIConfiguration: NSObject {
         ZLImageEditorUIConfiguration.single = ZLImageEditorUIConfiguration()
     }
     
+    /// HUD style. Defaults to dark.
+    @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
+    
     /// Language for framework.
     @objc public var languageType: ZLImageEditorLanguageType = .system {
         didSet {

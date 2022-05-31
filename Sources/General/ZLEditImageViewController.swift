@@ -837,11 +837,16 @@ open class ZLEditImageViewController: UIViewController {
         let editModel = ZLEditImageModel(drawPaths: drawPaths, mosaicPaths: mosaicPaths, editRect: editRect, angle: angle, brightness: brightness, contrast: contrast, saturation: saturation, selectRatio: selectRatio, selectFilter: currentFilter, textStickers: textStickers, imageStickers: imageStickers)
         if hasEdit {
             autoreleasepool {
+                let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
+                hud.show()
+                
                 resImage = buildImage()
                 resImage = resImage.clipImage(angle, editRect) ?? resImage
                 if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
                     resImage = resImage.compress(to: oriDataSize)
                 }
+                
+                hud.hide()
             }
         }
         

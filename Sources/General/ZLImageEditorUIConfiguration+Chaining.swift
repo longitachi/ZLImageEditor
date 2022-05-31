@@ -29,6 +29,12 @@ import UIKit
 extension ZLImageEditorUIConfiguration {
     
     @discardableResult
+    func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLImageEditorUIConfiguration {
+        hudStyle = style
+        return self
+    }
+    
+    @discardableResult
     public func languageType(_ type: ZLImageEditorLanguageType) -> ZLImageEditorUIConfiguration {
         languageType = type
         return self
