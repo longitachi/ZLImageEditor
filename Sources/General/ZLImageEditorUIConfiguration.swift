@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLImageEditorUIConfiguration: NSObject {
+public class ZLImageEditorUIConfiguration: NSObject {
 
     private static var single = ZLImageEditorUIConfiguration()
     
