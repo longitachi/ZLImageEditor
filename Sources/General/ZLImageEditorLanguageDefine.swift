@@ -40,6 +40,9 @@ import Foundation
     case malay
     case italian
     case indonesian
+    case portuguese
+    case spanish
+    case turkish
 }
 
 
