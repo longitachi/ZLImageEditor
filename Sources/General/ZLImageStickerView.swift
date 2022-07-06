@@ -27,7 +27,6 @@
 import UIKit
 
 protocol ZLStickerViewDelegate: NSObject {
-    
     // Called when scale or rotate or move.
     func stickerBeginOperation(_ sticker: UIView)
     
@@ -39,12 +38,9 @@ protocol ZLStickerViewDelegate: NSObject {
     
     // Called when tap sticker.
     func stickerDidTap(_ sticker: UIView)
-    
 }
 
-
 protocol ZLStickerViewAdditional: NSObject {
-    
     var gesIsEnabled: Bool { get set }
     
     func resetState()
@@ -52,12 +48,9 @@ protocol ZLStickerViewAdditional: NSObject {
     func moveToAshbin()
     
     func addScale(_ scale: CGFloat)
-    
 }
 
-
 class ZLImageStickerView: UIView, ZLStickerViewAdditional {
-
     static let edgeInset: CGFloat = 20
     
     static let borderWidth = 1 / UIScreen.main.scale
@@ -100,7 +93,7 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
     
     // Conver all states to model.
     var state: ZLImageStickerState {
-        return ZLImageStickerState(image: self.image, originScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+        return ZLImageStickerState(image: image, originScale: originScale, originAngle: originAngle, originFrame: originFrame, gesScale: gesScale, gesRotation: gesRotation, totalTranslationPoint: totalTranslationPoint)
     }
     
     deinit {
@@ -123,35 +116,36 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
         
-        self.layer.borderWidth = ZLTextStickerView.borderWidth
-        self.hideBorder()
+        layer.borderWidth = ZLTextStickerView.borderWidth
+        hideBorder()
         if showBorder {
-            self.startTimer()
+            startTimer()
         }
         
-        self.imageView = UIImageView(image: image)
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.clipsToBounds = true
-        self.addSubview(self.imageView)
+        imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        addSubview(imageView)
         
-        self.tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
-        self.addGestureRecognizer(self.tapGes)
+        tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        addGestureRecognizer(tapGes)
         
-        self.pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
-        self.pinchGes.delegate = self
-        self.addGestureRecognizer(self.pinchGes)
+        pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
+        pinchGes.delegate = self
+        addGestureRecognizer(pinchGes)
         
         let rotationGes = UIRotationGestureRecognizer(target: self, action: #selector(rotationAction(_:)))
         rotationGes.delegate = self
-        self.addGestureRecognizer(rotationGes)
+        addGestureRecognizer(rotationGes)
         
-        self.panGes = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
-        self.panGes.delegate = self
-        self.addGestureRecognizer(self.panGes)
+        panGes = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+        panGes.delegate = self
+        addGestureRecognizer(panGes)
         
-        self.tapGes.require(toFail: self.panGes)
+        tapGes.require(toFail: panGes)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -159,211 +153,211 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        guard self.firstLayout else {
+        guard firstLayout else {
             return
         }
         
         // Rotate must be first when first layout.
-        self.transform = self.transform.rotated(by: self.originAngle.toPi)
+        transform = transform.rotated(by: originAngle.toPi)
         
-        if self.totalTranslationPoint != .zero {
-            if self.originAngle == 90 {
-                self.transform = self.transform.translatedBy(x: self.totalTranslationPoint.y, y: -self.totalTranslationPoint.x)
-            } else if self.originAngle == 180 {
-                self.transform = self.transform.translatedBy(x: -self.totalTranslationPoint.x, y: -self.totalTranslationPoint.y)
-            } else if self.originAngle == 270 {
-                self.transform = self.transform.translatedBy(x: -self.totalTranslationPoint.y, y: self.totalTranslationPoint.x)
+        if totalTranslationPoint != .zero {
+            if originAngle == 90 {
+                transform = transform.translatedBy(x: totalTranslationPoint.y, y: -totalTranslationPoint.x)
+            } else if originAngle == 180 {
+                transform = transform.translatedBy(x: -totalTranslationPoint.x, y: -totalTranslationPoint.y)
+            } else if originAngle == 270 {
+                transform = transform.translatedBy(x: -totalTranslationPoint.y, y: totalTranslationPoint.x)
             } else {
-                self.transform = self.transform.translatedBy(x: self.totalTranslationPoint.x, y: self.totalTranslationPoint.y)
+                transform = transform.translatedBy(x: totalTranslationPoint.x, y: totalTranslationPoint.y)
             }
         }
         
-        self.transform = self.transform.scaledBy(x: self.originScale, y: self.originScale)
+        transform = transform.scaledBy(x: originScale, y: originScale)
         
-        self.originTransform = self.transform
+        originTransform = transform
         
-        if self.gesScale != 1 {
-            self.transform = self.transform.scaledBy(x: self.gesScale, y: self.gesScale)
+        if gesScale != 1 {
+            transform = transform.scaledBy(x: gesScale, y: gesScale)
         }
-        if self.gesRotation != 0 {
-            self.transform = self.transform.rotated(by: self.gesRotation)
+        if gesRotation != 0 {
+            transform = transform.rotated(by: gesRotation)
         }
         
-        self.firstLayout = false
-        self.imageView.frame = self.bounds.insetBy(dx: ZLImageStickerView.edgeInset, dy: ZLImageStickerView.edgeInset)
+        firstLayout = false
+        imageView.frame = bounds.insetBy(dx: ZLImageStickerView.edgeInset, dy: ZLImageStickerView.edgeInset)
     }
     
     @objc func tapAction(_ ges: UITapGestureRecognizer) {
-        guard self.gesIsEnabled else { return }
+        guard gesIsEnabled else { return }
         
-        self.superview?.bringSubviewToFront(self)
-        self.delegate?.stickerDidTap(self)
-        self.startTimer()
+        superview?.bringSubviewToFront(self)
+        delegate?.stickerDidTap(self)
+        startTimer()
     }
     
     @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
-        guard self.gesIsEnabled else { return }
+        guard gesIsEnabled else { return }
         
-        self.gesScale *= ges.scale
+        gesScale *= ges.scale
         ges.scale = 1
         
         if ges.state == .began {
-            self.setOperation(true)
+            setOperation(true)
         } else if ges.state == .changed {
-            self.updateTransform()
-        } else if (ges.state == .ended || ges.state == .cancelled){
-            self.setOperation(false)
+            updateTransform()
+        } else if ges.state == .ended || ges.state == .cancelled {
+            setOperation(false)
         }
     }
     
     @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
-        guard self.gesIsEnabled else { return }
+        guard gesIsEnabled else { return }
         
-        self.gesRotation += ges.rotation
+        gesRotation += ges.rotation
         ges.rotation = 0
         
         if ges.state == .began {
-            self.setOperation(true)
+            setOperation(true)
         } else if ges.state == .changed {
-            self.updateTransform()
-        } else if (ges.state == .ended || ges.state == .cancelled){
-            self.setOperation(false)
+            updateTransform()
+        } else if ges.state == .ended || ges.state == .cancelled {
+            setOperation(false)
         }
     }
     
     @objc func panAction(_ ges: UIPanGestureRecognizer) {
-        guard self.gesIsEnabled else { return }
+        guard gesIsEnabled else { return }
         
-        let point = ges.translation(in: self.superview)
-        self.gesTranslationPoint = CGPoint(x: point.x / self.originScale, y: point.y / self.originScale)
+        let point = ges.translation(in: superview)
+        gesTranslationPoint = CGPoint(x: point.x / originScale, y: point.y / originScale)
         
         if ges.state == .began {
-            self.setOperation(true)
+            setOperation(true)
         } else if ges.state == .changed {
-            self.updateTransform()
-        } else if (ges.state == .ended || ges.state == .cancelled) {
-            self.totalTranslationPoint.x += point.x
-            self.totalTranslationPoint.y += point.y
-            self.setOperation(false)
-            if self.originAngle == 90 {
-                self.originTransform = self.originTransform.translatedBy(x: self.gesTranslationPoint.y, y: -self.gesTranslationPoint.x)
-            } else if self.originAngle == 180 {
-                self.originTransform = self.originTransform.translatedBy(x: -self.gesTranslationPoint.x, y: -self.gesTranslationPoint.y)
-            } else if self.originAngle == 270 {
-                self.originTransform = self.originTransform.translatedBy(x: -self.gesTranslationPoint.y, y: self.gesTranslationPoint.x)
+            updateTransform()
+        } else if ges.state == .ended || ges.state == .cancelled {
+            totalTranslationPoint.x += point.x
+            totalTranslationPoint.y += point.y
+            setOperation(false)
+            if originAngle == 90 {
+                originTransform = originTransform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
+            } else if originAngle == 180 {
+                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.x, y: -gesTranslationPoint.y)
+            } else if originAngle == 270 {
+                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.y, y: gesTranslationPoint.x)
             } else {
-                self.originTransform = self.originTransform.translatedBy(x: self.gesTranslationPoint.x, y: self.gesTranslationPoint.y)
+                originTransform = originTransform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
             }
-            self.gesTranslationPoint = .zero
+            gesTranslationPoint = .zero
         }
     }
     
     func setOperation(_ isOn: Bool) {
-        if isOn, !self.onOperation {
-            self.onOperation = true
-            self.cleanTimer()
-            self.layer.borderColor = UIColor.white.cgColor
-            self.superview?.bringSubviewToFront(self)
-            self.delegate?.stickerBeginOperation(self)
-        } else if !isOn, self.onOperation {
-            self.onOperation = false
-            self.startTimer()
-            self.delegate?.stickerEndOperation(self, panGes: self.panGes)
+        if isOn, !onOperation {
+            onOperation = true
+            cleanTimer()
+            layer.borderColor = UIColor.white.cgColor
+            superview?.bringSubviewToFront(self)
+            delegate?.stickerBeginOperation(self)
+        } else if !isOn, onOperation {
+            onOperation = false
+            startTimer()
+            delegate?.stickerEndOperation(self, panGes: panGes)
         }
     }
     
     func updateTransform() {
-        var transform = self.originTransform
+        var transform = originTransform
         
-        if self.originAngle == 90 {
-            transform = transform.translatedBy(x: self.gesTranslationPoint.y, y: -self.gesTranslationPoint.x)
-        } else if self.originAngle == 180 {
-            transform = transform.translatedBy(x: -self.gesTranslationPoint.x, y: -self.gesTranslationPoint.y)
-        } else if self.originAngle == 270 {
-            transform = transform.translatedBy(x: -self.gesTranslationPoint.y, y: self.gesTranslationPoint.x)
+        if originAngle == 90 {
+            transform = transform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
+        } else if originAngle == 180 {
+            transform = transform.translatedBy(x: -gesTranslationPoint.x, y: -gesTranslationPoint.y)
+        } else if originAngle == 270 {
+            transform = transform.translatedBy(x: -gesTranslationPoint.y, y: gesTranslationPoint.x)
         } else {
-            transform = transform.translatedBy(x: self.gesTranslationPoint.x, y: self.gesTranslationPoint.y)
+            transform = transform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
         }
         // Scale must after translate.
-        transform = transform.scaledBy(x: self.gesScale, y: self.gesScale)
+        transform = transform.scaledBy(x: gesScale, y: gesScale)
         // Rotate must after scale.
-        transform = transform.rotated(by: self.gesRotation)
+        transform = transform.rotated(by: gesRotation)
         self.transform = transform
         
-        self.delegate?.stickerOnOperation(self, panGes: self.panGes)
+        delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
     @objc func hideBorder() {
-        self.cleanTimer()
-        self.layer.borderColor = UIColor.clear.cgColor
+        cleanTimer()
+        layer.borderColor = UIColor.clear.cgColor
     }
     
     func startTimer() {
-        self.cleanTimer()
-        self.layer.borderColor = UIColor.white.cgColor
-        self.timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideBorder), userInfo: nil, repeats: false)
-        RunLoop.current.add(self.timer!, forMode: .default)
+        cleanTimer()
+        layer.borderColor = UIColor.white.cgColor
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideBorder), userInfo: nil, repeats: false)
+        RunLoop.current.add(timer!, forMode: .default)
     }
     
     func cleanTimer() {
-        self.timer?.invalidate()
-        self.timer = nil
+        timer?.invalidate()
+        timer = nil
     }
     
     func resetState() {
-        self.onOperation = false
-        self.cleanTimer()
-        self.hideBorder()
+        onOperation = false
+        cleanTimer()
+        hideBorder()
     }
     
     func moveToAshbin() {
-        self.cleanTimer()
-        self.removeFromSuperview()
+        cleanTimer()
+        removeFromSuperview()
     }
     
     func addScale(_ scale: CGFloat) {
         // Revert zoom scale.
-        self.transform = self.transform.scaledBy(x: 1/self.originScale, y: 1/self.originScale)
+        transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
         // Revert ges scale.
-        self.transform = self.transform.scaledBy(x: 1/self.gesScale, y: 1/self.gesScale)
+        transform = transform.scaledBy(x: 1 / gesScale, y: 1 / gesScale)
         // Revert ges rotation.
-        self.transform = self.transform.rotated(by: -self.gesRotation)
+        transform = transform.rotated(by: -gesRotation)
         
-        var origin = self.frame.origin
+        var origin = frame.origin
         origin.x *= scale
         origin.y *= scale
         
-        let newSize = CGSize(width: self.frame.width * scale, height: self.frame.height * scale)
-        let newOrigin = CGPoint(x: self.frame.minX + (self.frame.width - newSize.width)/2, y: self.frame.minY + (self.frame.height - newSize.height)/2)
+        let newSize = CGSize(width: frame.width * scale, height: frame.height * scale)
+        let newOrigin = CGPoint(x: frame.minX + (frame.width - newSize.width) / 2, y: frame.minY + (frame.height - newSize.height) / 2)
         let diffX: CGFloat = (origin.x - newOrigin.x)
         let diffY: CGFloat = (origin.y - newOrigin.y)
         
-        if self.originAngle == 90 {
-            self.transform = self.transform.translatedBy(x: diffY, y: -diffX)
-            self.originTransform = self.originTransform.translatedBy(x: diffY / self.originScale, y: -diffX / self.originScale)
-        } else if self.originAngle == 180 {
-            self.transform = self.transform.translatedBy(x: -diffX, y: -diffY)
-            self.originTransform = self.originTransform.translatedBy(x: -diffX / self.originScale, y: -diffY / self.originScale)
-        } else if self.originAngle == 270 {
-            self.transform = self.transform.translatedBy(x: -diffY, y: diffX)
-            self.originTransform = self.originTransform.translatedBy(x: -diffY / self.originScale, y: diffX / self.originScale)
+        if originAngle == 90 {
+            transform = transform.translatedBy(x: diffY, y: -diffX)
+            originTransform = originTransform.translatedBy(x: diffY / originScale, y: -diffX / originScale)
+        } else if originAngle == 180 {
+            transform = transform.translatedBy(x: -diffX, y: -diffY)
+            originTransform = originTransform.translatedBy(x: -diffX / originScale, y: -diffY / originScale)
+        } else if originAngle == 270 {
+            transform = transform.translatedBy(x: -diffY, y: diffX)
+            originTransform = originTransform.translatedBy(x: -diffY / originScale, y: diffX / originScale)
         } else {
-            self.transform = self.transform.translatedBy(x: diffX, y: diffY)
-            self.originTransform = self.originTransform.translatedBy(x: diffX / self.originScale, y: diffY / self.originScale)
+            transform = transform.translatedBy(x: diffX, y: diffY)
+            originTransform = originTransform.translatedBy(x: diffX / originScale, y: diffY / originScale)
         }
-        self.totalTranslationPoint.x += diffX
-        self.totalTranslationPoint.y += diffY
+        totalTranslationPoint.x += diffX
+        totalTranslationPoint.y += diffY
         
-        self.transform = self.transform.scaledBy(x: scale, y: scale)
+        transform = transform.scaledBy(x: scale, y: scale)
         
         // Readd zoom scale.
-        self.transform = self.transform.scaledBy(x: self.originScale, y: self.originScale)
+        transform = transform.scaledBy(x: originScale, y: originScale)
         // Readd ges scale.
-        self.transform = self.transform.scaledBy(x: self.gesScale, y: self.gesScale)
+        transform = transform.scaledBy(x: gesScale, y: gesScale)
         // Readd ges rotation.
-        self.transform = self.transform.rotated(by: self.gesRotation)
+        transform = transform.rotated(by: gesRotation)
         
-        self.gesScale *= scale
+        gesScale *= scale
     }
     
     class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
@@ -384,21 +378,15 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
         size.height += ZLImageStickerView.edgeInset * 2
         return size
     }
-    
 }
 
-
 extension ZLImageStickerView: UIGestureRecognizerDelegate {
-    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
 }
 
-
 public class ZLImageStickerState: NSObject {
-    
     let image: UIImage
     let originScale: CGFloat
     let originAngle: CGFloat
@@ -417,5 +405,4 @@ public class ZLImageStickerState: NSObject {
         self.totalTranslationPoint = totalTranslationPoint
         super.init()
     }
-    
 }

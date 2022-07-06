@@ -27,7 +27,6 @@
 import UIKit
 
 extension UIColor {
-    
     class var adjustSliderNormalColor: UIColor {
         ZLImageEditorUIConfiguration.default().adjustSliderNormalColor
     }
@@ -51,5 +50,4 @@ extension UIColor {
     class var ashbinTintBgColor: UIColor {
         ZLImageEditorUIConfiguration.default().ashbinTintBgColor
     }
-    
 }

@@ -27,7 +27,6 @@
 import UIKit
 
 public class ZLImageEditorConfiguration: NSObject {
-    
     private static var single = ZLImageEditorConfiguration()
     
     @objc public class func `default`() -> ZLImageEditorConfiguration {
@@ -121,9 +120,9 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
+    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)?
 
-    @objc public var fontChooserContainerView: (UIView & ZLTextFontChooserDelegate)? = nil
+    @objc public var fontChooserContainerView: (UIView & ZLTextFontChooserDelegate)?
 
     private var pri_adjustTools: [ZLImageEditorConfiguration.AdjustTool] = [.brightness, .contrast, .saturation]
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
@@ -168,12 +167,10 @@ public class ZLImageEditorConfiguration: NSObject {
     
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
-    
 }
 
-extension ZLImageEditorConfiguration {
-    
-    @objc public enum EditTool: Int {
+public extension ZLImageEditorConfiguration {
+    @objc enum EditTool: Int {
         case draw
         case clip
         case imageSticker
@@ -183,7 +180,7 @@ extension ZLImageEditorConfiguration {
         case adjust
     }
     
-    @objc public enum AdjustTool: Int {
+    @objc enum AdjustTool: Int {
         case brightness
         case contrast
         case saturation
@@ -220,7 +217,7 @@ extension ZLImageEditorConfiguration {
         }
     }
     
-    @objc public enum FeedbackStyle: Int {
+    @objc enum FeedbackStyle: Int {
         case light
         case medium
         case heavy
@@ -237,21 +234,19 @@ extension ZLImageEditorConfiguration {
             }
         }
     }
-    
 }
 
 // MARK: Image source deploy
-struct ZLCustomImageDeploy {
-    
+
+enum ZLCustomImageDeploy {
     static var imageNames: [String] = []
     
     static var imageForKey: [String: UIImage] = [:]
-    
 }
 
 // MARK: Clip ratio.
+
 public class ZLImageClipRatio: NSObject {
-    
     @objc public var title: String
     
     @objc public let whRatio: CGFloat
@@ -264,57 +259,48 @@ public class ZLImageClipRatio: NSObject {
         self.isCircle = isCircle
         super.init()
     }
-    
 }
 
 extension ZLImageClipRatio {
- 
-    static func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
+    static func == (lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
         return lhs.whRatio == rhs.whRatio
     }
-    
 }
 
-extension ZLImageClipRatio {
+public extension ZLImageClipRatio {
+    @objc static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
     
-    @objc public static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
+    @objc static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
     
-    @objc public static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
+    @objc static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
     
-    @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
+    @objc static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0 / 4.0)
     
-    @objc public static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0/4.0)
+    @objc static let wh4x3 = ZLImageClipRatio(title: "4 : 3", whRatio: 4.0 / 3.0)
     
-    @objc public static let wh4x3 = ZLImageClipRatio(title: "4 : 3", whRatio: 4.0/3.0)
+    @objc static let wh2x3 = ZLImageClipRatio(title: "2 : 3", whRatio: 2.0 / 3.0)
     
-    @objc public static let wh2x3 = ZLImageClipRatio(title: "2 : 3", whRatio: 2.0/3.0)
+    @objc static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0 / 2.0)
     
-    @objc public static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0/2.0)
+    @objc static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0 / 16.0)
     
-    @objc public static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0/16.0)
-    
-    @objc public static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0/9.0)
-    
+    @objc static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0 / 9.0)
 }
 
 /// Provide an image sticker container view that conform to this protocol must be a subclass of UIView
 @objc public protocol ZLImageStickerContainerDelegate {
+    @objc var selectImageBlock: ((UIImage) -> Void)? { get set }
     
-    @objc var selectImageBlock: ( (UIImage) -> Void )? { get set }
-    
-    @objc var hideBlock: ( () -> Void )? { get set }
+    @objc var hideBlock: (() -> Void)? { get set }
     
     @objc func show(in view: UIView)
-    
 }
 
 /// Provide an text font choose view that conform to this protocol must be a subclass of UIView
 @objc public protocol ZLTextFontChooserDelegate {
+    @objc var selectFontBlock: ((UIFont) -> Void)? { get set }
 
-    @objc var selectFontBlock: ( (UIFont) -> Void )? { get set }
-
-    @objc var hideBlock: ( () -> Void )? { get set }
+    @objc var hideBlock: (() -> Void)? { get set }
 
     @objc func show(in view: UIView)
-
 }

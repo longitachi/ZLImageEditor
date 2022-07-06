@@ -26,86 +26,84 @@
 
 import UIKit
 
-extension ZLImageEditorConfiguration {
-    
+public extension ZLImageEditorConfiguration {
     @discardableResult
-    public func editImageTools(_ tools: [ZLImageEditorConfiguration.EditTool]) -> ZLImageEditorConfiguration {
+    func editImageTools(_ tools: [ZLImageEditorConfiguration.EditTool]) -> ZLImageEditorConfiguration {
         self.tools = tools
         return self
     }
     
     @discardableResult
-    public func drawColors(_ colors: [UIColor]) -> ZLImageEditorConfiguration {
+    func drawColors(_ colors: [UIColor]) -> ZLImageEditorConfiguration {
         drawColors = colors
         return self
     }
     
     @discardableResult
-    public func defaultDrawColor(_ color: UIColor) -> ZLImageEditorConfiguration {
+    func defaultDrawColor(_ color: UIColor) -> ZLImageEditorConfiguration {
         defaultDrawColor = color
         return self
     }
     
     @discardableResult
-    public func clipRatios(_ ratios: [ZLImageClipRatio]) -> ZLImageEditorConfiguration {
+    func clipRatios(_ ratios: [ZLImageClipRatio]) -> ZLImageEditorConfiguration {
         clipRatios = ratios
         return self
     }
     
     @discardableResult
-    public func textStickerTextColors(_ colors: [UIColor]) -> ZLImageEditorConfiguration {
+    func textStickerTextColors(_ colors: [UIColor]) -> ZLImageEditorConfiguration {
         textStickerTextColors = colors
         return self
     }
     
     @discardableResult
-    public func textStickerDefaultTextColor(_ color: UIColor) -> ZLImageEditorConfiguration {
+    func textStickerDefaultTextColor(_ color: UIColor) -> ZLImageEditorConfiguration {
         textStickerDefaultTextColor = color
         return self
     }
     
     @discardableResult
-    public func filters(_ filters: [ZLFilter]) -> ZLImageEditorConfiguration {
+    func filters(_ filters: [ZLFilter]) -> ZLImageEditorConfiguration {
         self.filters = filters
         return self
     }
     
     @discardableResult
-    public func imageStickerContainerView(_ view: (UIView & ZLImageStickerContainerDelegate)?) -> ZLImageEditorConfiguration {
+    func imageStickerContainerView(_ view: (UIView & ZLImageStickerContainerDelegate)?) -> ZLImageEditorConfiguration {
         imageStickerContainerView = view
         return self
     }
 
     @discardableResult
-    public func fontChooserContainerView(_ view: (UIView & ZLTextFontChooserDelegate)?) -> ZLImageEditorConfiguration {
+    func fontChooserContainerView(_ view: (UIView & ZLTextFontChooserDelegate)?) -> ZLImageEditorConfiguration {
         fontChooserContainerView = view
         return self
     }
     
     @discardableResult
-    public func adjustTools(_ tools: [ZLImageEditorConfiguration.AdjustTool]) -> ZLImageEditorConfiguration {
+    func adjustTools(_ tools: [ZLImageEditorConfiguration.AdjustTool]) -> ZLImageEditorConfiguration {
         adjustTools = tools
         return self
     }
     
     @available(iOS 10.0, *)
     @discardableResult
-    public func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Bool) -> ZLImageEditorConfiguration {
+    func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Bool) -> ZLImageEditorConfiguration {
         impactFeedbackWhenAdjustSliderValueIsZero = value
         return self
     }
     
     @available(iOS 10.0, *)
     @discardableResult
-    public func impactFeedbackStyle(_ style: ZLImageEditorConfiguration.FeedbackStyle) -> ZLImageEditorConfiguration {
+    func impactFeedbackStyle(_ style: ZLImageEditorConfiguration.FeedbackStyle) -> ZLImageEditorConfiguration {
         impactFeedbackStyle = style
         return self
     }
     
     @discardableResult
-    public func showClipDirectlyIfOnlyHasClipTool(_ value: Bool) -> ZLImageEditorConfiguration {
+    func showClipDirectlyIfOnlyHasClipTool(_ value: Bool) -> ZLImageEditorConfiguration {
         showClipDirectlyIfOnlyHasClipTool = value
         return self
     }
-    
 }

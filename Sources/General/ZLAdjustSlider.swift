@@ -25,7 +25,6 @@
 import UIKit
 
 class ZLAdjustSlider: UIView {
-
     static let maximumValue: Float = 1
     
     static let minimumValue: Float = -1
@@ -70,6 +69,7 @@ class ZLAdjustSlider: UIView {
         addGestureRecognizer(pan)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -158,5 +158,4 @@ class ZLAdjustSlider: UIView {
             endAdjust?()
         }
     }
-
 }

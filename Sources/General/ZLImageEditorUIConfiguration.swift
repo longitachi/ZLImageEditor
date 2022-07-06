@@ -27,7 +27,6 @@
 import UIKit
 
 public class ZLImageEditorUIConfiguration: NSObject {
-
     private static var single = ZLImageEditorUIConfiguration()
     
     @objc public class func `default`() -> ZLImageEditorUIConfiguration {
@@ -92,5 +91,4 @@ public class ZLImageEditorUIConfiguration: NSObject {
     
     /// The tint background color of ashbin.
     @objc public var ashbinTintBgColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
-    
 }

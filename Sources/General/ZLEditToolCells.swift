@@ -25,8 +25,8 @@
 import UIKit
 
 // MARK: Edit tool cell
+
 class ZLEditToolCell: UICollectionViewCell {
-    
     var toolType: ZLImageEditorConfiguration.EditTool = .draw {
         didSet {
             switch toolType {
@@ -64,15 +64,15 @@ class ZLEditToolCell: UICollectionViewCell {
         contentView.addSubview(icon)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: draw color cell
+
 class ZLDrawColorCell: UICollectionViewCell {
-    
     var bgWhiteView: UIView!
     
     var colorView: UIView!
@@ -86,31 +86,31 @@ class ZLDrawColorCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.bgWhiteView = UIView()
-        self.bgWhiteView.backgroundColor = .white
-        self.bgWhiteView.layer.cornerRadius = 10
-        self.bgWhiteView.layer.masksToBounds = true
-        self.bgWhiteView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        self.bgWhiteView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        self.contentView.addSubview(self.bgWhiteView)
+        bgWhiteView = UIView()
+        bgWhiteView.backgroundColor = .white
+        bgWhiteView.layer.cornerRadius = 10
+        bgWhiteView.layer.masksToBounds = true
+        bgWhiteView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        bgWhiteView.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        contentView.addSubview(bgWhiteView)
         
-        self.colorView = UIView()
-        self.colorView.layer.cornerRadius = 8
-        self.colorView.layer.masksToBounds = true
-        self.colorView.frame = CGRect(x: 0, y: 0, width: 16, height: 16)
-        self.colorView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        self.contentView.addSubview(self.colorView)
+        colorView = UIView()
+        colorView.layer.cornerRadius = 8
+        colorView.layer.masksToBounds = true
+        colorView.frame = CGRect(x: 0, y: 0, width: 16, height: 16)
+        colorView.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        contentView.addSubview(colorView)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: filter cell
+
 class ZLFilterImageCell: UICollectionViewCell {
-    
     var nameLabel: UILabel!
     
     var imageView: UIImageView!
@@ -118,32 +118,32 @@ class ZLFilterImageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.nameLabel = UILabel(frame: CGRect(x: 0, y: self.bounds.height-20, width: self.bounds.width, height: 20))
-        self.nameLabel.font = UIFont.systemFont(ofSize: 12)
-        self.nameLabel.textColor = .white
-        self.nameLabel.textAlignment = .center
-        self.nameLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
-        self.nameLabel.layer.shadowOffset = .zero
-        self.nameLabel.layer.shadowOpacity = 1
-        self.nameLabel.adjustsFontSizeToFitWidth = true
-        self.nameLabel.minimumScaleFactor = 0.5
-        self.contentView.addSubview(self.nameLabel)
+        nameLabel = UILabel(frame: CGRect(x: 0, y: bounds.height - 20, width: bounds.width, height: 20))
+        nameLabel.font = UIFont.systemFont(ofSize: 12)
+        nameLabel.textColor = .white
+        nameLabel.textAlignment = .center
+        nameLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
+        nameLabel.layer.shadowOffset = .zero
+        nameLabel.layer.shadowOpacity = 1
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.5
+        contentView.addSubview(nameLabel)
         
-        self.imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.width))
-        self.imageView.contentMode = .scaleAspectFill
-        self.imageView.clipsToBounds = true
-        self.contentView.addSubview(self.imageView)
+        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.width))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        contentView.addSubview(imageView)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: adjust tool cell
+
 class ZLAdjustToolCell: UICollectionViewCell {
-    
     lazy var nameLabel = UILabel()
     
     lazy var imageView = UIImageView()
@@ -189,8 +189,8 @@ class ZLAdjustToolCell: UICollectionViewCell {
         contentView.addSubview(imageView)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

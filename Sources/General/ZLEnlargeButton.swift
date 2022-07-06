@@ -27,7 +27,6 @@
 import UIKit
 
 open class ZLEnlargeButton: UIButton {
-
     /// 扩大点击区域
     public var enlargeInsets: UIEdgeInsets = .zero
     
@@ -39,8 +38,8 @@ open class ZLEnlargeButton: UIButton {
         }
     }
     
-    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        guard !isHidden && alpha != 0 else {
+    override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard !isHidden, alpha != 0 else {
             return false
         }
         
@@ -52,7 +51,7 @@ open class ZLEnlargeButton: UIButton {
     }
     
     private func enlargeRect() -> CGRect {
-        guard enlargeInsets != .zero  else {
+        guard enlargeInsets != .zero else {
             return bounds
         }
         
@@ -64,5 +63,4 @@ open class ZLEnlargeButton: UIButton {
         )
         return rect
     }
-
 }

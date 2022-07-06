@@ -27,13 +27,11 @@
 import UIKit
 
 struct ZLImageEditorLayout {
-    
     static let bottomToolBtnH: CGFloat = 34
     
     static let bottomToolTitleFont = UIFont.systemFont(ofSize: 17)
     
     static let bottomToolBtnCornerRadius: CGFloat = 5
-    
 }
 
 func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {

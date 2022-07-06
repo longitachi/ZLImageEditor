@@ -45,9 +45,7 @@ import Foundation
     case turkish
 }
 
-
 public struct ZLLocalLanguageKey: Hashable {
-    
     public let rawValue: String
     
     public init(rawValue: String) {
@@ -80,7 +78,6 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// waiting... (正在处理...)
     public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
-    
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {
