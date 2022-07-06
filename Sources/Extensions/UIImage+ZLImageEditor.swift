@@ -187,15 +187,16 @@ extension UIImage {
             return nil
         }
         
+        let scale = 8 * size.width / UIScreen.main.bounds.width
         let currCiImage = CIImage(cgImage: currCgImage)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(currCiImage, forKey: kCIInputImageKey)
-        filter?.setValue(20, forKey: kCIInputScaleKey)
+        filter?.setValue(scale, forKey: kCIInputScaleKey)
         guard let outputImage = filter?.outputImage else { return nil }
         
         let context = CIContext()
         
-        if let cgImg = context.createCGImage(outputImage, from: CGRect(origin: .zero, size: self.size)) {
+        if let cgImg = context.createCGImage(outputImage, from: CGRect(origin: .zero, size: size)) {
             return UIImage(cgImage: cgImg)
         } else {
             return nil

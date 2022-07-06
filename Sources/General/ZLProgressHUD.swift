@@ -1,6 +1,6 @@
 //
 //  ZLProgressHUD.swift
-//  ZLPhotoBrowser
+//  ZLImageEditor
 //
 //  Created by long on 2020/8/17.
 //

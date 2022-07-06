@@ -218,6 +218,8 @@ open class ZLEditImageViewController: UIViewController {
         return self.originalImage.size
     }
     
+    var toolViewStateTimer: Timer?
+    
     @objc public var editFinishBlock: ((UIImage, ZLEditImageModel) -> Void)?
     
     open override var prefersStatusBarHidden: Bool {
@@ -229,6 +231,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     deinit {
+        cleanToolViewStateTimer()
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
@@ -910,7 +913,7 @@ open class ZLEditImageViewController: UIViewController {
                 path?.addLine(to: point)
                 self.drawLine()
             } else if pan.state == .cancelled || pan.state == .ended {
-                self.setToolView(show: true)
+                self.setToolView(show: true, delay: 0.5)
                 self.revokeBtn.isEnabled = self.drawPaths.count > 0
             }
         } else if self.selectedTool == .mosaic {
@@ -935,7 +938,7 @@ open class ZLEditImageViewController: UIViewController {
                 path?.addLine(to: point)
                 self.mosaicImageLayerMaskLayer?.path = path?.path.cgPath
             } else if pan.state == .cancelled || pan.state == .ended {
-                self.setToolView(show: true)
+                self.setToolView(show: true, delay: 0.5)
                 self.revokeBtn.isEnabled = self.mosaicPaths.count > 0
                 self.generateNewMosaicImage()
             }
@@ -991,11 +994,27 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
-    func setToolView(show: Bool) {
+    func setToolView(show: Bool, delay: TimeInterval? = nil) {
+        cleanToolViewStateTimer()
+        if let delay = delay {
+            toolViewStateTimer = Timer.scheduledTimer(timeInterval: delay, target: ZLWeakProxy(target: self), selector: #selector(setToolViewShow_timerFunc(show:)), userInfo: ["show": show], repeats: false)
+            RunLoop.current.add(toolViewStateTimer!, forMode: .common)
+        } else {
+            setToolViewShow_timerFunc(show: show)
+        }
+    }
+    
+    @objc private func setToolViewShow_timerFunc(show: Bool) {
+        var flag = show
+        if let toolViewStateTimer = toolViewStateTimer {
+            let userInfo = toolViewStateTimer.userInfo as? [String: Any]
+            flag = userInfo?["show"] as? Bool ?? true
+            cleanToolViewStateTimer()
+        }
         topShadowView.layer.removeAllAnimations()
         bottomShadowView.layer.removeAllAnimations()
         adjustSlider?.layer.removeAllAnimations()
-        if show {
+        if flag {
             UIView.animate(withDuration: 0.25) {
                 self.topShadowView.alpha = 1
                 self.bottomShadowView.alpha = 1
@@ -1008,6 +1027,11 @@ open class ZLEditImageViewController: UIViewController {
                 self.adjustSlider?.alpha = 0
             }
         }
+    }
+    
+    private func cleanToolViewStateTimer() {
+        toolViewStateTimer?.invalidate()
+        toolViewStateTimer = nil
     }
     
     func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIFont, UIColor, UIColor) -> Void) {
@@ -1150,9 +1174,11 @@ open class ZLEditImageViewController: UIViewController {
     /// 传入inputImage 和 inputMosaicImage则代表仅想要获取新生成的mosaic图片
     @discardableResult
     func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
+        let renderRect = CGRect(origin: .zero, size: originalImage.size)
+        
         UIGraphicsBeginImageContextWithOptions(originalImage.size, false, originalImage.scale)
         if inputImage != nil {
-            inputImage?.draw(at: .zero)
+            inputImage?.draw(in: renderRect)
         } else {
             var drawImage: UIImage? = nil
             if tools.contains(.filter), let image = filterImages[currentFilter.name] {
@@ -1160,8 +1186,13 @@ open class ZLEditImageViewController: UIViewController {
             } else {
                 drawImage = originalImage
             }
-            drawImage = drawImage?.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
+            
             drawImage?.draw(at: .zero)
+            if tools.contains(.adjust), (brightness != 0 || contrast != 0 || saturation != 0) {
+                drawImage = drawImage?.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
+            }
+            
+            drawImage?.draw(in: renderRect)
         }
         let context = UIGraphicsGetCurrentContext()
         
@@ -1186,7 +1217,9 @@ open class ZLEditImageViewController: UIViewController {
         midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
         
         UIGraphicsBeginImageContextWithOptions(originalImage.size, false, originalImage.scale)
-        (inputMosaicImage ?? mosaicImage)?.draw(at: .zero)
+        // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
+        originalImage.draw(in: renderRect)
+        (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
         midImage?.draw(at: .zero)
         
         let temp = UIGraphicsGetImageFromCurrentImageContext()
@@ -1415,12 +1448,18 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             currentDrawColor = drawColors[indexPath.row]
         } else if collectionView == filterCollectionView {
             currentFilter = ZLImageEditorConfiguration.default().filters[indexPath.row]
+            func adjustImage(_ image: UIImage) -> UIImage {
+                guard tools.contains(.adjust), (brightness != 0 || contrast != 0 || saturation != 0) else {
+                    return image
+                }
+                return image.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
+            }
             if let image = filterImages[currentFilter.name] {
-                editImage = image.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
+                editImage = adjustImage(image)
                 editImageWithoutAdjust = image
             } else {
                 let image = currentFilter.applier?(originalImage) ?? originalImage
-                editImage = image.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
+                editImage = adjustImage(image)
                 editImageWithoutAdjust = image
                 filterImages[currentFilter.name] = image
             }
