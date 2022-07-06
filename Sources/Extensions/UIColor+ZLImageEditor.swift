@@ -26,28 +26,36 @@
 
 import UIKit
 
-extension UIColor {
-    class var adjustSliderNormalColor: UIColor {
+extension ZLImageEditorWrapper where Base: UIColor {
+    static var adjustSliderNormalColor: UIColor {
         ZLImageEditorUIConfiguration.default().adjustSliderNormalColor
     }
     
-    class var adjustSliderTintColor: UIColor {
+    static var adjustSliderTintColor: UIColor {
         ZLImageEditorUIConfiguration.default().adjustSliderTintColor
     }
     
-    class var editDoneBtnBgColor: UIColor {
+    static var editDoneBtnBgColor: UIColor {
         ZLImageEditorUIConfiguration.default().editDoneBtnBgColor
     }
     
-    class var editDoneBtnTitleColor: UIColor {
+    static var editDoneBtnTitleColor: UIColor {
         ZLImageEditorUIConfiguration.default().editDoneBtnTitleColor
     }
     
-    class var ashbinNormalBgColor: UIColor {
+    static var ashbinNormalBgColor: UIColor {
         ZLImageEditorUIConfiguration.default().ashbinNormalBgColor
     }
     
-    class var ashbinTintBgColor: UIColor {
+    static var ashbinTintBgColor: UIColor {
         ZLImageEditorUIConfiguration.default().ashbinTintBgColor
+    }
+    
+    static var toolTitleNormalColor: UIColor {
+        ZLImageEditorUIConfiguration.default().toolTitleNormalColor
+    }
+    
+    static var toolTitleTintColor: UIColor {
+        ZLImageEditorUIConfiguration.default().toolTitleTintColor
     }
 }

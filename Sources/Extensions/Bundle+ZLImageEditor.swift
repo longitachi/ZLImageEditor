@@ -26,7 +26,7 @@
 
 import Foundation
 
-private class BundleFinder {}
+private class BundleFinder { }
 
 extension Bundle {
     private static var bundle: Bundle?

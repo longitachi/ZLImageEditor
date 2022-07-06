@@ -86,7 +86,7 @@ class ZLAdjustSlider: UIView {
     }
     
     private func setupUI() {
-        shadowView.backgroundColor = .adjustSliderNormalColor
+        shadowView.backgroundColor = .zl.adjustSliderNormalColor
         shadowView.layer.cornerRadius = sliderWidth / 2
         shadowView.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
         shadowView.layer.shadowOffset = .zero
@@ -94,12 +94,12 @@ class ZLAdjustSlider: UIView {
         shadowView.layer.shadowRadius = 3
         addSubview(shadowView)
         
-        whiteView.backgroundColor = .adjustSliderNormalColor
+        whiteView.backgroundColor = .zl.adjustSliderNormalColor
         whiteView.layer.cornerRadius = sliderWidth / 2
         whiteView.layer.masksToBounds = true
         addSubview(whiteView)
         
-        tintView.backgroundColor = .adjustSliderTintColor
+        tintView.backgroundColor = .zl.adjustSliderTintColor
         whiteView.addSubview(tintView)
         
         separator.backgroundColor = zlRGB(230, 230, 230)

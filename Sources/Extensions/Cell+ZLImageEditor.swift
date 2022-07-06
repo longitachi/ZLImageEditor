@@ -26,22 +26,12 @@
 
 import UIKit
 
-extension UICollectionViewCell {
-    class func zl_identifier() -> String {
-        return NSStringFromClass(classForCoder())
+extension ZLImageEditorWrapper where Base: UICollectionViewCell {
+    static var identifier: String {
+        NSStringFromClass(Base.self)
     }
     
-    class func zl_register(_ collectionView: UICollectionView) {
-        collectionView.register(classForCoder(), forCellWithReuseIdentifier: zl_identifier())
-    }
-}
-
-extension UITableViewCell {
-    class func zl_identifier() -> String {
-        return NSStringFromClass(classForCoder())
-    }
-    
-    class func zl_register(_ tableView: UITableView) {
-        tableView.register(classForCoder(), forCellReuseIdentifier: zl_identifier())
+    static func register(_ collectionView: UICollectionView) {
+        collectionView.register(Base.self, forCellWithReuseIdentifier: identifier)
     }
 }

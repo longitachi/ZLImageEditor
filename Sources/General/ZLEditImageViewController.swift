@@ -244,7 +244,7 @@ open class ZLEditImageViewController: UIViewController {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
             vc.clipDoneBlock = { angle, editRect, ratio in
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, brightness: 0, contrast: 0, saturation: 0, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
-                completion?(image.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
+                completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
             vc.animateDismiss = animate
             vc.modalPresentationStyle = .fullScreen
@@ -261,7 +261,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
-        originalImage = image.fixOrientation()
+        originalImage = image.zl.fixOrientation()
         editImage = originalImage
         editImageWithoutAdjust = originalImage
         editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
@@ -367,7 +367,7 @@ open class ZLEditImageViewController: UIViewController {
         let toolY: CGFloat = 85
         
         let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
-        let doneBtnW = localLanguageTextValue(.editFinish).boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
+        let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.frame.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
         
         editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.bounds.width - 20 - 20 - doneBtnW - 20, height: 30)
@@ -393,7 +393,7 @@ open class ZLEditImageViewController: UIViewController {
         } else {
             size = CGSize(width: fixLength, height: fixLength / ratio)
         }
-        let thumbnailImage = originalImage.resize(size) ?? originalImage
+        let thumbnailImage = originalImage.zl.resize(size) ?? originalImage
         
         DispatchQueue.global().async {
             self.thumbnailFilterImages = ZLImageEditorConfiguration.default().filters.map { $0.applier?(thumbnailImage) ?? thumbnailImage }
@@ -500,12 +500,12 @@ open class ZLEditImageViewController: UIViewController {
         editToolCollectionView.showsHorizontalScrollIndicator = false
         bottomShadowView.addSubview(editToolCollectionView)
         
-        ZLEditToolCell.zl_register(editToolCollectionView)
+        ZLEditToolCell.zl.register(editToolCollectionView)
         
         doneBtn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        doneBtn.backgroundColor = .editDoneBtnBgColor
+        doneBtn.backgroundColor = .zl.editDoneBtnBgColor
         doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
-        doneBtn.setTitleColor(.editDoneBtnTitleColor, for: .normal)
+        doneBtn.setTitleColor(.zl.editDoneBtnTitleColor, for: .normal)
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         doneBtn.layer.masksToBounds = true
         doneBtn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
@@ -529,7 +529,7 @@ open class ZLEditImageViewController: UIViewController {
             drawCV.showsHorizontalScrollIndicator = false
             bottomShadowView.addSubview(drawCV)
             
-            ZLDrawColorCell.zl_register(drawCV)
+            ZLDrawColorCell.zl.register(drawCV)
             drawColorCollectionView = drawCV
         }
         
@@ -555,12 +555,12 @@ open class ZLEditImageViewController: UIViewController {
             filterCV.showsHorizontalScrollIndicator = false
             bottomShadowView.addSubview(filterCV)
             
-            ZLFilterImageCell.zl_register(filterCV)
+            ZLFilterImageCell.zl.register(filterCV)
             filterCollectionView = filterCV
         }
         
         if tools.contains(.adjust) {
-            editImage = editImage.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
+            editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
             
             let adjustLayout = UICollectionViewFlowLayout()
             adjustLayout.itemSize = CGSize(width: adjustColViewH, height: adjustColViewH)
@@ -577,7 +577,7 @@ open class ZLEditImageViewController: UIViewController {
             adjustCV.showsHorizontalScrollIndicator = false
             bottomShadowView.addSubview(adjustCV)
             
-            ZLAdjustToolCell.zl_register(adjustCV)
+            ZLAdjustToolCell.zl.register(adjustCV)
             adjustCollectionView = adjustCV
             
             adjustSlider = ZLAdjustSlider()
@@ -603,7 +603,7 @@ open class ZLEditImageViewController: UIViewController {
         revokeBtn.addTarget(self, action: #selector(revokeBtnClick), for: .touchUpInside)
         bottomShadowView.addSubview(revokeBtn)
         
-        ashbinView.backgroundColor = .ashbinNormalBgColor
+        ashbinView.backgroundColor = .zl.ashbinNormalBgColor
         ashbinView.layer.cornerRadius = 15
         ashbinView.layer.masksToBounds = true
         ashbinView.isHidden = true
@@ -621,7 +621,7 @@ open class ZLEditImageViewController: UIViewController {
         ashbinView.addSubview(asbinTipLabel)
         
         if tools.contains(.mosaic) {
-            mosaicImage = editImage.mosaicImage()
+            mosaicImage = editImage.zl.mosaicImage()
             
             mosaicImageLayer = CALayer()
             mosaicImageLayer?.contents = mosaicImage?.cgImage
@@ -684,7 +684,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func rotationImageView() {
-        let transform = CGAffineTransform(rotationAngle: angle.toPi)
+        let transform = CGAffineTransform(rotationAngle: angle.zl.toPi)
         imageView.transform = transform
         drawingImageView.transform = transform
         stickersContainer.transform = transform
@@ -718,7 +718,7 @@ open class ZLEditImageViewController: UIViewController {
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: editRect, angle: angle, selectRatio: selectRatio)
         let rect = mainScrollView.convert(containerView.frame, to: view)
         vc.presentAnimateFrame = rect
-        vc.presentAnimateImage = currentEditImage.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false)
+        vc.presentAnimateImage = currentEditImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false)
         vc.modalPresentationStyle = .fullScreen
         
         vc.clipDoneBlock = { [weak self] angle, editFrame, selectRatio in
@@ -852,9 +852,9 @@ open class ZLEditImageViewController: UIViewController {
                 hud.show()
                 
                 resImage = buildImage()
-                resImage = resImage.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
+                resImage = resImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
                 if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
-                    resImage = resImage.compress(to: oriDataSize)
+                    resImage = resImage.zl.compress(to: oriDataSize)
                 }
                 
                 hud.hide()
@@ -969,7 +969,10 @@ open class ZLEditImageViewController: UIViewController {
     
     // 生成一个没有调整参数前的图片
     func generateAdjustImageRef() {
-        editImageAdjustRef = generateNewMosaicImage(inputImage: editImageWithoutAdjust, inputMosaicImage: editImageWithoutAdjust.mosaicImage())
+        editImageAdjustRef = generateNewMosaicImage(
+            inputImage: editImageWithoutAdjust,
+            inputMosaicImage: editImageWithoutAdjust.zl.mosaicImage()
+        )
     }
     
     func adjustValueChanged(_ value: Float) {
@@ -984,19 +987,19 @@ open class ZLEditImageViewController: UIViewController {
                 return
             }
             brightness = value
-            resultImage = editImageAdjustRef.adjust(brightness: value, contrast: contrast, saturation: saturation)
+            resultImage = editImageAdjustRef.zl.adjust(brightness: value, contrast: contrast, saturation: saturation)
         case .contrast:
             if contrast == value {
                 return
             }
             contrast = value
-            resultImage = editImageAdjustRef.adjust(brightness: brightness, contrast: value, saturation: saturation)
+            resultImage = editImageAdjustRef.zl.adjust(brightness: brightness, contrast: value, saturation: saturation)
         case .saturation:
             if saturation == value {
                 return
             }
             saturation = value
-            resultImage = editImageAdjustRef.adjust(brightness: brightness, contrast: contrast, saturation: value)
+            resultImage = editImageAdjustRef.zl.adjust(brightness: brightness, contrast: contrast, saturation: value)
         }
         
         guard let resultImage = resultImage else {
@@ -1071,8 +1074,8 @@ open class ZLEditImageViewController: UIViewController {
             
             let isCircle = selectRatio?.isCircle ?? false
             bgImage = buildImage()
-                .clipImage(angle: angle, editRect: editRect, isCircle: isCircle)?
-                .clipImage(angle: 0, editRect: r, isCircle: isCircle)
+                .zl.clipImage(angle: angle, editRect: editRect, isCircle: isCircle)?
+                .zl.clipImage(angle: 0, editRect: r, isCircle: isCircle)
         }
         
         let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, bgColor: bgColor)
@@ -1185,7 +1188,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func generateNewMosaicImageLayer() {
-        mosaicImage = editImage.mosaicImage()
+        mosaicImage = editImage.zl.mosaicImage()
         
         mosaicImageLayer?.removeFromSuperlayer()
         
@@ -1215,7 +1218,7 @@ open class ZLEditImageViewController: UIViewController {
             
             drawImage?.draw(at: .zero)
             if tools.contains(.adjust), brightness != 0 || contrast != 0 || saturation != 0 {
-                drawImage = drawImage?.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
+                drawImage = drawImage?.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
             }
             
             drawImage?.draw(in: renderRect)
@@ -1386,7 +1389,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == editToolCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditToolCell.zl_identifier(), for: indexPath) as! ZLEditToolCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditToolCell.zl.identifier, for: indexPath) as! ZLEditToolCell
             
             let toolType = tools[indexPath.row]
             cell.icon.isHighlighted = false
@@ -1395,7 +1398,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             
             return cell
         } else if collectionView == drawColorCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLDrawColorCell.zl_identifier(), for: indexPath) as! ZLDrawColorCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLDrawColorCell.zl.identifier, for: indexPath) as! ZLDrawColorCell
             
             let c = drawColors[indexPath.row]
             cell.color = c
@@ -1407,7 +1410,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             
             return cell
         } else if collectionView == filterCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLFilterImageCell.zl_identifier(), for: indexPath) as! ZLFilterImageCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLFilterImageCell.zl.identifier, for: indexPath) as! ZLFilterImageCell
             
             let image = thumbnailFilterImages[indexPath.row]
             let filter = ZLImageEditorConfiguration.default().filters[indexPath.row]
@@ -1416,14 +1419,14 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             cell.imageView.image = image
             
             if currentFilter === filter {
-                cell.nameLabel.textColor = .white
+                cell.nameLabel.textColor = .zl.toolTitleTintColor
             } else {
-                cell.nameLabel.textColor = zlRGB(160, 160, 160)
+                cell.nameLabel.textColor = .zl.toolTitleNormalColor
             }
             
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLAdjustToolCell.zl_identifier(), for: indexPath) as! ZLAdjustToolCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLAdjustToolCell.zl.identifier, for: indexPath) as! ZLAdjustToolCell
             
             let tool = adjustTools[indexPath.row]
             
@@ -1433,9 +1436,9 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             cell.imageView.isHighlighted = isSelected
             
             if isSelected {
-                cell.nameLabel.textColor = .white
+                cell.nameLabel.textColor = .zl.toolTitleTintColor
             } else {
-                cell.nameLabel.textColor = zlRGB(160, 160, 160)
+                cell.nameLabel.textColor = .zl.toolTitleNormalColor
             }
             
             return cell
@@ -1469,7 +1472,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
                 guard tools.contains(.adjust), brightness != 0 || contrast != 0 || saturation != 0 else {
                     return image
                 }
-                return image.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
+                return image.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
             }
             if let image = filterImages[currentFilter.name] {
                 editImage = adjustImage(image)
@@ -1527,7 +1530,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func stickerOnOperation(_ sticker: UIView, panGes: UIPanGestureRecognizer) {
         let point = panGes.location(in: view)
         if ashbinView.frame.contains(point) {
-            ashbinView.backgroundColor = .ashbinTintBgColor
+            ashbinView.backgroundColor = .zl.ashbinTintBgColor
             ashbinImgView.isHighlighted = true
             if sticker.alpha == 1 {
                 sticker.layer.removeAllAnimations()
@@ -1536,7 +1539,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 }
             }
         } else {
-            ashbinView.backgroundColor = .ashbinNormalBgColor
+            ashbinView.backgroundColor = .zl.ashbinNormalBgColor
             ashbinImgView.isHighlighted = false
             if sticker.alpha != 1 {
                 sticker.layer.removeAllAnimations()

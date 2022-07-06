@@ -159,11 +159,11 @@ class ZLClipImageViewController: UIViewController {
         self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
-            editImage = image.rotate(orientation: .left)
+            editImage = image.zl.rotate(orientation: .left)
         } else if self.angle == -180 {
-            editImage = image.rotate(orientation: .down)
+            editImage = image.zl.rotate(orientation: .down)
         } else if self.angle == -270 {
-            editImage = image.rotate(orientation: .right)
+            editImage = image.zl.rotate(orientation: .right)
         } else {
             editImage = image
         }
@@ -252,7 +252,7 @@ class ZLClipImageViewController: UIViewController {
         let toolBtnH: CGFloat = 25
         let toolBtnY = (ZLClipImageViewController.bottomToolViewH - toolBtnH) / 2 - 10
         cancelBtn.frame = CGRect(x: 30, y: toolBtnY, width: toolBtnH, height: toolBtnH)
-        let revertBtnW = localLanguageTextValue(.revert).boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: toolBtnH)).width + 20
+        let revertBtnW = localLanguageTextValue(.revert).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: toolBtnH)).width + 20
         revertBtn.frame = CGRect(x: (view.bounds.width - revertBtnW) / 2, y: toolBtnY, width: revertBtnW, height: toolBtnH)
         doneBtn.frame = CGRect(x: view.bounds.width - 30 - toolBtnH, y: toolBtnY, width: toolBtnH, height: toolBtnH)
         
@@ -351,7 +351,7 @@ class ZLClipImageViewController: UIViewController {
         clipRatioColView.isHidden = clipRatios.count <= 1
         clipRatioColView.showsHorizontalScrollIndicator = false
         view.addSubview(clipRatioColView)
-        ZLImageClipRatioCell.zl_register(clipRatioColView)
+        ZLImageClipRatioCell.zl.register(clipRatioColView)
         
         gridPanGes = UIPanGestureRecognizer(target: self, action: #selector(gridGesPanAction(_:)))
         gridPanGes.delegate = self
@@ -373,7 +373,7 @@ class ZLClipImageViewController: UIViewController {
         } else {
             size = CGSize(width: fixLength, height: fixLength / ratio)
         }
-        thumbnailImage = editImage.resize(size)
+        thumbnailImage = editImage.zl.resize(size)
     }
     
     func calculateClipRect() {
@@ -543,14 +543,14 @@ class ZLClipImageViewController: UIViewController {
             // 将edit rect转换为相对edit image的rect
             let rect = convertClipRectToEditImageRect()
             // 旋转图片
-            editImage = editImage.rotate(orientation: .left)
+            editImage = editImage.zl.rotate(orientation: .left)
             // 将rect进行旋转，转换到相对于旋转后的edit image的rect
             editRect = CGRect(x: rect.minY, y: editImage.size.height - rect.minX - rect.width, width: rect.height, height: rect.width)
         } else {
             // 其他比例的裁剪框，旋转后都重置edit rect
             
             // 旋转图片
-            editImage = editImage.rotate(orientation: .left)
+            editImage = editImage.zl.rotate(orientation: .left)
             calculateClipRect()
         }
         
@@ -863,7 +863,7 @@ class ZLClipImageViewController: UIViewController {
     
     func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
         let frame = convertClipRectToEditImageRect()
-        let clipImage = editImage.clipImage(angle: 0, editRect: frame, isCircle: selectedRatio.isCircle) ?? editImage
+        let clipImage = editImage.zl.clipImage(angle: 0, editRect: frame, isCircle: selectedRatio.isCircle) ?? editImage
         return (clipImage, frame)
     }
     
@@ -913,15 +913,15 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLImageClipRatioCell.zl_identifier(), for: indexPath) as! ZLImageClipRatioCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLImageClipRatioCell.zl.identifier, for: indexPath) as! ZLImageClipRatioCell
         
         let ratio = clipRatios[indexPath.row]
         cell.configureCell(image: thumbnailImage ?? editImage, ratio: ratio)
         
         if ratio == selectedRatio {
-            cell.titleLabel.textColor = .white
+            cell.titleLabel.textColor = .zl.toolTitleTintColor
         } else {
-            cell.titleLabel.textColor = zlRGB(160, 160, 160)
+            cell.titleLabel.textColor = .zl.toolTitleNormalColor
         }
         
         return cell

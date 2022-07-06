@@ -158,7 +158,7 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
         }
         
         // Rotate must be first when first layout.
-        transform = transform.rotated(by: originAngle.toPi)
+        transform = transform.rotated(by: originAngle.zl.toPi)
         
         if totalTranslationPoint != .zero {
             if originAngle == 90 {
