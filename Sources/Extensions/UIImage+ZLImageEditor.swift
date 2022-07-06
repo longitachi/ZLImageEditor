@@ -266,21 +266,26 @@ extension UIImage {
         return ci
     }
     
-    func clipImage(_ angle: CGFloat, _ editRect: CGRect) -> UIImage? {
+    func clipImage(angle: CGFloat, editRect: CGRect, isCircle: Bool) -> UIImage? {
         let a = ((Int(angle) % 360) - 360) % 360
         var newImage = self
         if a == -90 {
-            newImage = self.rotate(orientation: .left)
+            newImage = rotate(orientation: .left)
         } else if a == -180 {
-            newImage = self.rotate(orientation: .down)
+            newImage = rotate(orientation: .down)
         } else if a == -270 {
-            newImage = self.rotate(orientation: .right)
+            newImage = rotate(orientation: .right)
         }
         guard editRect.size != newImage.size else {
             return newImage
         }
         let origin = CGPoint(x: -editRect.minX, y: -editRect.minY)
         UIGraphicsBeginImageContextWithOptions(editRect.size, false, newImage.scale)
+        let context = UIGraphicsGetCurrentContext()
+        if isCircle {
+            context?.addEllipse(in: CGRect(origin: .zero, size: editRect.size))
+            context?.clip()
+        }
         newImage.draw(at: origin)
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

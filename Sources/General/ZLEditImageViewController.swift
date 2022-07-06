@@ -220,7 +220,7 @@ open class ZLEditImageViewController: UIViewController {
     
     var toolViewStateTimer: Timer?
     
-    @objc public var editFinishBlock: ((UIImage, ZLEditImageModel) -> Void)?
+    @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
     
     open override var prefersStatusBarHidden: Bool {
         return true
@@ -235,13 +235,19 @@ open class ZLEditImageViewController: UIViewController {
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
-    @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = true, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel) -> Void )? ) {
+    @objc public class func showEditImageVC(
+        parentVC: UIViewController?,
+        animate: Bool = true,
+        image: UIImage,
+        editModel: ZLEditImageModel? = nil,
+        completion: ((UIImage, ZLEditImageModel?) -> Void)?
+    ) {
         let tools = ZLImageEditorConfiguration.default().tools
         if ZLImageEditorConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
             vc.clipDoneBlock = { (angle, editRect, ratio) in
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, brightness: 0, contrast: 0, saturation: 0, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
-                completion?(image.clipImage(angle, editRect) ?? image, m)
+                completion?(image.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
             vc.animateDismiss = animate
             vc.modalPresentationStyle = .fullScreen
@@ -417,6 +423,14 @@ open class ZLEditImageViewController: UIViewController {
         let w = ratio * editSize.width * self.mainScrollView.zoomScale
         let h = ratio * editSize.height * self.mainScrollView.zoomScale
         self.containerView.frame = CGRect(x: max(0, (scrollViewSize.width-w)/2), y: max(0, (scrollViewSize.height-h)/2), width: w, height: h)
+        if selectRatio?.isCircle == true {
+            let mask = CAShapeLayer()
+            let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            mask.path = path.cgPath
+            containerView.layer.mask = mask
+        } else {
+            containerView.layer.mask = nil
+        }
         
         let scaleImageOrigin = CGPoint(x: -self.editRect.origin.x*ratio, y: -self.editRect.origin.y*ratio)
         let scaleImageSize = CGSize(width: self.imageSize.width * ratio, height: self.imageSize.height * ratio)
@@ -710,7 +724,7 @@ open class ZLEditImageViewController: UIViewController {
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: editRect, angle: angle, selectRatio: selectRatio)
         let rect = mainScrollView.convert(containerView.frame, to: view)
         vc.presentAnimateFrame = rect
-        vc.presentAnimateImage = currentEditImage.clipImage(angle, editRect)
+        vc.presentAnimateImage = currentEditImage.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false)
         vc.modalPresentationStyle = .fullScreen
         
         vc.clipDoneBlock = { [weak self] (angle, editFrame, selectRatio) in
@@ -837,20 +851,34 @@ open class ZLEditImageViewController: UIViewController {
         }
         
         var resImage = self.originalImage
-        let editModel = ZLEditImageModel(drawPaths: drawPaths, mosaicPaths: mosaicPaths, editRect: editRect, angle: angle, brightness: brightness, contrast: contrast, saturation: saturation, selectRatio: selectRatio, selectFilter: currentFilter, textStickers: textStickers, imageStickers: imageStickers)
+        var editModel: ZLEditImageModel?
         if hasEdit {
             autoreleasepool {
                 let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
                 hud.show()
                 
                 resImage = buildImage()
-                resImage = resImage.clipImage(angle, editRect) ?? resImage
+                resImage = resImage.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
                 if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
                     resImage = resImage.compress(to: oriDataSize)
                 }
                 
                 hud.hide()
             }
+            
+            editModel = ZLEditImageModel(
+                drawPaths: drawPaths,
+                mosaicPaths: mosaicPaths,
+                editRect: editRect,
+                angle: angle,
+                brightness: brightness,
+                contrast: contrast,
+                saturation: saturation,
+                selectRatio: selectRatio,
+                selectFilter: currentFilter,
+                textStickers: textStickers,
+                imageStickers: imageStickers
+            )
         }
         
         dismiss(animated: animateDismiss) {
@@ -1046,7 +1074,11 @@ open class ZLEditImageViewController: UIViewController {
             r.origin.y *= scale
             r.size.width *= scale
             r.size.height *= scale
-            bgImage = buildImage().clipImage(angle, editRect)?.clipImage(0, r)
+            
+            let isCircle = selectRatio?.isCircle ?? false
+            bgImage = buildImage()
+                .clipImage(angle: angle, editRect: editRect, isCircle: isCircle)?
+                .clipImage(angle: 0, editRect: r, isCircle: isCircle)
         }
         
         let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, bgColor: bgColor)

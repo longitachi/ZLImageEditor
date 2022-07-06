@@ -252,13 +252,17 @@ struct ZLCustomImageDeploy {
 // MARK: Clip ratio.
 public class ZLImageClipRatio: NSObject {
     
-    let title: String
+    @objc public var title: String
     
-    let whRatio: CGFloat
+    @objc public let whRatio: CGFloat
     
-    @objc public init(title: String, whRatio: CGFloat) {
+    @objc public let isCircle: Bool
+    
+    @objc public init(title: String, whRatio: CGFloat, isCircle: Bool = false) {
         self.title = title
-        self.whRatio = whRatio
+        self.whRatio = isCircle ? 1 : whRatio
+        self.isCircle = isCircle
+        super.init()
     }
     
 }
@@ -274,6 +278,8 @@ extension ZLImageClipRatio {
 extension ZLImageClipRatio {
     
     @objc public static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
+    
+    @objc public static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
     
     @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
     
