@@ -1,9 +1,9 @@
 "cancel" = "キャンセル";
 "done" = "確定";
-"editFinish" = "編集完了";
+"editFinish" = "完了";
 "revert" = "元に戻す";
-"brightness" = "明度";
+"brightness" = "明るさ";
 "contrast" = "コントラスト";
-"saturation" = "彩度";
+"saturation" = "暖かさ";
 "textStickerRemoveTips" = "ここにドラッグして削除します";
 "hudLoading" = "お待ち下さい";
