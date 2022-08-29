@@ -39,7 +39,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupUI()
+        setupUI()
+        configImageEditor()
     }
     
     func setupUI() {
@@ -208,6 +209,24 @@ class ViewController: UIViewController {
         }
     }
     
+    func configImageEditor() {
+//        ZLImageEditorUIConfiguration.default()
+//            .languageType(.english)
+//            .customLanguageConfig(
+//                [
+//                    .cancel: "×",
+//                    .editFinish: "👌"
+//                ]
+//            )
+        
+        ZLImageEditorConfiguration.default()
+            // Provide a image sticker container view
+            .imageStickerContainerView(ImageStickerContainerView())
+            .fontChooserContainerView(FontChooserContainerView())
+            // Custom filter
+//            .filters = [.normal]
+    }
+    
     @objc func pickImage() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -280,13 +299,6 @@ class ViewController: UIViewController {
     }
     
     func editImage(_ image: UIImage, editModel: ZLEditImageModel?) {
-        ZLImageEditorConfiguration.default()
-            // Provide a image sticker container view
-            .imageStickerContainerView(ImageStickerContainerView())
-            .fontChooserContainerView(FontChooserContainerView())
-            // Custom filter
-//            .filters = [.normal]
-        
         ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
             self?.resultImageView.image = resImage
             self?.resultImageEditModel = editModel

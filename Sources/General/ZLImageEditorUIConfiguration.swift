@@ -40,10 +40,34 @@ public class ZLImageEditorUIConfiguration: NSObject {
     /// HUD style. Defaults to dark.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
     
+    // MARK: Language properties
+    
     /// Language for framework.
     @objc public var languageType: ZLImageEditorLanguageType = .system {
         didSet {
             Bundle.resetLanguage()
+        }
+    }
+    
+    /// Developers can customize languages.
+    /// - example: If you needs to replace
+    /// key: .hudLoading, value: "loading, waiting please" language,
+    /// The dictionary that needs to be passed in is [.hudLoading: "text to be replaced"].
+    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
+    public var customLanguageConfig: [ZLLocalLanguageKey: String] = [:]
+    
+    /// Developers can customize languages (This property is only for objc).
+    /// - example: If you needs to replace
+    /// key: @"loading", value: @"loading, waiting please" language,
+    /// The dictionary that needs to be passed in is @[@"hudLoading": @"text to be replaced"].
+    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
+    @objc public var customLanguageConfig_objc: [String: String] = [:] {
+        didSet {
+            var swiftParams: [ZLLocalLanguageKey: String] = [:]
+            customLanguageConfig_objc.forEach { key, value in
+                swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
+            }
+            customLanguageConfig = swiftParams
         }
     }
     
@@ -74,6 +98,8 @@ public class ZLImageEditorUIConfiguration: NSObject {
         }
     }
     
+    // MARK: Color properties
+    
     /// The normal color of adjust slider.
     @objc public var adjustSliderNormalColor = UIColor.white
     
@@ -97,4 +123,12 @@ public class ZLImageEditorUIConfiguration: NSObject {
     
     /// The tint color of the title below the various tools in the image editor.
     @objc public var toolTitleTintColor = UIColor.white
+}
+
+// MARK: Image source deploy
+
+enum ZLCustomImageDeploy {
+    static var imageNames: [String] = []
+    
+    static var imageForKey: [String: UIImage] = [:]
 }

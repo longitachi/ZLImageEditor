@@ -40,6 +40,12 @@ public extension ZLImageEditorUIConfiguration {
     }
     
     @discardableResult
+    func customLanguageConfig(_ config: [ZLLocalLanguageKey: String]) -> ZLImageEditorUIConfiguration {
+        customLanguageConfig = config
+        return self
+    }
+    
+    @discardableResult
     func customImageNames(_ names: [String]) -> ZLImageEditorUIConfiguration {
         customImageNames = names
         return self

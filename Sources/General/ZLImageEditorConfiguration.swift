@@ -236,14 +236,6 @@ public extension ZLImageEditorConfiguration {
     }
 }
 
-// MARK: Image source deploy
-
-enum ZLCustomImageDeploy {
-    static var imageNames: [String] = []
-    
-    static var imageForKey: [String: UIImage] = [:]
-}
-
 // MARK: Clip ratio.
 
 public class ZLImageClipRatio: NSObject {

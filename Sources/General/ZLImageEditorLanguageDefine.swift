@@ -81,5 +81,9 @@ public struct ZLLocalLanguageKey: Hashable {
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {
+    if let value = ZLImageEditorUIConfiguration.default().customLanguageConfig[key] {
+        return value
+    }
+    
     return Bundle.zlLocalizedString(key.rawValue)
 }
