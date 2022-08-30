@@ -2,6 +2,17 @@
 
 -----
 
+## [1.1.2](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.2) (2022-08-30)
+### Add:
+* Adjust loading progress hud style to make it prettier.
+* Support Portuguese, Spanish and Turkish.
+* Support crop round image.
+* Support for custom text.
+* Support redo in graffiti and mosaic tools.
+* Add wrapper for ZLImageEditor compatible types.
+    
+-----
+    
 ## [1.1.0](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.0) (2022-05-13)
 ## [1.1.1 - 1.1.0 Patch](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.1) (2022-05-16)
 ### Add:

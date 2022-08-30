@@ -50,6 +50,14 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.2
+  Add:
+    Adjust loading progress hud style to make it prettier.
+    Support Portuguese, Spanish and Turkish.
+    Support crop round image.
+    Support for custom text.
+    Support redo in graffiti and mosaic tools.
+    Add wrapper for ZLImageEditor compatible types.
 ● 1.1.1
   Add:
     Can select custom font before adding text sticker.
@@ -57,8 +65,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
     Add ZLImageEditorUIConfiguration.
 ● 1.0.7
     Fix the bug that crop does not work.
-● 1.0.6
-    Revert the code for image compression.
 ...
 ```
 
