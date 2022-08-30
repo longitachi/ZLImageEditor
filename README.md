@@ -20,6 +20,7 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 * [Change Log](#ChangeLog)
 * [Languages](#Languages)
 * [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
+* [Support](#Support)
 * [Demo Effect](#DemoEffect)
 
 ### <a id="Features"></a>Features
@@ -119,6 +120,10 @@ $ carthage update ZLImageEditor
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
 2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
+
+### <a id="Support"></a> Support
+* [**★ Star**](#) this repo.
+* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ap.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wp.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/pp.png" width = "150" height = "125" />
 
 ### <a id="DemoEffect"></a> Demo Effect
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLImageEditor/editImage.gif)
