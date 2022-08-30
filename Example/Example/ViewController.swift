@@ -225,6 +225,7 @@ class ViewController: UIViewController {
             .fontChooserContainerView(FontChooserContainerView())
             // Custom filter
 //            .filters = [.normal]
+            .canRedo(true)
     }
     
     @objc func pickImage() {

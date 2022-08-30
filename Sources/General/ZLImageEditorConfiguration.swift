@@ -165,8 +165,11 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
+    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
+    
+    /// Whether to support redo in graffiti and mosaic tools. Defaults to false
+    @objc public var canRedo = false
 }
 
 public extension ZLImageEditorConfiguration {

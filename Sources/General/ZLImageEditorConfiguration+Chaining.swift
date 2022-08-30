@@ -106,4 +106,10 @@ public extension ZLImageEditorConfiguration {
         showClipDirectlyIfOnlyHasClipTool = value
         return self
     }
+    
+    @discardableResult
+    func canRedo(_ value: Bool) -> ZLImageEditorConfiguration {
+        canRedo = value
+        return self
+    }
 }
