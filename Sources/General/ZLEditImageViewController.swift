@@ -430,7 +430,6 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 140 - insets.bottom, width: view.zl.width, height: 140 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
         
-        let drawColorCollectionViewRightSpacing: CGFloat
         if canRedo, let redoBtn = redoBtn {
             redoBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
             revokeBtn.frame = CGRect(x: redoBtn.zl.left - 10 - 35, y: 30, width: 35, height: 30)
@@ -482,6 +481,11 @@ open class ZLEditImageViewController: UIViewController {
         shouldLayout = true
     }
     
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        shouldLayout = true
+    }
+    
     func generateFilterImages() {
         let size: CGSize
         let ratio = (originalImage.size.width / originalImage.size.height)
@@ -517,6 +521,8 @@ open class ZLEditImageViewController: UIViewController {
         let w = ratio * editSize.width * mainScrollView.zoomScale
         let h = ratio * editSize.height * mainScrollView.zoomScale
         containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: max(0, (scrollViewSize.height - h) / 2), width: w, height: h)
+        mainScrollView.contentSize = containerView.frame.size
+        
         if selectRatio?.isCircle == true {
             let mask = CAShapeLayer()
             let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)

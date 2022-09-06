@@ -158,6 +158,7 @@
 		E402098E256BAC560077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		E4CAF826256CACE800C7B04E /* CustomFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFilter.swift; sourceTree = "<group>"; };
+		FD88C1F628C739C100C0C0F2 /* Example-bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-bridge.h"; sourceTree = "<group>"; };
 		FDB3113428756E8100845756 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		FDB3113528756E8100845756 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FDB3113628756E8A00845756 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -253,6 +254,7 @@
 				E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */,
 				985A2D7D282A8BC5007AE0C6 /* FontChooserContainerView.swift */,
 				E4CAF826256CACE800C7B04E /* CustomFilter.swift */,
+				FD88C1F628C739C100C0C0F2 /* Example-bridge.h */,
 				E402092D256BA9D70077F5DC /* Main.storyboard */,
 				E4020930256BA9D90077F5DC /* Assets.xcassets */,
 				E4020932256BA9D90077F5DC /* LaunchScreen.storyboard */,
@@ -646,6 +648,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-bridge.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -666,6 +669,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-bridge.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

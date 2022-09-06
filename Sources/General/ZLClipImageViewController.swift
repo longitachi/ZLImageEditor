@@ -116,16 +116,7 @@ class ZLClipImageViewController: UIViewController {
     
     var thumbnailImage: UIImage?
     
-    lazy var maxClipFrame: CGRect = {
-        var insets = deviceSafeAreaInsets()
-        insets.top += 20
-        var rect = CGRect.zero
-        rect.origin.x = 15
-        rect.origin.y = insets.top
-        rect.size.width = UIScreen.main.bounds.width - 15 * 2
-        rect.size.height = UIScreen.main.bounds.height - insets.top - ZLClipImageViewController.bottomToolViewH - ZLClipImageViewController.clipRatioItemSize.height - 25
-        return rect
-    }()
+    lazy var maxClipFrame = calculateMaxClipFrame()
     
     var minClipSize = CGSize(width: 45, height: 45)
     
@@ -168,8 +159,8 @@ class ZLClipImageViewController: UIViewController {
             editImage = image
         }
         var firstEnter = false
-        if let sr = selectRatio {
-            selectedRatio = sr
+        if let selectRatio = selectRatio {
+            selectedRatio = selectRatio
         } else {
             firstEnter = true
             selectedRatio = ZLImageEditorConfiguration.default().clipRatios.first!
@@ -264,6 +255,12 @@ class ZLClipImageViewController: UIViewController {
         if clipRatios.count > 1, let index = clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
             clipRatioColView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
+    }
+    
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        shouldLayout = true
+        maxClipFrame = calculateMaxClipFrame()
     }
     
     func setupUI() {
@@ -376,6 +373,18 @@ class ZLClipImageViewController: UIViewController {
         thumbnailImage = editImage.zl.resize(size)
     }
     
+    /// 计算做大裁剪范围
+    func calculateMaxClipFrame() -> CGRect {
+        var insets = deviceSafeAreaInsets()
+        insets.top += 20
+        var rect = CGRect.zero
+        rect.origin.x = 15
+        rect.origin.y = insets.top
+        rect.size.width = UIScreen.main.bounds.width - 15 * 2
+        rect.size.height = UIScreen.main.bounds.height - insets.top - ZLClipImageViewController.bottomToolViewH - ZLClipImageViewController.clipRatioItemSize.height - 25
+        return rect
+    }
+    
     func calculateClipRect() {
         if selectedRatio.whRatio == 0 {
             editRect = CGRect(origin: .zero, size: editImage.size)
@@ -427,7 +436,7 @@ class ZLClipImageViewController: UIViewController {
         scrollView.minimumZoomScale = originalScale
         scrollView.maximumZoomScale = 10
         // 设置当前zoom scale
-        let zoomScale = (clipRectZoomScale * originalScale)
+        let zoomScale = clipRectZoomScale * originalScale
         scrollView.zoomScale = zoomScale
         scrollView.contentSize = CGSize(width: editImage.size.width * zoomScale, height: editImage.size.height * zoomScale)
         
