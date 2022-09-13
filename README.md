@@ -51,6 +51,9 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.3
+  Add:
+    Adapt iPad.
 ● 1.1.2
   Add:
     Adjust loading progress hud style to make it prettier.
@@ -64,8 +67,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
     Can select custom font before adding text sticker.
     Change the authority of ZLEditImageViewController to open.
     Add ZLImageEditorUIConfiguration.
-● 1.0.7
-    Fix the bug that crop does not work.
 ...
 ```
 

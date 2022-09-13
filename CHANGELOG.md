@@ -2,6 +2,12 @@
 
 -----
 
+## [1.1.3](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.3) (2022-09-13)
+### Add:
+* Adapt iPad.
+    
+-----
+
 ## [1.1.2](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.2) (2022-08-30)
 ### Add:
 * Adjust loading progress hud style to make it prettier.
