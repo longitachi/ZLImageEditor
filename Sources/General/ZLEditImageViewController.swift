@@ -481,11 +481,6 @@ open class ZLEditImageViewController: UIViewController {
         shouldLayout = true
     }
     
-    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        shouldLayout = true
-    }
-    
     func generateFilterImages() {
         let size: CGSize
         let ratio = (originalImage.size.width / originalImage.size.height)
