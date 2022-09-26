@@ -338,6 +338,18 @@ extension ZLImageEditorWrapper where Base: UIImage {
         }
         return UIImage(data: data) ?? base
     }
+
+    func fillColor(_ color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(base.size, false, base.scale)
+        let drawRect = CGRect(x: 0,y: 0,width: base.size.width,height: base.size.height)
+        color.setFill()
+        UIRectFill(drawRect)
+        base.draw(in: drawRect, blendMode: .destinationIn, alpha: 1)
+
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return tintedImage!
+    }
 }
 
 extension ZLImageEditorWrapper where Base: UIImage {

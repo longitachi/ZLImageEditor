@@ -58,4 +58,8 @@ extension ZLImageEditorWrapper where Base: UIColor {
     static var toolTitleTintColor: UIColor {
         ZLImageEditorUIConfiguration.default().toolTitleTintColor
     }
+
+    static var toolIconHighlightedColor: UIColor? {
+        ZLImageEditorUIConfiguration.default().toolIconHighlightedColor
+    }
 }
