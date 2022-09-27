@@ -123,6 +123,9 @@ public class ZLImageEditorUIConfiguration: NSObject {
     
     /// The tint color of the title below the various tools in the image editor.
     @objc public var toolTitleTintColor = UIColor.white
+
+    /// The highlighted color of the tool icon.
+    @objc public var toolIconHighlightedColor: UIColor?
 }
 
 // MARK: Image source deploy

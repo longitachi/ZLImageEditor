@@ -52,6 +52,10 @@ class ZLEditToolCell: UICollectionViewCell {
                 icon.image = getImage("zl_adjust")
                 icon.highlightedImage = getImage("zl_adjust_selected")
             }
+            if let color = UIColor.zl.toolIconHighlightedColor {
+                icon.highlightedImage = icon.highlightedImage?
+                    .zl.fillColor(color)
+            }
         }
     }
     
@@ -163,6 +167,10 @@ class ZLAdjustToolCell: UICollectionViewCell {
                 imageView.image = getImage("zl_saturation")
                 imageView.highlightedImage = getImage("zl_saturation_selected")
                 nameLabel.text = localLanguageTextValue(.saturation)
+            }
+            if let color = UIColor.zl.toolIconHighlightedColor {
+                imageView.highlightedImage = imageView.highlightedImage?
+                    .zl.fillColor(color)
             }
         }
     }

@@ -104,4 +104,10 @@ public extension ZLImageEditorUIConfiguration {
         toolTitleTintColor = color
         return self
     }
+
+    @discardableResult
+    func toolIconHighlightedColor(_ color: UIColor) -> ZLImageEditorUIConfiguration {
+        toolIconHighlightedColor = color
+        return self
+    }
 }
