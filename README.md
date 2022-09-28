@@ -66,11 +66,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
     Support for custom text.
     Support redo in graffiti and mosaic tools.
     Add wrapper for ZLImageEditor compatible types.
-● 1.1.1
-  Add:
-    Can select custom font before adding text sticker.
-    Change the authority of ZLEditImageViewController to open.
-    Add ZLImageEditorUIConfiguration.
 ...
 ```
 

@@ -4,8 +4,8 @@
 
 ## [1.1.4](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.4) (2022-09-28)
 ### Add:
-* Can change tool icon's highlited color by `toolIconHighlightedColor`.[#28](https://github.com/longitachi/ZLImageEditor/pull/28)
-* Support Arabic language.[#27](https://github.com/longitachi/ZLImageEditor/pull/27)
+* Can change tool icon's highlited color by `toolIconHighlightedColor`.[#28](https://github.com/longitachi/ZLImageEditor/pull/28) @darquro
+* Support Arabic language.[#27](https://github.com/longitachi/ZLImageEditor/pull/27) @LastSoul
 
 -----
 
