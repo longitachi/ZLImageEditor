@@ -51,6 +51,10 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.4
+  Add:
+    Can change tool icon's highlited color.
+    Support Arabic language.
 ● 1.1.3
   Add:
     Adapt iPad.
