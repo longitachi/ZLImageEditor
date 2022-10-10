@@ -1,4 +1,4 @@
-"cancel" = "Stornieren";
+"cancel" = "Abbrechen";
 "done" = "Erledigt";
 "editFinish" = "Fertig";
 "revert" = "Rückgängig";
@@ -6,4 +6,4 @@
 "contrast" = "Kontrast";
 "saturation" = "Sättigung";
 "textStickerRemoveTips" = "Zum Entfernen hierher ziehen";
-"hudLoading" = "warten...";
+"hudLoading" = "Warten...";
