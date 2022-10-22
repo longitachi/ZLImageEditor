@@ -62,6 +62,12 @@ public extension ZLImageEditorConfiguration {
         textStickerDefaultTextColor = color
         return self
     }
+
+    @discardableResult
+    func textStickerCanLineBreak(_ enable: Bool) -> ZLImageEditorConfiguration {
+        textStickerCanLineBreak = enable
+        return self
+    }
     
     @discardableResult
     func filters(_ filters: [ZLFilter]) -> ZLImageEditorConfiguration {
