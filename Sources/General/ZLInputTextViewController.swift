@@ -139,7 +139,8 @@ class ZLInputTextViewController: UIViewController {
         
         textView = UITextView(frame: .zero)
         textView.keyboardAppearance = .dark
-        textView.returnKeyType = .done
+        textView.returnKeyType = ZLImageEditorConfiguration.default().textStickerCanLineBreak ? .default : .done
+        textView.indicatorStyle = .white
         textView.delegate = self
         textView.backgroundColor = .clear
         textView.tintColor = .zl.editDoneBtnBgColor
@@ -169,6 +170,7 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
+        textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         endInput?(textView.text, textView.font ?? UIFont.systemFont(ofSize: ZLTextStickerView.fontSize), currentTextColor, .clear)
         dismiss(animated: true, completion: nil)
     }
@@ -213,7 +215,7 @@ extension ZLInputTextViewController: UICollectionViewDelegate, UICollectionViewD
 
 extension ZLInputTextViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+        if !ZLImageEditorConfiguration.default().textStickerCanLineBreak && text == "\n" {
             doneBtnClick()
             return false
         }

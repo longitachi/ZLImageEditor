@@ -104,6 +104,9 @@ public class ZLImageEditorConfiguration: NSObject {
     
     /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
     @objc public var textStickerDefaultTextColor = UIColor.white
+
+    /// Whether text sticker allows line break.
+    @objc public var textStickerCanLineBreak = false
     
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.
