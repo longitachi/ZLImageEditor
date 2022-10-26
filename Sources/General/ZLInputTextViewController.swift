@@ -170,8 +170,8 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        endInput?(textView.text, textView.font ?? UIFont.systemFont(ofSize: ZLTextStickerView.fontSize), currentTextColor, .clear)
+        let content = textView.text.trimmingCharacters(in: .newlines)
+        endInput?(content, textView.font ?? UIFont.systemFont(ofSize: ZLTextStickerView.fontSize), currentTextColor, .clear)
         dismiss(animated: true, completion: nil)
     }
     
