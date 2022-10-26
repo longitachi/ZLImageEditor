@@ -2,6 +2,13 @@
 
 -----
 
+## [1.1.5](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.5) (2022-10-26)
+### Add:
+* Update localization files for German. [#31](https://github.com/longitachi/ZLImageEditor/pull/31) @hirbod
+* Support content wrapping for text sticker. [#32](https://github.com/longitachi/ZLImageEditor/pull/32) @darquro
+
+-----
+
 ## [1.1.4](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.4) (2022-09-28)
 ### Add:
 * Can change tool icon's highlited color by `toolIconHighlightedColor`.[#28](https://github.com/longitachi/ZLImageEditor/pull/28) @darquro

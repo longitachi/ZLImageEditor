@@ -51,6 +51,10 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.5
+  Add:
+    Update localization files for German.
+    Support content wrapping for text sticker.
 ● 1.1.4
   Add:
     Can change tool icon's highlited color.
@@ -58,14 +62,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ● 1.1.3
   Add:
     Adapt iPad.
-● 1.1.2
-  Add:
-    Adjust loading progress hud style to make it prettier.
-    Support Portuguese, Spanish and Turkish.
-    Support crop round image.
-    Support for custom text.
-    Support redo in graffiti and mosaic tools.
-    Add wrapper for ZLImageEditor compatible types.
 ...
 ```
 
