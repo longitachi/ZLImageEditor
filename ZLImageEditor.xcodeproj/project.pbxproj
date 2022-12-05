@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F7AC607293DE16400BC67BC /* ZLAdjustHSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F7AC606293DE16400BC67BC /* ZLAdjustHSlider.swift */; };
 		E40208DC256B9BA60077F5DC /* ZLImageEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = E40208DA256B9BA60077F5DC /* ZLImageEditor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */; };
 		E40208EC256B9F9C0077F5DC /* ZLImageStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40208E5256B9F9C0077F5DC /* ZLImageStickerView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F7AC606293DE16400BC67BC /* ZLAdjustHSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLAdjustHSlider.swift; sourceTree = "<group>"; };
 		E40208D7256B9BA60077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E40208DA256B9BA60077F5DC /* ZLImageEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLImageEditor.h; sourceTree = "<group>"; };
 		E40208DB256B9BA60077F5DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				E40208E6256B9F9C0077F5DC /* ZLTextStickerView.swift */,
 				FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */,
 				FD8EFA512772026D0067ADF1 /* ZLAdjustSlider.swift */,
+				5F7AC606293DE16400BC67BC /* ZLAdjustHSlider.swift */,
 				E40208EA256B9F9C0077F5DC /* ZLFilter.swift */,
 				E40208F3256B9FA70077F5DC /* ZLClipImageDismissAnimatedTransition.swift */,
 				FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */,
@@ -253,6 +256,7 @@
 				E40208EF256B9F9C0077F5DC /* ZLInputTextViewController.swift in Sources */,
 				E40208F1256B9F9C0077F5DC /* ZLFilter.swift in Sources */,
 				FDB3113328752F7300845756 /* ZLWeakProxy.swift in Sources */,
+				5F7AC607293DE16400BC67BC /* ZLAdjustHSlider.swift in Sources */,
 				E402090A256BA1DE0077F5DC /* ZLImageEditorDefine.swift in Sources */,
 				E40208ED256B9F9C0077F5DC /* ZLTextStickerView.swift in Sources */,
 			);

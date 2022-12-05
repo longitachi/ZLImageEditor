@@ -32,6 +32,13 @@ public extension ZLImageEditorUIConfiguration {
         hudStyle = style
         return self
     }
+
+    @discardableResult
+    @available(iOS 14.0, *)
+    func adjustSliderType(_ type: ZLAdjustSliderType) -> ZLImageEditorUIConfiguration {
+        adjustSliderType = type
+        return self
+    }
     
     @discardableResult
     func languageType(_ type: ZLImageEditorLanguageType) -> ZLImageEditorUIConfiguration {
