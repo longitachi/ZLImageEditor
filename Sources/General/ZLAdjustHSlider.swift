@@ -89,8 +89,8 @@ final class ZLAdjustHSlider: UIView {
         if UIDevice.current.userInterfaceIdiom == .phone {
             NSLayoutConstraint.activate([
                 stackView.topAnchor.constraint(equalTo: topAnchor),
-                stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-                stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: 20),
+                stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 40),
+                stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -40),
                 stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
         } else {
