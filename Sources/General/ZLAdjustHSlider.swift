@@ -54,9 +54,10 @@ final class ZLAdjustHSlider: UIView {
                 let style = ZLImageEditorConfiguration.default().impactFeedbackStyle.uiFeedback
                 UIImpactFeedbackGenerator(style: style).impactOccurred()
             }
-            self?.label.text = "\(Int(slider.value * 100))"
+            self?.updateLabel()
             self?.valueChanged?(slider.value)
         }, for: .valueChanged)
+        slider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSliderTapped(_:))))
         return slider
     }()
 
@@ -64,6 +65,7 @@ final class ZLAdjustHSlider: UIView {
         let label = UILabel(frame: .init(x: 0, y: 0, width: 50, height: 30))
         label.textColor = .white
         label.textAlignment = .center
+        label.font = label.font.withSize(16)
         label.text = "0"
         return label
     }()
@@ -84,12 +86,21 @@ final class ZLAdjustHSlider: UIView {
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leftAnchor.constraint(equalTo: leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            NSLayoutConstraint.activate([
+                stackView.topAnchor.constraint(equalTo: topAnchor),
+                stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+                stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: 20),
+                stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                stackView.topAnchor.constraint(equalTo: topAnchor),
+                stackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
+                stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ])
+        }
 
         stackView.addArrangedSubview(label)
         NSLayoutConstraint.activate([
@@ -103,12 +114,23 @@ final class ZLAdjustHSlider: UIView {
             slider.rightAnchor.constraint(equalTo: stackView.rightAnchor),
         ])
     }
+}
 
-    // MARK: View Lifecycle
+@available(iOS 14.0, *)
+extension ZLAdjustHSlider {
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        stackView.frame = .init(x: 0, y: 0, width: frame.width, height: frame.height)
+    @objc func onSliderTapped(_ recognizer: UITapGestureRecognizer) {
+        let tapLocation = recognizer.location(in: slider)
+        let sliderHalfWidth = slider.frame.size.width / 2
+        let diff = tapLocation.x - sliderHalfWidth
+        let newValue = diff / sliderHalfWidth
+        slider.setValue(Float(newValue), animated: true)
+        updateLabel()
+        valueChanged?(slider.value)
+    }
+
+    private func updateLabel() {
+        label.text = "\(Int(slider.value * 100))"
     }
 }
 
@@ -121,7 +143,7 @@ extension ZLAdjustHSlider: ZLAdjustHSliderable {
         }
         set {
             slider.setValue(newValue, animated: false)
-            label.text = "\(Int(newValue * 100))"
+            updateLabel()
         }
     }
 }

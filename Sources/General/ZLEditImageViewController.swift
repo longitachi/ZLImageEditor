@@ -457,9 +457,9 @@ open class ZLEditImageViewController: UIViewController {
         adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.zl.width - 40, height: adjustColViewH)
         adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
         
-        adjustHSlider?.frame = .init(x: 20,
+        adjustHSlider?.frame = .init(x: 0,
                                      y: bottomShadowView.zl.top - adjustHSliderH,
-                                     width: view.zl.width - 40,
+                                     width: view.zl.width,
                                      height: adjustHSliderH)
 
         filterCollectionView?.frame = CGRect(x: 20, y: 0, width: view.zl.width - 40, height: filterColViewH)
