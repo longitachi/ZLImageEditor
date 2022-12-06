@@ -664,9 +664,6 @@ open class ZLEditImageViewController: UIViewController {
             adjustSlider?.valueChanged = { [weak self] value in
                 self?.adjustValueChanged(value)
             }
-            adjustSlider?.endAdjust = { [weak self] in
-                self?.endAdjust()
-            }
             adjustSlider?.isHidden = true
             if let adjustSlider = adjustSlider {
                 view.addSubview(adjustSlider)
@@ -858,7 +855,9 @@ open class ZLEditImageViewController: UIViewController {
         } else {
             selectedTool = nil
         }
-        
+
+        endAdjust()
+
         drawColorCollectionView?.isHidden = true
         filterCollectionView?.isHidden = true
         adjustCollectionView?.isHidden = true
