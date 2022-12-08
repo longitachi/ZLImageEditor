@@ -89,8 +89,6 @@ open class ZLEditImageViewController: UIViewController {
     public var filterColViewH: CGFloat = 80
     
     public var adjustColViewH: CGFloat = 60
-
-    public var adjustHSliderH: CGFloat = 60
     
     public var ashbinSize = CGSize(width: 160, height: 80)
     
@@ -204,18 +202,20 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
     
-    lazy var adjustSlider: ZLAdjustSlider? = {
-        if ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal { return nil }
-        return ZLAdjustSlider()
-    }()
-
-    lazy var adjustHSlider: ZLAdjustHSliderable? = {
-        guard ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal else { return nil }
-        let adjustHSlider = ZLAdjustHSlider(frame: .zero)
-        adjustHSlider.valueChanged = { [weak self] value in
+    lazy var adjustSlider: ZLAdjustSliderable? = {
+        guard ZLImageEditorConfiguration.default().tools.contains(.adjust) else { return nil }
+        let slider: ZLAdjustSliderable
+        switch ZLImageEditorUIConfiguration.default().adjustSliderType {
+        case .vertical:
+            slider = ZLAdjustVSlider()
+        case .horizontal:
+            slider = ZLAdjustHSlider()
+        }
+        slider.valueChanged = { [weak self] value in
             self?.adjustValueChanged(value)
         }
-        return adjustHSlider
+        slider.isHidden = true
+        return slider
     }()
     
     var animateDismiss = true
@@ -453,12 +453,21 @@ open class ZLEditImageViewController: UIViewController {
         drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: revokeBtn.zl.left - 20 - 10, height: drawColViewH)
         
         adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.zl.width - 40, height: adjustColViewH)
-        adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
-        
-        adjustHSlider?.frame = .init(x: 0,
-                                     y: bottomShadowView.zl.top - adjustHSliderH,
-                                     width: view.zl.width,
-                                     height: adjustHSliderH)
+        if let adjustSlider = adjustSlider {
+            switch adjustSlider.type {
+            case .vertical:
+                adjustSlider.frame = CGRect(x: view.zl.width - 60,
+                                            y: view.zl.height / 2 - 100,
+                                            width: 60,
+                                            height: 200)
+            case .horizontal:
+                let sliderHeight = 60.0
+                adjustSlider.frame = .init(x: 0,
+                                           y: bottomShadowView.zl.top - sliderHeight,
+                                           width: view.zl.width,
+                                           height: sliderHeight)
+            }
+        }
 
         filterCollectionView?.frame = CGRect(x: 20, y: 0, width: view.zl.width - 40, height: filterColViewH)
         
@@ -658,17 +667,9 @@ open class ZLEditImageViewController: UIViewController {
             if let selectedAdjustTool = selectedAdjustTool {
                 changeAdjustTool(selectedAdjustTool)
             }
-            adjustSlider?.beginAdjust = {}
-            adjustSlider?.valueChanged = { [weak self] value in
-                self?.adjustValueChanged(value)
-            }
-            adjustSlider?.isHidden = true
+
             if let adjustSlider = adjustSlider {
                 view.addSubview(adjustSlider)
-            }
-
-            if let adjustHSlider = adjustHSlider {
-                view.addSubview(adjustHSlider)
             }
         }
         
@@ -786,7 +787,6 @@ open class ZLEditImageViewController: UIViewController {
         filterCollectionView?.isHidden = true
         adjustCollectionView?.isHidden = true
         adjustSlider?.isHidden = true
-        adjustHSlider?.isHidden = true
     }
     
     func clipBtnClick() {
@@ -824,7 +824,6 @@ open class ZLEditImageViewController: UIViewController {
             self.topShadowView.alpha = 0
             self.bottomShadowView.alpha = 0
             self.adjustSlider?.alpha = 0
-            self.adjustHSlider?.alpha = 0
         }
     }
     
@@ -860,7 +859,6 @@ open class ZLEditImageViewController: UIViewController {
         filterCollectionView?.isHidden = true
         adjustCollectionView?.isHidden = true
         adjustSlider?.isHidden = true
-        adjustHSlider?.isHidden = true
         revokeBtn.isHidden = !isSelected
         revokeBtn.isEnabled = !mosaicPaths.isEmpty
         redoBtn?.isHidden = !isSelected
@@ -880,7 +878,6 @@ open class ZLEditImageViewController: UIViewController {
         filterCollectionView?.isHidden = !isSelected
         adjustCollectionView?.isHidden = true
         adjustSlider?.isHidden = true
-        adjustHSlider?.isHidden = true
     }
     
     func adjustBtnClick() {
@@ -896,7 +893,6 @@ open class ZLEditImageViewController: UIViewController {
         filterCollectionView?.isHidden = true
         adjustCollectionView?.isHidden = !isSelected
         adjustSlider?.isHidden = !isSelected
-        adjustHSlider?.isHidden = !isSelected
         
         generateAdjustImageRef()
     }
@@ -911,7 +907,6 @@ open class ZLEditImageViewController: UIViewController {
             }
         }()
         adjustSlider?.value = value
-        adjustHSlider?.value = value
         generateAdjustImageRef()
     }
     
@@ -1159,14 +1154,12 @@ open class ZLEditImageViewController: UIViewController {
                 self.topShadowView.alpha = 1
                 self.bottomShadowView.alpha = 1
                 self.adjustSlider?.alpha = 1
-                self.adjustHSlider?.alpha = 1
             }
         } else {
             UIView.animate(withDuration: 0.25) {
                 self.topShadowView.alpha = 0
                 self.bottomShadowView.alpha = 0
                 self.adjustSlider?.alpha = 0
-                self.adjustHSlider?.alpha = 0
             }
         }
     }
@@ -1418,7 +1411,6 @@ open class ZLEditImageViewController: UIViewController {
             self.topShadowView.alpha = 1
             self.bottomShadowView.alpha = 1
             self.adjustSlider?.alpha = 1
-            self.adjustHSlider?.alpha = 1
         }
     }
 }

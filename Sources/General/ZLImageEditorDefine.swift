@@ -61,3 +61,9 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
 func zl_debugPrint(_ message: Any) {
 //    debugPrint(message)
 }
+
+protocol ZLAdjustSliderable: UIView {
+    var type: ZLAdjustSliderType { get }
+    var value: Float { get set }
+    var valueChanged: ((Float) -> Void)? { get set }
+}

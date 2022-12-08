@@ -24,12 +24,8 @@
 
 import UIKit
 
-protocol ZLAdjustHSliderable: UIView {
-    var value: Float { get set }
-}
-
 /// Horizontal Adjust Slider
-final class ZLAdjustHSlider: UIView {
+final class ZLAdjustHSlider: UIView, ZLAdjustSliderable {
 
     // MARK: View Components
 
@@ -60,19 +56,31 @@ final class ZLAdjustHSlider: UIView {
         return label
     }()
 
-    // MARK: Properties
+    // MARK: ZLAdjustSliderable
+
+    let type: ZLAdjustSliderType = .horizontal
+
+    var value: Float {
+        get {
+            slider.value
+        }
+        set {
+            slider.setValue(newValue, animated: false)
+            updateLabel()
+        }
+    }
 
     var valueChanged: ((Float) -> Void)? = nil
 
     // MARK: Initializer
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override init(frame: CGRect) {
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        isHidden = true
 
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,18 +140,5 @@ extension ZLAdjustHSlider {
 
     private func updateLabel() {
         label.text = "\(Int(slider.value * 100))"
-    }
-}
-
-extension ZLAdjustHSlider: ZLAdjustHSliderable {
-
-    var value: Float {
-        get {
-            slider.value
-        }
-        set {
-            slider.setValue(newValue, animated: false)
-            updateLabel()
-        }
     }
 }

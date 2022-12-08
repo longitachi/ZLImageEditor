@@ -1,5 +1,5 @@
 //
-//  ZLAdjustSlider.swift
+//  ZLAdjustVSlider.swift
 //  ZLImageEditor
 //
 //  Created by long on 2021/12/17.
@@ -24,7 +24,7 @@
 
 import UIKit
 
-class ZLAdjustSlider: UIView {
+class ZLAdjustVSlider: UIView, ZLAdjustSliderable {
     static let maximumValue: Float = 1
     
     static let minimumValue: Float = -1
@@ -43,26 +43,30 @@ class ZLAdjustSlider: UIView {
     
     lazy var pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
     
+    private var valueForPanBegan: Float = 0
+    
+    var beginAdjust: (() -> Void)?
+
+    var endAdjust: (() -> Void)?
+
+    // MARK: ZLAdjustSliderable
+
+    let type: ZLAdjustSliderType = .vertical
+
     var value: Float = 0 {
         didSet {
             valueLabel.text = String(Int(roundf(value * 100)))
             tintView.frame = calculateTintFrame()
         }
     }
-    
-    private var valueForPanBegan: Float = 0
-    
-    var beginAdjust: (() -> Void)?
-    
-    var valueChanged: ((Float) -> Void)?
-    
-    var endAdjust: (() -> Void)?
-    
+
+    var valueChanged: ((Float) -> Void)? = nil
+
     deinit {
         zl_debugPrint("ZLAdjustSlider deinit")
     }
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupUI()
         
@@ -118,7 +122,7 @@ class ZLAdjustSlider: UIView {
     
     private func calculateTintFrame() -> CGRect {
         let totalH = bounds.height / 2
-        let tintH = totalH * abs(CGFloat(value)) / CGFloat(ZLAdjustSlider.maximumValue)
+        let tintH = totalH * abs(CGFloat(value)) / CGFloat(ZLAdjustVSlider.maximumValue)
         if value > 0 {
             return CGRect(x: 0, y: totalH - tintH, width: sliderWidth, height: tintH)
         } else {
@@ -135,7 +139,7 @@ class ZLAdjustSlider: UIView {
         } else if pan.state == .changed {
             let y = -translation.y / 100
             var temp = valueForPanBegan + Float(y)
-            temp = max(ZLAdjustSlider.minimumValue, min(ZLAdjustSlider.maximumValue, temp))
+            temp = max(ZLAdjustVSlider.minimumValue, min(ZLAdjustVSlider.maximumValue, temp))
             
             if (-0.0049..<0.005) ~= temp {
                 temp = 0
