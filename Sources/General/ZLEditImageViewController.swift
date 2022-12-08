@@ -899,14 +899,16 @@ open class ZLEditImageViewController: UIViewController {
     
     func changeAdjustTool(_ tool: ZLImageEditorConfiguration.AdjustTool) {
         selectedAdjustTool = tool
-        let value: Float = {
-            switch tool {
-            case .brightness: return brightness
-            case .contrast: return contrast
-            case .saturation: return saturation
-            }
-        }()
-        adjustSlider?.value = value
+
+        switch tool {
+        case .brightness:
+            adjustSlider?.value = brightness
+        case .contrast:
+            adjustSlider?.value = contrast
+        case .saturation:
+            adjustSlider?.value = saturation
+        }
+
         generateAdjustImageRef()
     }
     
