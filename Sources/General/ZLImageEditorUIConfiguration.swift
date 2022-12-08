@@ -41,7 +41,6 @@ public class ZLImageEditorUIConfiguration: NSObject {
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
 
     /// Adjust Slider Type
-    @available(iOS 14.0, *)
     public lazy var adjustSliderType: ZLAdjustSliderType = .vertical
     
     // MARK: Language properties
@@ -142,7 +141,6 @@ enum ZLCustomImageDeploy {
 
 // MARK: Ajust Slider
 
-@available(iOS 14.0, *)
 public enum ZLAdjustSliderType {
     case vertical, horizontal
 }

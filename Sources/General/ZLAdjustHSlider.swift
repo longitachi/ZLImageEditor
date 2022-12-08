@@ -29,7 +29,6 @@ protocol ZLAdjustHSliderable: UIView {
 }
 
 /// Horizontal Adjust Slider
-@available(iOS 14.0, *)
 final class ZLAdjustHSlider: UIView {
 
     // MARK: View Components
@@ -47,16 +46,7 @@ final class ZLAdjustHSlider: UIView {
         slider.maximumValue = 1
         slider.value = 0
         slider.tintColor = ZLImageEditorUIConfiguration.default().adjustSliderTintColor
-        slider.addAction(.init{ [weak self] action in
-            guard let slider = action.sender as? UISlider else { return }
-            if slider.value == 0,
-               ZLImageEditorConfiguration.default().impactFeedbackWhenAdjustSliderValueIsZero {
-                let style = ZLImageEditorConfiguration.default().impactFeedbackStyle.uiFeedback
-                UIImpactFeedbackGenerator(style: style).impactOccurred()
-            }
-            self?.updateLabel()
-            self?.valueChanged?(slider.value)
-        }, for: .valueChanged)
+        slider.addTarget(self, action: #selector(onValueChanged(_:)), for: .valueChanged)
         slider.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onSliderTapped(_:))))
         return slider
     }()
@@ -116,8 +106,19 @@ final class ZLAdjustHSlider: UIView {
     }
 }
 
-@available(iOS 14.0, *)
 extension ZLAdjustHSlider {
+
+    @objc func onValueChanged(_ sender: UISlider) {
+        if #available(iOS 10.0, *) {
+            if sender.value == 0,
+               ZLImageEditorConfiguration.default().impactFeedbackWhenAdjustSliderValueIsZero {
+                let style = ZLImageEditorConfiguration.default().impactFeedbackStyle.uiFeedback
+                UIImpactFeedbackGenerator(style: style).impactOccurred()
+            }
+        }
+        updateLabel()
+        valueChanged?(sender.value)
+    }
 
     @objc func onSliderTapped(_ recognizer: UITapGestureRecognizer) {
         let tapLocation = recognizer.location(in: slider)
@@ -134,7 +135,6 @@ extension ZLAdjustHSlider {
     }
 }
 
-@available(iOS 14.0, *)
 extension ZLAdjustHSlider: ZLAdjustHSliderable {
 
     var value: Float {

@@ -34,7 +34,6 @@ public extension ZLImageEditorUIConfiguration {
     }
 
     @discardableResult
-    @available(iOS 14.0, *)
     func adjustSliderType(_ type: ZLAdjustSliderType) -> ZLImageEditorUIConfiguration {
         adjustSliderType = type
         return self

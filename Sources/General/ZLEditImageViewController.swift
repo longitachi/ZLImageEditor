@@ -205,14 +205,12 @@ open class ZLEditImageViewController: UIViewController {
     open lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
     
     lazy var adjustSlider: ZLAdjustSlider? = {
-        if #available(iOS 14.0, *),
-              ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal { return nil }
+        if ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal { return nil }
         return ZLAdjustSlider()
     }()
 
     lazy var adjustHSlider: ZLAdjustHSliderable? = {
-        guard #available(iOS 14.0, *),
-              ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal else { return nil }
+        guard ZLImageEditorUIConfiguration.default().adjustSliderType == .horizontal else { return nil }
         let adjustHSlider = ZLAdjustHSlider(frame: .zero)
         adjustHSlider.valueChanged = { [weak self] value in
             self?.adjustValueChanged(value)
