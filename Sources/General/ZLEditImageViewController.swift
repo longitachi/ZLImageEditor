@@ -462,9 +462,11 @@ open class ZLEditImageViewController: UIViewController {
                                             height: 200)
             case .horizontal:
                 let sliderHeight = 60.0
-                adjustSlider.frame = .init(x: 0,
+                let sliderWidth = UIDevice.current.userInterfaceIdiom == .phone ? view.zl.width : view.zl.width / 2
+                let x = (view.zl.width - sliderWidth) / 2
+                adjustSlider.frame = .init(x: x,
                                            y: bottomShadowView.zl.top - sliderHeight,
-                                           width: view.zl.width,
+                                           width: sliderWidth,
                                            height: sliderHeight)
             }
         }
