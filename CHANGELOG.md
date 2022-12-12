@@ -2,6 +2,13 @@
 
 -----
 
+## [1.1.6](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.6) (2022-12-12)
+### Add:
+* Add horizontal adjust slider.
+* Support Ukrainian. [#33](https://github.com/longitachi/ZLImageEditor/pull/33) @darquro
+   
+----- 
+    
 ## [1.1.5](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.5) (2022-10-26)
 ### Add:
 * Update localization files for German. [#31](https://github.com/longitachi/ZLImageEditor/pull/31) @hirbod
