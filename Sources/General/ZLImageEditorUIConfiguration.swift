@@ -40,6 +40,9 @@ public class ZLImageEditorUIConfiguration: NSObject {
     /// HUD style. Defaults to dark.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
     
+    /// Adjust Slider Type
+    @objc public var adjustSliderType: ZLAdjustSliderType = .vertical
+    
     // MARK: Language properties
     
     /// Language for framework.
@@ -134,4 +137,9 @@ enum ZLCustomImageDeploy {
     static var imageNames: [String] = []
     
     static var imageForKey: [String: UIImage] = [:]
+}
+
+@objc public enum ZLAdjustSliderType: Int {
+    case vertical
+    case horizontal
 }

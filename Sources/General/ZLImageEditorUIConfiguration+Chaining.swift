@@ -34,6 +34,12 @@ public extension ZLImageEditorUIConfiguration {
     }
     
     @discardableResult
+    func adjustSliderType(_ type: ZLAdjustSliderType) -> ZLImageEditorUIConfiguration {
+        adjustSliderType = type
+        return self
+    }
+    
+    @discardableResult
     func languageType(_ type: ZLImageEditorLanguageType) -> ZLImageEditorUIConfiguration {
         languageType = type
         return self
