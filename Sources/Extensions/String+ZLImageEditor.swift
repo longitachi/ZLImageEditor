@@ -41,3 +41,36 @@ extension ZLImageEditorWrapper where Base == String {
         return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
 }
+
+// https://gist.github.com/S1U/4b1c52714b31047461862717fd9dcc1f
+extension UIFont {
+
+    class func adaptiveFontWithName(fontName: String, label: UILabel, minSize: CGFloat = 9, maxSize: CGFloat = 999) -> UIFont! {
+        var tempFont: UIFont
+        var tempMax: CGFloat = maxSize
+        var tempMin: CGFloat = minSize
+
+        while (ceil(tempMin) != ceil(tempMax)) {
+            let testedSize = (tempMax + tempMin) / 2
+            tempFont = UIFont(name:fontName, size:testedSize)!
+
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.hyphenationFactor = 1.0
+            let attributedString = NSAttributedString(string: label.text!, attributes: [NSAttributedString.Key.font: tempFont, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+            let textFrame = attributedString.boundingRect(with: CGSize(width: label.bounds.size.width, height: CGFloat.greatestFiniteMagnitude), options: NSStringDrawingOptions.usesLineFragmentOrigin , context: nil)
+
+            let difference = label.frame.height - textFrame.height
+
+            // print("\(tempMin)-\(tempMax) - tested : \(testedSize) --> difference : \(difference)")
+
+            if (difference > 0) {
+                tempMin = testedSize
+            } else {
+                tempMax = testedSize
+            }
+        }
+
+        // returning the size -1 (to have enought space right and left)
+        return UIFont(name: fontName, size: tempMin)
+    }
+}
