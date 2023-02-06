@@ -30,6 +30,7 @@
 		FD8EFA54277206D30067ADF1 /* ZLEditToolCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */; };
 		FD8EFA562772CF3B0067ADF1 /* ZLImageEditorConfiguration+Chaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8EFA552772CF3B0067ADF1 /* ZLImageEditorConfiguration+Chaining.swift */; };
 		FDB3113328752F7300845756 /* ZLWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB3113228752F7300845756 /* ZLWeakProxy.swift */; };
+		FDC9B2442990D66300963047 /* ZLBaseStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC9B2432990D66300963047 /* ZLBaseStickerView.swift */; };
 		FDD5289226C3FFCA00338B06 /* ZLImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */; };
 		FDE1A559282E580900178B0F /* ZLImageEditorUIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1A558282E580900178B0F /* ZLImageEditorUIConfiguration.swift */; };
 		FDE1A55B282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1A55A282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift */; };
@@ -63,6 +64,7 @@
 		FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditToolCells.swift; sourceTree = "<group>"; };
 		FD8EFA552772CF3B0067ADF1 /* ZLImageEditorConfiguration+Chaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLImageEditorConfiguration+Chaining.swift"; sourceTree = "<group>"; };
 		FDB3113228752F7300845756 /* ZLWeakProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLWeakProxy.swift; sourceTree = "<group>"; };
+		FDC9B2432990D66300963047 /* ZLBaseStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLBaseStickerView.swift; sourceTree = "<group>"; };
 		FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLImageEditor.swift; sourceTree = "<group>"; };
 		FDE1A558282E580900178B0F /* ZLImageEditorUIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLImageEditorUIConfiguration.swift; sourceTree = "<group>"; };
 		FDE1A55A282E58E700178B0F /* ZLImageEditorUIConfiguration+Chaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLImageEditorUIConfiguration+Chaining.swift"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */,
 				E40208E9256B9F9C0077F5DC /* ZLClipImageViewController.swift */,
 				E40208E8256B9F9C0077F5DC /* ZLInputTextViewController.swift */,
+				FDC9B2432990D66300963047 /* ZLBaseStickerView.swift */,
 				E40208E5256B9F9C0077F5DC /* ZLImageStickerView.swift */,
 				E40208E6256B9F9C0077F5DC /* ZLTextStickerView.swift */,
 				FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */,
@@ -250,6 +253,7 @@
 				FD8EFA522772026D0067ADF1 /* ZLAdjustSlider.swift in Sources */,
 				E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */,
 				E402090E256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift in Sources */,
+				FDC9B2442990D66300963047 /* ZLBaseStickerView.swift in Sources */,
 				E40208EF256B9F9C0077F5DC /* ZLInputTextViewController.swift in Sources */,
 				E40208F1256B9F9C0077F5DC /* ZLFilter.swift in Sources */,
 				FDB3113328752F7300845756 /* ZLWeakProxy.swift in Sources */,

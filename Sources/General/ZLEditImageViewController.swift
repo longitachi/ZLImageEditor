@@ -1614,7 +1614,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
     }
 }
 
-extension ZLEditImageViewController: ZLTextStickerViewDelegate {
+extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: UIView) {
         setToolView(show: false)
         ashbinView.layer.removeAllAnimations()
