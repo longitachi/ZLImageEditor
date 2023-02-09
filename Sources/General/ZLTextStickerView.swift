@@ -161,6 +161,33 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
             super.tapAction(ges)
         }
     }
+
+    override func pinchAction(_ ges: UIPinchGestureRecognizer) {
+        super.pinchAction(ges)
+
+        switch ges.state {
+        case .changed:
+            updateFontSize()
+        default:
+            break
+        }
+    }
+
+    func updateFontSize() {
+        guard let fontName = textFont?.fontName else { return }
+        let frameSize = frame.size
+
+        let center = CGPoint(x: borderView.frame.midX, y: borderView.frame.midY)
+        var frame = borderView.frame
+        frame.origin.x = center.x - frameSize.width / 2
+        frame.origin.y = center.y - frameSize.height / 2
+        frame.size = frameSize
+        borderView.frame = frame
+        label.frame = borderView.bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
+
+        textFont = UIFont.adaptiveFontWithName(fontName: fontName, label: label)
+    }
+
     
     func changeSize(to newSize: CGSize) {
         // Revert zoom scale.
