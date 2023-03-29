@@ -2,6 +2,12 @@
 
 -----
 
+## [1.1.7](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.7) (2023-03-29)
+### Add:
+* Add max scaling for stickers.
+
+----- 
+
 ## [1.1.6](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.6) (2022-12-12)
 ### Add:
 * Add horizontal adjust slider.

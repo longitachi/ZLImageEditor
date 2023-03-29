@@ -51,6 +51,9 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.1.7
+  Add:
+    Add max scaling for stickers.
 ● 1.1.6
   Add:
     Add horizontal adjust slider.
@@ -59,10 +62,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
   Add:
     Update localization files for German.
     Support content wrapping for text sticker.
-● 1.1.4
-  Add:
-    Can change tool icon's highlited color.
-    Support Arabic language.
 ...
 ```
 
