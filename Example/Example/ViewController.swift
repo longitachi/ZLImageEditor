@@ -9,7 +9,6 @@ import UIKit
 import ZLImageEditor
 
 class ViewController: UIViewController {
-
     var editImageToolView: UIView!
     
     var editImageDrawToolSwitch: UISwitch!
@@ -44,8 +43,8 @@ class ViewController: UIViewController {
     }
     
     func setupUI() {
-        self.title = "Main"
-        self.view.backgroundColor = .white
+        title = "Main"
+        view.backgroundColor = .white
         
         func createLabel(_ title: String) -> UILabel {
             let label = UILabel()
@@ -57,145 +56,145 @@ class ViewController: UIViewController {
         
         let spacing: CGFloat = 20
         // Container
-        self.editImageToolView = UIView()
-        self.view.addSubview(self.editImageToolView)
-        self.editImageToolView.snp.makeConstraints { (make) in
+        editImageToolView = UIView()
+        view.addSubview(editImageToolView)
+        editImageToolView.snp.makeConstraints { make in
             make.top.equalTo(self.view.snp.topMargin).offset(5)
             make.left.equalTo(self.view).offset(20)
             make.right.equalTo(self.view).offset(-20)
         }
         
         let drawToolLabel = createLabel("Draw")
-        self.editImageToolView.addSubview(drawToolLabel)
-        drawToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(drawToolLabel)
+        drawToolLabel.snp.makeConstraints { make in
             make.top.equalTo(self.editImageToolView).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
-        self.editImageDrawToolSwitch = UISwitch()
-        self.editImageDrawToolSwitch.isOn = config.tools.contains(.draw)
-        self.editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageDrawToolSwitch)
-        self.editImageDrawToolSwitch.snp.makeConstraints { (make) in
+        editImageDrawToolSwitch = UISwitch()
+        editImageDrawToolSwitch.isOn = config.tools.contains(.draw)
+        editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageDrawToolSwitch)
+        editImageDrawToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(drawToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(drawToolLabel)
         }
         
         let cropToolLabel = createLabel("Crop")
-        self.editImageToolView.addSubview(cropToolLabel)
-        cropToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(cropToolLabel)
+        cropToolLabel.snp.makeConstraints { make in
             make.centerY.equalTo(drawToolLabel)
             make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
-        self.editImageClipToolSwitch = UISwitch()
-        self.editImageClipToolSwitch.isOn = config.tools.contains(.clip)
-        self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageClipToolSwitch)
-        self.editImageClipToolSwitch.snp.makeConstraints { (make) in
+        editImageClipToolSwitch = UISwitch()
+        editImageClipToolSwitch.isOn = config.tools.contains(.clip)
+        editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageClipToolSwitch)
+        editImageClipToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(cropToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(cropToolLabel)
         }
         
         let imageStickerToolLabel = createLabel("Image sticker")
-        self.editImageToolView.addSubview(imageStickerToolLabel)
-        imageStickerToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(imageStickerToolLabel)
+        imageStickerToolLabel.snp.makeConstraints { make in
             make.top.equalTo(drawToolLabel.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
-        self.editImageImageStickerToolSwitch = UISwitch()
-        self.editImageImageStickerToolSwitch.isOn = config.tools.contains(.imageSticker)
-        self.editImageImageStickerToolSwitch.addTarget(self, action: #selector(imageStickerToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageImageStickerToolSwitch)
-        self.editImageImageStickerToolSwitch.snp.makeConstraints { (make) in
+        editImageImageStickerToolSwitch = UISwitch()
+        editImageImageStickerToolSwitch.isOn = config.tools.contains(.imageSticker)
+        editImageImageStickerToolSwitch.addTarget(self, action: #selector(imageStickerToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageImageStickerToolSwitch)
+        editImageImageStickerToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(imageStickerToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(imageStickerToolLabel)
         }
         
         let textStickerToolLabel = createLabel("Text sticker")
-        self.editImageToolView.addSubview(textStickerToolLabel)
-        textStickerToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(textStickerToolLabel)
+        textStickerToolLabel.snp.makeConstraints { make in
             make.centerY.equalTo(imageStickerToolLabel)
             make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
-        self.editImageTextStickerToolSwitch = UISwitch()
-        self.editImageTextStickerToolSwitch.isOn = config.tools.contains(.textSticker)
-        self.editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageTextStickerToolSwitch)
-        self.editImageTextStickerToolSwitch.snp.makeConstraints { (make) in
+        editImageTextStickerToolSwitch = UISwitch()
+        editImageTextStickerToolSwitch.isOn = config.tools.contains(.textSticker)
+        editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageTextStickerToolSwitch)
+        editImageTextStickerToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(textStickerToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(textStickerToolLabel)
         }
         
         let mosaicToolLabel = createLabel("Mosaic")
-        self.editImageToolView.addSubview(mosaicToolLabel)
-        mosaicToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(mosaicToolLabel)
+        mosaicToolLabel.snp.makeConstraints { make in
             make.top.equalTo(imageStickerToolLabel.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
-        self.editImageMosaicToolSwitch = UISwitch()
-        self.editImageMosaicToolSwitch.isOn = config.tools.contains(.mosaic)
-        self.editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageMosaicToolSwitch)
-        self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
+        editImageMosaicToolSwitch = UISwitch()
+        editImageMosaicToolSwitch.isOn = config.tools.contains(.mosaic)
+        editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageMosaicToolSwitch)
+        editImageMosaicToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(mosaicToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(mosaicToolLabel)
         }
         
         let filterToolLabel = createLabel("Filter")
-        self.editImageToolView.addSubview(filterToolLabel)
-        filterToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(filterToolLabel)
+        filterToolLabel.snp.makeConstraints { make in
             make.centerY.equalTo(mosaicToolLabel)
             make.left.equalTo(self.editImageToolView.snp.centerX)
         }
         
-        self.editImageFilterToolSwitch = UISwitch()
-        self.editImageFilterToolSwitch.isOn = config.tools.contains(.filter)
-        self.editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageFilterToolSwitch)
-        self.editImageFilterToolSwitch.snp.makeConstraints { (make) in
+        editImageFilterToolSwitch = UISwitch()
+        editImageFilterToolSwitch.isOn = config.tools.contains(.filter)
+        editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageFilterToolSwitch)
+        editImageFilterToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(filterToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(filterToolLabel)
         }
         
         let adjustToolLabel = createLabel("Adjust")
-        self.editImageToolView.addSubview(adjustToolLabel)
-        adjustToolLabel.snp.makeConstraints { (make) in
+        editImageToolView.addSubview(adjustToolLabel)
+        adjustToolLabel.snp.makeConstraints { make in
             make.top.equalTo(mosaicToolLabel.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
-        self.editImageAdjustToolSwitch = UISwitch()
-        self.editImageAdjustToolSwitch.isOn = config.tools.contains(.adjust)
-        self.editImageAdjustToolSwitch.addTarget(self, action: #selector(adjustToolChanged), for: .valueChanged)
-        self.editImageToolView.addSubview(self.editImageAdjustToolSwitch)
-        self.editImageAdjustToolSwitch.snp.makeConstraints { (make) in
+        editImageAdjustToolSwitch = UISwitch()
+        editImageAdjustToolSwitch.isOn = config.tools.contains(.adjust)
+        editImageAdjustToolSwitch.addTarget(self, action: #selector(adjustToolChanged), for: .valueChanged)
+        editImageToolView.addSubview(editImageAdjustToolSwitch)
+        editImageAdjustToolSwitch.snp.makeConstraints { make in
             make.left.equalTo(adjustToolLabel.snp.right).offset(spacing)
             make.centerY.equalTo(adjustToolLabel)
             make.bottom.equalTo(self.editImageToolView)
         }
         
-        self.pickImageBtn = UIButton(type: .custom)
-        self.pickImageBtn.backgroundColor = .black
-        self.pickImageBtn.layer.cornerRadius = 5
-        self.pickImageBtn.layer.masksToBounds = true
-        self.pickImageBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        self.pickImageBtn.setTitle("Pick an image", for: .normal)
-        self.pickImageBtn.addTarget(self, action: #selector(pickImage), for: .touchUpInside)
-        self.view.addSubview(self.pickImageBtn)
-        self.pickImageBtn.snp.makeConstraints { (make) in
+        pickImageBtn = UIButton(type: .custom)
+        pickImageBtn.backgroundColor = .black
+        pickImageBtn.layer.cornerRadius = 5
+        pickImageBtn.layer.masksToBounds = true
+        pickImageBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        pickImageBtn.setTitle("Pick an image", for: .normal)
+        pickImageBtn.addTarget(self, action: #selector(pickImage), for: .touchUpInside)
+        view.addSubview(pickImageBtn)
+        pickImageBtn.snp.makeConstraints { make in
             make.top.equalTo(self.editImageToolView.snp.bottom).offset(spacing)
             make.left.equalTo(self.editImageToolView)
         }
         
-        self.resultImageView = UIImageView()
-        self.resultImageView.contentMode = .scaleAspectFit
-        self.resultImageView.clipsToBounds = true
-        self.view.addSubview(self.resultImageView)
-        self.resultImageView.snp.makeConstraints { (make) in
+        resultImageView = UIImageView()
+        resultImageView.contentMode = .scaleAspectFit
+        resultImageView.clipsToBounds = true
+        view.addSubview(resultImageView)
+        resultImageView.snp.makeConstraints { make in
             make.top.equalTo(self.pickImageBtn.snp.bottom).offset(spacing)
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.view.snp.bottomMargin)
@@ -203,8 +202,8 @@ class ViewController: UIViewController {
         
         let control = UIControl()
         control.addTarget(self, action: #selector(continueEditImage), for: .touchUpInside)
-        self.view.addSubview(control)
-        control.snp.makeConstraints { (make) in
+        view.addSubview(control)
+        control.snp.makeConstraints { make in
             make.edges.equalTo(self.resultImageView)
         }
     }
@@ -233,7 +232,7 @@ class ViewController: UIViewController {
         picker.delegate = self
         picker.sourceType = .photoLibrary
         picker.mediaTypes = ["public.image"]
-        self.showDetailViewController(picker, sender: nil)
+        showDetailViewController(picker, sender: nil)
     }
     
     @objc func drawToolChanged() {
@@ -293,34 +292,31 @@ class ViewController: UIViewController {
     }
     
     @objc func continueEditImage() {
-        guard let oi = self.originalImage else {
+        guard let oi = originalImage else {
             return
         }
-        self.editImage(oi, editModel: self.resultImageEditModel)
+        
+        editImage(oi, editModel: resultImageEditModel)
     }
     
     func editImage(_ image: UIImage, editModel: ZLEditImageModel?) {
-        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] (resImage, editModel) in
+        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: editModel) { [weak self] resImage, editModel in
             self?.resultImageView.image = resImage
             self?.resultImageEditModel = editModel
         }
     }
-
 }
 
-
 extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true) {
             guard let image = info[.originalImage] as? UIImage else { return }
             self.originalImage = image
             self.editImage(image, editModel: nil)
         }
     }
-    
 }

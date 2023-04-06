@@ -199,20 +199,25 @@ extension ZLImageEditorWrapper where Base: UIImage {
         }
     }
     
-    func resize(_ size: CGSize) -> UIImage? {
+    func resize(_ size: CGSize, scale: CGFloat? = nil) -> UIImage? {
         if size.width <= 0 || size.height <= 0 {
             return nil
         }
-        UIGraphicsBeginImageContextWithOptions(size, false, base.scale)
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, scale ?? base.scale)
         base.draw(in: CGRect(origin: .zero, size: size))
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return temp
     }
     
-    /// Processing speed is better than resize(:) method
-    /// bitsPerPixel = bitsPerComponent * 4
-    func resize_vI(_ size: CGSize, bitsPerComponent: UInt32 = 8, bitsPerPixel: UInt32 = 32) -> UIImage? {
+    /// Resize image. Processing speed is better than resize(:) method
+    /// - Parameters:
+    ///   - size: Dest size of the image.
+    ///   - scale: The scale factor of the image.
+    ///   - bitsPerComponent: The number of bits allocated for a single color component of a bitmap image.
+    ///   - bitsPerPixel: The number of bits allocated for a single pixel in a bitmap image. bitsPerComponent * 4
+    func resize_vI(_ size: CGSize, scale: CGFloat? = nil, bitsPerComponent: UInt32 = 8, bitsPerPixel: UInt32 = 32) -> UIImage? {
         guard let cgImage = base.cgImage else { return nil }
         
         var format = vImage_CGImageFormat(
@@ -253,7 +258,7 @@ extension ZLImageEditorWrapper where Base: UIImage {
         guard error == kvImageNoError else { return nil }
         
         // create a UIImage
-        return UIImage(cgImage: destCGImage, scale: base.scale, orientation: base.imageOrientation)
+        return UIImage(cgImage: destCGImage, scale: scale ?? base.scale, orientation: base.imageOrientation)
     }
     
     func toCIImage() -> CIImage? {
