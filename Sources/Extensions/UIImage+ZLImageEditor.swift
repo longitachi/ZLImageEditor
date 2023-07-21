@@ -388,6 +388,18 @@ extension ZLImageEditorWrapper where Base: UIImage {
     }
 }
 
+extension ZLImageEditorWrapper where Base: UIImage {
+    static func getImage(_ named: String) -> UIImage? {
+        if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
+            return image
+        }
+        if let image = ZLCustomImageDeploy.imageForKey[named] {
+            return image
+        }
+        return UIImage(named: named, in: Bundle.zlImageEditorBundle, compatibleWith: nil)
+    }
+}
+
 extension ZLImageEditorWrapper where Base: CIImage {
     func toUIImage() -> UIImage? {
         let context = CIContext()

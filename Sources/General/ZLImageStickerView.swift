@@ -29,6 +29,8 @@ import UIKit
 class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     private let image: UIImage
     
+    private static let edgeInset: CGFloat = 20
+    
     private lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
         view.contentMode = .scaleAspectFit
@@ -53,7 +55,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
         zl_debugPrint("ZLImageStickerView deinit")
     }
     
-    convenience init(from state: ZLImageStickerState) {
+    convenience init(state: ZLImageStickerState) {
         self.init(
             image: state.image,
             originScale: state.originScale,
@@ -87,7 +89,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
             showBorder: showBorder
         )
         
-        addSubview(imageView)
+        borderView.addSubview(imageView)
     }
     
     @available(*, unavailable)
@@ -96,7 +98,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     }
     
     override func setupUIFrameWhenFirstLayout() {
-        imageView.frame = bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
+        imageView.frame = bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
     }
     
     class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
@@ -113,8 +115,8 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
             let w = h * whRatio
             size = CGSize(width: w, height: h)
         }
-        size.width += ZLStickerLayout.edgeInset * 2
-        size.height += ZLStickerLayout.edgeInset * 2
+        size.width += Self.edgeInset * 2
+        size.height += Self.edgeInset * 2
         return size
     }
 }

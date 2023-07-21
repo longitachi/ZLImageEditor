@@ -309,10 +309,10 @@ class ZLClipImageViewController: UIViewController {
         bottomToolView.layer.addSublayer(bottomShadowLayer)
         
         bottomToolLineView = UIView()
-        bottomToolLineView.backgroundColor = zlRGB(240, 240, 240)
+        bottomToolLineView.backgroundColor = .zl.rgba(240, 240, 240)
         bottomToolView.addSubview(bottomToolLineView)
         
-        cancelBtn.setImage(getImage("zl_close"), for: .normal)
+        cancelBtn.setImage(.zl.getImage("zl_close"), for: .normal)
         cancelBtn.adjustsImageWhenHighlighted = false
         cancelBtn.enlargeInset = 20
         cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
@@ -325,13 +325,13 @@ class ZLClipImageViewController: UIViewController {
         revertBtn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(revertBtn)
         
-        doneBtn.setImage(getImage("zl_right"), for: .normal)
+        doneBtn.setImage(.zl.getImage("zl_right"), for: .normal)
         doneBtn.adjustsImageWhenHighlighted = false
         doneBtn.enlargeInset = 20
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(doneBtn)
         
-        rotateBtn.setImage(getImage("zl_rotateimage"), for: .normal)
+        rotateBtn.setImage(.zl.getImage("zl_rotateimage"), for: .normal)
         rotateBtn.adjustsImageWhenHighlighted = false
         rotateBtn.enlargeInset = 20
         rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)

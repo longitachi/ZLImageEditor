@@ -52,11 +52,6 @@ protocol ZLStickerViewAdditional: NSObject {
     func addScale(_ scale: CGFloat)
 }
 
-enum ZLStickerLayout {
-    static let borderWidth = 1 / UIScreen.main.scale
-    static let edgeInset: CGFloat = 20
-}
-
 class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     private enum Direction: Int {
         case up = 0
@@ -64,6 +59,8 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         case bottom = 180
         case left = 270
     }
+    
+    var borderWidth = 1 / UIScreen.main.scale
     
     var firstLayout = true
     
@@ -137,7 +134,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
         
-        borderView.layer.borderWidth = ZLStickerLayout.borderWidth
+        borderView.layer.borderWidth = borderWidth
         hideBorder()
         if showBorder {
             startTimer()

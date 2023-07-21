@@ -49,9 +49,9 @@ public class ZLProgressHUD: UIView {
         var icon: UIImage? {
             switch self {
             case .light, .lightBlur:
-                return getImage("zl_loading_dark")
+                return .zl.getImage("zl_loading_dark")
             case .dark, .darkBlur:
-                return getImage("zl_loading_light")
+                return .zl.getImage("zl_loading_light")
             }
         }
         

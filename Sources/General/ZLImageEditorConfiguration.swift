@@ -54,12 +54,26 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    private var pri_drawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    private static let defaultDrawColors: [UIColor] = [
+        .white,
+        .black,
+        .zl.rgba(249, 80, 81),
+        .zl.rgba(248, 156, 59),
+        .zl.rgba(255, 195, 0),
+        .zl.rgba(145, 211, 0),
+        .zl.rgba(0, 193, 94),
+        .zl.rgba(16, 173, 254),
+        .zl.rgba(16, 132, 236),
+        .zl.rgba(99, 103, 240),
+        .zl.rgba(127, 127, 127)
+    ]
+    
+    private var pri_drawColors = ZLImageEditorConfiguration.defaultDrawColors
     /// Draw colors for image editor.
     @objc public var drawColors: [UIColor] {
         get {
             if pri_drawColors.isEmpty {
-                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+                return ZLImageEditorConfiguration.defaultDrawColors
             } else {
                 return pri_drawColors
             }
@@ -70,7 +84,7 @@ public class ZLImageEditorConfiguration: NSObject {
     }
     
     /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
-    @objc public var defaultDrawColor = zlRGB(241, 79, 79)
+    @objc public var defaultDrawColor: UIColor = .zl.rgba(249, 80, 81)
     
     private var pri_clipRatios: [ZLImageClipRatio] = [.custom]
     /// Edit ratios for image editor.
@@ -87,12 +101,26 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    private static let defaultTextStickerTextColors: [UIColor] = [
+        .white,
+        .black,
+        .zl.rgba(249, 80, 81),
+        .zl.rgba(248, 156, 59),
+        .zl.rgba(255, 195, 0),
+        .zl.rgba(145, 211, 0),
+        .zl.rgba(0, 193, 94),
+        .zl.rgba(16, 173, 254),
+        .zl.rgba(16, 132, 236),
+        .zl.rgba(99, 103, 240),
+        .zl.rgba(127, 127, 127)
+    ]
+    
+    private var pri_textStickerTextColors = ZLImageEditorConfiguration.defaultTextStickerTextColors
     /// Text sticker colors for image editor.
     @objc public var textStickerTextColors: [UIColor] {
         get {
             if pri_textStickerTextColors.isEmpty {
-                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+                return ZLImageEditorConfiguration.defaultTextStickerTextColors
             } else {
                 return pri_textStickerTextColors
             }

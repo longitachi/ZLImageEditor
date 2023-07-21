@@ -107,22 +107,22 @@ public class ZLImageEditorUIConfiguration: NSObject {
     @objc public var adjustSliderNormalColor = UIColor.white
     
     /// The tint color of adjust slider.
-    @objc public var adjustSliderTintColor = zlRGB(80, 169, 56)
+    @objc public var adjustSliderTintColor: UIColor = .zl.rgba(7, 213, 101)
     
     /// The background color of edit done button.
-    @objc public var editDoneBtnBgColor = zlRGB(80, 169, 56)
+    @objc public var editDoneBtnBgColor: UIColor = .zl.rgba(7, 213, 101)
     
     /// The title color of edit done button.
     @objc public var editDoneBtnTitleColor = UIColor.white
     
     /// The normal background color of ashbin.
-    @objc public var ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
+    @objc public var ashbinNormalBgColor: UIColor = .zl.rgba(40, 40, 40, 0.8)
     
     /// The tint background color of ashbin.
-    @objc public var ashbinTintBgColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
+    @objc public var ashbinTintBgColor: UIColor = .zl.rgba(241, 79, 79, 0.98)
     
     /// The normal color of the title below the various tools in the image editor.
-    @objc public var toolTitleNormalColor = zlRGB(160, 160, 160)
+    @objc public var toolTitleNormalColor: UIColor = .zl.rgba(160, 160, 160)
     
     /// The tint color of the title below the various tools in the image editor.
     @objc public var toolTitleTintColor = UIColor.white

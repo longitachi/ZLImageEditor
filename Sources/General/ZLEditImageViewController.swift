@@ -86,7 +86,7 @@ open class ZLEditImageViewController: UIViewController {
     
     public var drawColViewH: CGFloat = 50
     
-    public var filterColViewH: CGFloat = 80
+    public var filterColViewH: CGFloat = 90
     
     public var adjustColViewH: CGFloat = 60
     
@@ -136,7 +136,7 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_retake"), for: .normal)
+        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -157,8 +157,8 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var revokeBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_revoke_disable"), for: .disabled)
-        btn.setImage(getImage("zl_revoke"), for: .normal)
+        btn.setImage(.zl.getImage("zl_revoke_disable"), for: .disabled)
+        btn.setImage(.zl.getImage("zl_revoke"), for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.isEnabled = false
         btn.isHidden = true
@@ -200,7 +200,7 @@ open class ZLEditImageViewController: UIViewController {
         return view
     }()
     
-    open lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
+    open lazy var ashbinImgView = UIImageView(image: .zl.getImage("zl_ashbin"), highlightedImage: .zl.getImage("zl_ashbin_open"))
     
     var adjustSlider: ZLAdjustSlider?
     
@@ -392,11 +392,11 @@ open class ZLEditImageViewController: UIViewController {
         
         var stickers: [UIView?] = Array(repeating: nil, count: teStic.count + imStic.count)
         teStic.forEach { cache in
-            let v = ZLTextStickerView(from: cache.state)
+            let v = ZLTextStickerView(state: cache.state)
             stickers[cache.index] = v
         }
         imStic.forEach { cache in
-            let v = ZLImageStickerView(from: cache.state)
+            let v = ZLImageStickerView(state: cache.state)
             stickers[cache.index] = v
         }
         
@@ -439,18 +439,18 @@ open class ZLEditImageViewController: UIViewController {
         topShadowLayer.frame = topShadowView.bounds
         cancelBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         
-        bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 140 - insets.bottom, width: view.zl.width, height: 140 + insets.bottom)
+        bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 150 - insets.bottom, width: view.zl.width, height: 150 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
         
         if canRedo, let redoBtn = redoBtn {
-            redoBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
-            revokeBtn.frame = CGRect(x: redoBtn.zl.left - 10 - 35, y: 30, width: 35, height: 30)
+            redoBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 40, width: 35, height: 30)
+            revokeBtn.frame = CGRect(x: redoBtn.zl.left - 10 - 35, y: 40, width: 35, height: 30)
         } else {
-            revokeBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 30, width: 35, height: 30)
+            revokeBtn.frame = CGRect(x: view.zl.width - 15 - 35, y: 40, width: 35, height: 30)
         }
-        drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: revokeBtn.zl.left - 20 - 10, height: drawColViewH)
+        drawColorCollectionView?.frame = CGRect(x: 20, y: 30, width: revokeBtn.zl.left - 20 - 10, height: drawColViewH)
         
-        adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.zl.width - 40, height: adjustColViewH)
+        adjustCollectionView?.frame = CGRect(x: 20, y: 20, width: view.zl.width - 40, height: adjustColViewH)
         if ZLImageEditorUIConfiguration.default().adjustSliderType == .vertical {
             adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
         } else {
@@ -479,7 +479,7 @@ open class ZLEditImageViewController: UIViewController {
             height: 25
         )
         
-        let toolY: CGFloat = 85
+        let toolY: CGFloat = 95
         
         let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
         let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
@@ -592,10 +592,10 @@ open class ZLEditImageViewController: UIViewController {
         
         if tools.contains(.draw) {
             let drawColorLayout = UICollectionViewFlowLayout()
-            let drawColorItemWidth: CGFloat = 30
+            let drawColorItemWidth: CGFloat = 36
             drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
-            drawColorLayout.minimumLineSpacing = 15
-            drawColorLayout.minimumInteritemSpacing = 15
+            drawColorLayout.minimumLineSpacing = 0
+            drawColorLayout.minimumInteritemSpacing = 0
             drawColorLayout.scrollDirection = .horizontal
             let drawColorTopBottomInset = (drawColViewH - drawColorItemWidth) / 2
             drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 0, bottom: drawColorTopBottomInset, right: 0)
@@ -605,7 +605,6 @@ open class ZLEditImageViewController: UIViewController {
             drawCV.delegate = self
             drawCV.dataSource = self
             drawCV.isHidden = true
-            drawCV.showsHorizontalScrollIndicator = false
             bottomShadowView.addSubview(drawCV)
             
             ZLDrawColorCell.zl.register(drawCV)
@@ -621,17 +620,17 @@ open class ZLEditImageViewController: UIViewController {
             }
             
             let filterLayout = UICollectionViewFlowLayout()
-            filterLayout.itemSize = CGSize(width: filterColViewH - 20, height: filterColViewH)
+            filterLayout.itemSize = CGSize(width: filterColViewH - 30, height: filterColViewH - 10)
             filterLayout.minimumLineSpacing = 15
             filterLayout.minimumInteritemSpacing = 15
             filterLayout.scrollDirection = .horizontal
+            filterLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
             
             let filterCV = UICollectionView(frame: .zero, collectionViewLayout: filterLayout)
             filterCV.backgroundColor = .clear
             filterCV.delegate = self
             filterCV.dataSource = self
             filterCV.isHidden = true
-            filterCV.showsHorizontalScrollIndicator = false
             bottomShadowView.addSubview(filterCV)
             
             ZLFilterImageCell.zl.register(filterCV)
@@ -677,8 +676,8 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.addSubview(revokeBtn)
         if canRedo {
             let btn = UIButton(type: .custom)
-            btn.setImage(getImage("zl_redo_disable"), for: .disabled)
-            btn.setImage(getImage("zl_redo"), for: .normal)
+            btn.setImage(.zl.getImage("zl_redo_disable"), for: .disabled)
+            btn.setImage(.zl.getImage("zl_redo"), for: .normal)
             btn.adjustsImageWhenHighlighted = false
             btn.isEnabled = false
             btn.isHidden = true
@@ -734,9 +733,9 @@ open class ZLEditImageViewController: UIViewController {
             }
 
             ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] font in
-                self?.showInputTextVC(font: font) { [weak self] text, font, textColor, bgColor in
-                    self?.addTextStickersView(text, textColor: textColor, font: font, bgColor: bgColor)
-                }
+                self?.showInputTextVC(font: font, completion: { [weak self] text, textColor, font, image, style in
+                    self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
+                })
             }
         }
         
@@ -840,8 +839,8 @@ open class ZLEditImageViewController: UIViewController {
             setToolView(show: false)
             fontChooserContainerIsHidden = false
         } else {
-            showInputTextVC { [weak self] text, _, textColor, bgColor in
-                self?.addTextStickersView(text, textColor: textColor, bgColor: bgColor)
+            showInputTextVC { [weak self] text, textColor, font, image, style in
+                self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
             }
         }
     }
@@ -919,7 +918,7 @@ open class ZLEditImageViewController: UIViewController {
         var textStickers: [(ZLTextStickerState, Int)] = []
         var imageStickers: [(ZLImageStickerState, Int)] = []
         for (index, view) in stickersContainer.subviews.enumerated() {
-            if let ts = view as? ZLTextStickerView, let _ = ts.label.text {
+            if let ts = view as? ZLTextStickerView, !ts.text.isEmpty {
                 textStickers.append((ts.state, index))
             } else if let ts = view as? ZLImageStickerView {
                 imageStickers.append((ts.state, index))
@@ -1177,7 +1176,7 @@ open class ZLEditImageViewController: UIViewController {
         toolViewStateTimer = nil
     }
     
-    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, bgColor: UIColor? = nil, completion: @escaping (String, UIFont, UIColor, UIColor) -> Void) {
+    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void) {
         var bgImage: UIImage?
         autoreleasepool {
             // Calculate image displayed frame on the screen.
@@ -1196,10 +1195,10 @@ open class ZLEditImageViewController: UIViewController {
                 .zl.clipImage(angle: 0, editRect: r, isCircle: isCircle)
         }
         
-        let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, bgColor: bgColor)
+        let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, style: style)
         
-        vc.endInput = { text, font, textColor, bgColor in
-            completion(text, font, textColor, bgColor)
+        vc.endInput = { text, textColor, font, image, style in
+            completion(text, textColor, font, image, style)
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -1234,13 +1233,14 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     /// Add text sticker
-    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont? = nil, bgColor: UIColor) {
-        guard !text.isEmpty else { return }
+    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle) {
+        guard !text.isEmpty, let image = image else { return }
+        
         let scale = mainScrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(text: text, width: view.frame.width, font: font)
+        let size = ZLTextStickerView.calculateSize(image: image)
         let originFrame = getStickerOriginFrame(size)
         
-        let textSticker = ZLTextStickerView(text: text, textColor: textColor, font: font, bgColor: bgColor, originScale: 1 / scale, originAngle: -angle, originFrame: originFrame)
+        let textSticker = ZLTextStickerView(text: text, textColor: textColor, font: font, style: style, image: image, originScale: 1 / scale, originAngle: -angle, originFrame: originFrame)
         stickersContainer.addSubview(textSticker)
         textSticker.frame = originFrame
         
@@ -1692,22 +1692,23 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
     
     func sticker(_ textSticker: ZLTextStickerView, editText text: String) {
-        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.textFont, bgColor: textSticker.bgColor) { [weak self] text, font, textColor, bgColor in
-            guard let `self` = self else { return }
-            if text.isEmpty {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { [weak self] text, textColor, font, image, style in
+            guard let image = image, !text.isEmpty else {
                 textSticker.moveToAshbin()
-            } else {
-                textSticker.startTimer()
-                guard textSticker.text != text || textSticker.textColor != textColor || textSticker.bgColor != bgColor else {
-                    return
-                }
-                textSticker.text = text
-                textSticker.textColor = textColor
-                textSticker.bgColor = bgColor
-                textSticker.textFont = font
-                let newSize = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width, font: font)
-                textSticker.changeSize(to: newSize)
+                return
             }
+            
+            textSticker.startTimer()
+            guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style || textSticker.font != font else {
+                return
+            }
+            textSticker.text = text
+            textSticker.textColor = textColor
+            textSticker.style = style
+            textSticker.image = image
+            textSticker.font = font
+            let newSize = ZLTextStickerView.calculateSize(image: image)
+            textSticker.changeSize(to: newSize)
         }
     }
 }
