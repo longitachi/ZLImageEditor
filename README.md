@@ -51,7 +51,7 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
-● 1.1.8
+● 1.1.8.1
   Add:
     Text stickers support display background color.
 ● 1.1.7

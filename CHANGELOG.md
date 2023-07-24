@@ -2,7 +2,7 @@
 
 -----
 
-## [1.1.8](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8) (2023-07-21)
+## [1.1.8 ~ 1.1.8.1](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8.1) (2023-07-24)
 ### Add:
 * Text stickers support display background color.
 

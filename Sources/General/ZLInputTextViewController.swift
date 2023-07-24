@@ -404,7 +404,7 @@ extension ZLInputTextViewController {
     private func calculateTextRects() -> [CGRect] {
         let layoutManager = textView.layoutManager
         
-        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.count), actualCharacterRange: nil)
+        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
         let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
         
         var rects: [CGRect] = []
