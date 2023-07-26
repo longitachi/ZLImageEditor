@@ -51,7 +51,10 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
-● 1.1.8.1
+● 1.1.8.1, 1.1.8.2 - 1.1.8 Patch
+  Fix:
+    Disable TextView when user ends editing.
+● 1.1.8
   Add:
     Text stickers support display background color.
 ● 1.1.7

@@ -2,7 +2,19 @@
 
 -----
 
-## [1.1.8 ~ 1.1.8.1](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8.1) (2023-07-24)
+## [1.1.8.2 - 1.1.8 Patch](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8.2) (2023-07-26)
+### Fix:
+* Disable TextView when user ends editing.
+
+----- 
+
+## [1.1.8.1 - 1.1.8 Patch](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8.1) (2023-07-24)
+### Add:
+* Text stickers support display background color.
+
+----- 
+
+## [1.1.8](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8) (2023-07-21)
 ### Add:
 * Text stickers support display background color.
 
