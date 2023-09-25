@@ -27,55 +27,6 @@
 import UIKit
 
 public class ZLProgressHUD: UIView {
-    @objc public enum HUDStyle: Int {
-        case light
-        case lightBlur
-        case dark
-        case darkBlur
-        
-        var bgColor: UIColor {
-            switch self {
-            case .light:
-                return .white
-            case .dark:
-                return .darkGray
-            case .lightBlur:
-                return UIColor.white.withAlphaComponent(0.8)
-            case .darkBlur:
-                return UIColor.darkGray.withAlphaComponent(0.8)
-            }
-        }
-        
-        var icon: UIImage? {
-            switch self {
-            case .light, .lightBlur:
-                return .zl.getImage("zl_loading_dark")
-            case .dark, .darkBlur:
-                return .zl.getImage("zl_loading_light")
-            }
-        }
-        
-        var textColor: UIColor {
-            switch self {
-            case .light, .lightBlur:
-                return .black
-            case .dark, .darkBlur:
-                return .white
-            }
-        }
-        
-        var blurEffectStyle: UIBlurEffect.Style? {
-            switch self {
-            case .light, .dark:
-                return nil
-            case .lightBlur:
-                return .extraLight
-            case .darkBlur:
-                return .dark
-            }
-        }
-    }
-    
     private let style: ZLProgressHUD.HUDStyle
     
     private lazy var loadingView = UIImageView(image: style.icon)
@@ -134,17 +85,78 @@ public class ZLProgressHUD: UIView {
         loadingView.layer.add(animation, forKey: nil)
     }
     
-    @objc public func show() {
-        DispatchQueue.main.async {
-            self.startAnimation()
-            UIApplication.shared.keyWindow?.addSubview(self)
+    @objc public func show(in view: UIView? = UIApplication.shared.keyWindow) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.show(in: view)
+            }
+            return
         }
+        
+        startAnimation()
+        view?.addSubview(self)
     }
     
     @objc public func hide() {
-        DispatchQueue.main.async {
-            self.loadingView.layer.removeAllAnimations()
-            self.removeFromSuperview()
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.hide()
+            }
+            return
+        }
+        
+        loadingView.layer.removeAllAnimations()
+        removeFromSuperview()
+    }
+}
+
+public extension ZLProgressHUD {
+    @objc enum HUDStyle: Int {
+        case light
+        case lightBlur
+        case dark
+        case darkBlur
+        
+        var bgColor: UIColor {
+            switch self {
+            case .light:
+                return .white
+            case .dark:
+                return .darkGray
+            case .lightBlur:
+                return UIColor.white.withAlphaComponent(0.8)
+            case .darkBlur:
+                return UIColor.darkGray.withAlphaComponent(0.8)
+            }
+        }
+        
+        var icon: UIImage? {
+            switch self {
+            case .light, .lightBlur:
+                return .zl.getImage("zl_loading_dark")
+            case .dark, .darkBlur:
+                return .zl.getImage("zl_loading_light")
+            }
+        }
+        
+        var textColor: UIColor {
+            switch self {
+            case .light, .lightBlur:
+                return .black
+            case .dark, .darkBlur:
+                return .white
+            }
+        }
+        
+        var blurEffectStyle: UIBlurEffect.Style? {
+            switch self {
+            case .light, .dark:
+                return nil
+            case .lightBlur:
+                return .extraLight
+            case .darkBlur:
+                return .dark
+            }
         }
     }
 }

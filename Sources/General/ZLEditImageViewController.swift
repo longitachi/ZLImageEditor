@@ -932,37 +932,46 @@ open class ZLEditImageViewController: UIViewController {
         
         var resImage = originalImage
         var editModel: ZLEditImageModel?
-        if hasEdit {
-            autoreleasepool {
-                let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
-                hud.show()
-                
+        
+        func callback() {
+            dismiss(animated: animateDismiss) {
+                self.editFinishBlock?(resImage, editModel)
+            }
+        }
+        
+        guard hasEdit else {
+            callback()
+            return
+        }
+        
+        autoreleasepool {
+            let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
+            hud.show(in: view)
+            
+            DispatchQueue.main.async { [self] in
                 resImage = buildImage()
                 resImage = resImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
                 if let oriDataSize = originalImage.jpegData(compressionQuality: 1)?.count {
                     resImage = resImage.zl.compress(to: oriDataSize)
                 }
                 
+                editModel = ZLEditImageModel(
+                    drawPaths: drawPaths,
+                    mosaicPaths: mosaicPaths,
+                    editRect: editRect,
+                    angle: angle,
+                    brightness: brightness,
+                    contrast: contrast,
+                    saturation: saturation,
+                    selectRatio: selectRatio,
+                    selectFilter: currentFilter,
+                    textStickers: textStickers,
+                    imageStickers: imageStickers
+                )
+                
                 hud.hide()
+                callback()
             }
-            
-            editModel = ZLEditImageModel(
-                drawPaths: drawPaths,
-                mosaicPaths: mosaicPaths,
-                editRect: editRect,
-                angle: angle,
-                brightness: brightness,
-                contrast: contrast,
-                saturation: saturation,
-                selectRatio: selectRatio,
-                selectFilter: currentFilter,
-                textStickers: textStickers,
-                imageStickers: imageStickers
-            )
-        }
-        
-        dismiss(animated: animateDismiss) {
-            self.editFinishBlock?(resImage, editModel)
         }
     }
     
