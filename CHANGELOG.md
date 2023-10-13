@@ -2,7 +2,7 @@
 
 -----
 
-## [1.2.0](https://github.com/longitachi/ZLImageEditor/releases/tag/1.2.0) (2023-10-13)
+## [1.2.1](https://github.com/longitachi/ZLImageEditor/releases/tag/1.2.1) (2023-10-13)
 ### Add:
 * Optimize the undo and redo function in the image editor. All operations support undo and redo.
 * Dutch support added.

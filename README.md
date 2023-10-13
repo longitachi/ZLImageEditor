@@ -51,7 +51,7 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
-● 1.2.0
+● 1.2.1
   Add:
     Optimize the undo and redo function in the image editor. All operations support undo and redo.
     Dutch support added.
