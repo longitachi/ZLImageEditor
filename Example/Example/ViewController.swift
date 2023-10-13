@@ -224,7 +224,6 @@ class ViewController: UIViewController {
             .fontChooserContainerView(FontChooserContainerView())
             // Custom filter
 //            .filters = [.normal]
-            .canRedo(true)
     }
     
     @objc func pickImage() {
@@ -314,7 +313,10 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true) {
-            guard let image = info[.originalImage] as? UIImage else { return }
+            guard var image = info[.originalImage] as? UIImage else { return }
+            let w = min(1500, image.zl.width)
+            let h = w * image.zl.height / image.zl.width
+            image = image.zl.resize(CGSize(width: w, height: h)) ?? image
             self.originalImage = image
             self.editImage(image, editModel: nil)
         }

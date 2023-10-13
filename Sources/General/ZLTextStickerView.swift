@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
+class ZLTextStickerView: ZLBaseStickerView {
     static let fontSize: CGFloat = 32
     
     private static let edgeInset: CGFloat = 10
@@ -55,6 +55,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     // Convert all states to model.
     override var state: ZLTextStickerState {
         return ZLTextStickerState(
+            id: id,
             text: text,
             textColor: textColor,
             font: font,
@@ -75,6 +76,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     
     convenience init(state: ZLTextStickerState) {
         self.init(
+            id: state.id,
             text: state.text,
             textColor: state.textColor,
             font: state.font,
@@ -91,6 +93,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     }
     
     init(
+        id: String = UUID().uuidString,
         text: String,
         textColor: UIColor,
         font: UIFont? = nil,
@@ -110,6 +113,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         self.style = style
         self.image = image
         super.init(
+            id: id,
             originScale: originScale,
             originAngle: originAngle,
             originFrame: originFrame,
@@ -181,46 +185,5 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         size.width += Self.edgeInset * 2
         size.height += Self.edgeInset * 2
         return size
-    }
-}
-
-public class ZLTextStickerState: NSObject {
-    let text: String
-    let textColor: UIColor
-    let font: UIFont?
-    let style: ZLInputTextStyle
-    let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
-    
-    init(
-        text: String,
-        textColor: UIColor,
-        font: UIFont?,
-        style: ZLInputTextStyle,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
-        self.text = text
-        self.textColor = textColor
-        self.font = font
-        self.style = style
-        self.image = image
-        self.originScale = originScale
-        self.originAngle = originAngle
-        self.originFrame = originFrame
-        self.gesScale = gesScale
-        self.gesRotation = gesRotation
-        self.totalTranslationPoint = totalTranslationPoint
-        super.init()
     }
 }

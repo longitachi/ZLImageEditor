@@ -27,7 +27,7 @@
 import UIKit
 import Accelerate
 
-extension ZLImageEditorWrapper where Base: UIImage {
+public extension ZLImageEditorWrapper where Base: UIImage {
     // 修复转向
     func fixOrientation() -> UIImage {
         if base.imageOrientation == .up {
@@ -357,7 +357,7 @@ extension ZLImageEditorWrapper where Base: UIImage {
     }
 }
 
-extension ZLImageEditorWrapper where Base: UIImage {
+public extension ZLImageEditorWrapper where Base: UIImage {
     var width: CGFloat {
         base.size.width
     }
@@ -367,7 +367,7 @@ extension ZLImageEditorWrapper where Base: UIImage {
     }
 }
 
-extension ZLImageEditorWrapper where Base: UIImage {
+public extension ZLImageEditorWrapper where Base: UIImage {
     /// 调整图片亮度、对比度、饱和度
     /// - Parameters:
     ///   - brightness: value in [-1, 1]
@@ -400,7 +400,7 @@ extension ZLImageEditorWrapper where Base: UIImage {
     }
 }
 
-extension ZLImageEditorWrapper where Base: CIImage {
+public extension ZLImageEditorWrapper where Base: CIImage {
     func toUIImage() -> UIImage? {
         let context = CIContext()
         guard let cgImage = context.createCGImage(base, from: base.extent) else {
