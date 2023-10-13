@@ -29,6 +29,20 @@ import UIKit
 public class ZLImageEditorConfiguration: NSObject {
     private static var single = ZLImageEditorConfiguration()
     
+    private static let defaultColors: [UIColor] = [
+        .white,
+        .black,
+        .zl.rgba(249, 80, 81),
+        .zl.rgba(248, 156, 59),
+        .zl.rgba(255, 195, 0),
+        .zl.rgba(145, 211, 0),
+        .zl.rgba(0, 193, 94),
+        .zl.rgba(16, 173, 254),
+        .zl.rgba(16, 132, 236),
+        .zl.rgba(99, 103, 240),
+        .zl.rgba(127, 127, 127)
+    ]
+    
     @objc public class func `default`() -> ZLImageEditorConfiguration {
         return ZLImageEditorConfiguration.single
     }
@@ -54,26 +68,12 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    private static let defaultDrawColors: [UIColor] = [
-        .white,
-        .black,
-        .zl.rgba(249, 80, 81),
-        .zl.rgba(248, 156, 59),
-        .zl.rgba(255, 195, 0),
-        .zl.rgba(145, 211, 0),
-        .zl.rgba(0, 193, 94),
-        .zl.rgba(16, 173, 254),
-        .zl.rgba(16, 132, 236),
-        .zl.rgba(99, 103, 240),
-        .zl.rgba(127, 127, 127)
-    ]
-    
-    private var pri_drawColors = ZLImageEditorConfiguration.defaultDrawColors
+    private var pri_drawColors = ZLImageEditorConfiguration.defaultColors
     /// Draw colors for image editor.
     @objc public var drawColors: [UIColor] {
         get {
             if pri_drawColors.isEmpty {
-                return ZLImageEditorConfiguration.defaultDrawColors
+                return ZLImageEditorConfiguration.defaultColors
             } else {
                 return pri_drawColors
             }
@@ -101,26 +101,12 @@ public class ZLImageEditorConfiguration: NSObject {
         }
     }
     
-    private static let defaultTextStickerTextColors: [UIColor] = [
-        .white,
-        .black,
-        .zl.rgba(249, 80, 81),
-        .zl.rgba(248, 156, 59),
-        .zl.rgba(255, 195, 0),
-        .zl.rgba(145, 211, 0),
-        .zl.rgba(0, 193, 94),
-        .zl.rgba(16, 173, 254),
-        .zl.rgba(16, 132, 236),
-        .zl.rgba(99, 103, 240),
-        .zl.rgba(127, 127, 127)
-    ]
-    
-    private var pri_textStickerTextColors = ZLImageEditorConfiguration.defaultTextStickerTextColors
+    private var pri_textStickerTextColors = ZLImageEditorConfiguration.defaultColors
     /// Text sticker colors for image editor.
     @objc public var textStickerTextColors: [UIColor] {
         get {
             if pri_textStickerTextColors.isEmpty {
-                return ZLImageEditorConfiguration.defaultTextStickerTextColors
+                return ZLImageEditorConfiguration.defaultColors
             } else {
                 return pri_textStickerTextColors
             }
@@ -132,9 +118,13 @@ public class ZLImageEditorConfiguration: NSObject {
     
     /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
     @objc public var textStickerDefaultTextColor = UIColor.white
-
+    
+    /// The default font of text sticker.
+    /// - Note: This property is ignored when using fontChooserContainerView.
+    @objc public var textStickerDefaultFont: UIFont?
+    
     /// Whether text sticker allows line break.
-    @objc public var textStickerCanLineBreak = false
+    @objc public var textStickerCanLineBreak = true
     
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.

@@ -187,6 +187,12 @@
 		FDB3114D28756EE200845756 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FDB3114E28756EE900845756 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
 		FDB3114F28756EE900845756 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FDC4877F2AD8F52900B1F15C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
+		FDC487802AD8F52900B1F15C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FDC487812AD8F53400B1F15C /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
+		FDC487822AD8F53400B1F15C /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FDC487832AD8F53B00B1F15C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
+		FDC487842AD8F53B00B1F15C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,6 +378,9 @@
 				tr,
 				"es-419",
 				vi,
+				ar,
+				uk,
+				nl,
 			);
 			mainGroup = E402091B256BA9D70077F5DC;
 			productRefGroup = E4020925256BA9D70077F5DC /* Products */;
@@ -486,6 +495,9 @@
 				FDB3114A28756ED400845756 /* tr */,
 				FDB3114C28756EE200845756 /* es-419 */,
 				FDB3114E28756EE900845756 /* vi */,
+				FDC4877F2AD8F52900B1F15C /* ar */,
+				FDC487812AD8F53400B1F15C /* uk */,
+				FDC487832AD8F53B00B1F15C /* nl */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -508,6 +520,9 @@
 				FDB3114B28756ED500845756 /* tr */,
 				FDB3114D28756EE200845756 /* es-419 */,
 				FDB3114F28756EE900845756 /* vi */,
+				FDC487802AD8F52900B1F15C /* ar */,
+				FDC487822AD8F53400B1F15C /* uk */,
+				FDC487842AD8F53B00B1F15C /* nl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

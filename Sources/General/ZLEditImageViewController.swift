@@ -856,7 +856,7 @@ open class ZLEditImageViewController: UIViewController {
             setToolView(show: false)
             fontChooserContainerIsHidden = false
         } else {
-            showInputTextVC { [weak self] text, textColor, font, image, style in
+            showInputTextVC(font: ZLImageEditorConfiguration.default().textStickerDefaultFont) { [weak self] text, textColor, font, image, style in
                 self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
             }
         }
@@ -1175,7 +1175,7 @@ open class ZLEditImageViewController: UIViewController {
         toolViewStateTimer = nil
     }
     
-    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void) {
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void) {
         var bgImage: UIImage?
         autoreleasepool {
             // Calculate image displayed frame on the screen.
