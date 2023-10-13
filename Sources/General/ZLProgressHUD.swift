@@ -68,7 +68,7 @@ public class ZLProgressHUD: UIView {
         label.textAlignment = .center
         label.textColor = style.textColor
         label.font = UIFont.systemFont(ofSize: 16)
-        label.text = localLanguageTextValue(.hudLoading)
+        label.text = localLanguageTextValue(.hudProcessing)
         view.addSubview(label)
         
         addSubview(view)

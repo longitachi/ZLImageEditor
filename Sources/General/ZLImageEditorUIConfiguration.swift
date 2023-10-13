@@ -54,15 +54,15 @@ public class ZLImageEditorUIConfiguration: NSObject {
     
     /// Developers can customize languages.
     /// - example: If you needs to replace
-    /// key: .hudLoading, value: "loading, waiting please" language,
-    /// The dictionary that needs to be passed in is [.hudLoading: "text to be replaced"].
+    /// key: .hudProcessing, value: "loading, waiting please" language,
+    /// The dictionary that needs to be passed in is [.hudProcessing: "text to be replaced"].
     /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
     public var customLanguageConfig: [ZLLocalLanguageKey: String] = [:]
     
     /// Developers can customize languages (This property is only for objc).
     /// - example: If you needs to replace
     /// key: @"loading", value: @"loading, waiting please" language,
-    /// The dictionary that needs to be passed in is @[@"hudLoading": @"text to be replaced"].
+    /// The dictionary that needs to be passed in is @[@"hudProcessing": @"text to be replaced"].
     /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
     @objc public var customLanguageConfig_objc: [String: String] = [:] {
         didSet {
