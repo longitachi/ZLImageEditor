@@ -217,6 +217,8 @@ class ZLInputTextViewController: UIViewController {
         toolView.addSubview(textStyleBtn)
         toolView.addSubview(collectionView)
         
+        textView.textAlignment = .left
+        
         refreshTextViewUI()
     }
     
