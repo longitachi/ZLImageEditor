@@ -124,7 +124,7 @@ public class ZLImageEditorConfiguration: NSObject {
     @objc public var textStickerDefaultFont: UIFont?
     
     /// Whether text sticker allows line break.
-    @objc public var textStickerCanLineBreak = true
+    @objc public var textStickerCanLineBreak = false
     
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.

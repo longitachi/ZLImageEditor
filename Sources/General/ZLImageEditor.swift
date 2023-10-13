@@ -27,7 +27,7 @@
 import Foundation
 import UIKit
 
-let version = "1.1.8.2"
+let version = "1.2.0"
 
 public struct ZLImageEditorWrapper<Base> {
     public let base: Base

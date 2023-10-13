@@ -51,24 +51,24 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 1.2.0
+  Add:
+    Optimize the undo and redo function in the image editor. All operations support undo and redo.
+    Dutch support added.
+    Supports setting the default font for text stickers.
+  Fix:
+    Fix the bug that text stickers are not displayed when typing in Arabic.
 ● 1.1.8.1, 1.1.8.2 - 1.1.8 Patch
   Fix:
     Disable TextView when user ends editing.
 ● 1.1.8
   Add:
     Text stickers support display background color.
-● 1.1.7
-  Add:
-    Add max scaling for stickers.
-● 1.1.6
-  Add:
-    Add horizontal adjust slider.
-    Support Ukrainian.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese (Simplified/Traditional), 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇺🇦 Ukranian, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkey , Arabic
+🇨🇳 Chinese (Simplified/Traditional), 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇺🇦 Ukranian, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkey, 🇸🇦 Arabic, 🇳🇱 Dutch.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLImageEditor in your project:

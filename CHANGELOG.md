@@ -2,6 +2,17 @@
 
 -----
 
+## [1.2.0](https://github.com/longitachi/ZLImageEditor/releases/tag/1.2.0) (2023-10-13)
+### Add:
+* Optimize the undo and redo function in the image editor. All operations support undo and redo.
+* Dutch support added.
+* Supports setting the default font for text stickers.
+
+### Fix:
+* Fix the bug that text stickers are not displayed when typing in Arabic. [#48](https://github.com/longitachi/ZLImageEditor/issues/48)
+
+----- 
+    
 ## [1.1.8.2 - 1.1.8 Patch](https://github.com/longitachi/ZLImageEditor/releases/tag/1.1.8.2) (2023-07-26)
 ### Fix:
 * Disable TextView when user ends editing.
