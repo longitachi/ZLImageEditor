@@ -29,34 +29,40 @@ import UIKit
 // MARK: Draw path
 
 public class ZLDrawPath: NSObject {
+    private static var pathIndex = 0
+    
     let pathColor: UIColor
+    
+    private var bgPath: UIBezierPath
     
     var path: UIBezierPath
     
     let ratio: CGFloat
     
-    let shapeLayer: CAShapeLayer
+    let index: Int
+    
+    var willDelete = false
     
     private var points: [CGPoint] = []
     
-    init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    init(pathColor: UIColor, pathWidth: CGFloat, defaultLinePath: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
         path = UIBezierPath()
         path.lineWidth = pathWidth / ratio
         path.lineCapStyle = .round
         path.lineJoinStyle = .round
         path.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
+        
+        bgPath = UIBezierPath()
+        bgPath.lineWidth = pathWidth / ratio + defaultLinePath
+        bgPath.lineCapStyle = .round
+        bgPath.lineJoinStyle = .round
+        bgPath.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
+        
         points.append(startPoint)
-        
-        shapeLayer = CAShapeLayer()
-        shapeLayer.lineCap = .round
-        shapeLayer.lineJoin = .round
-        shapeLayer.lineWidth = pathWidth / ratio
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.strokeColor = pathColor.cgColor
-        shapeLayer.path = path.cgPath
-        
         self.ratio = ratio
+        index = Self.pathIndex
+        Self.pathIndex += 1
         
         super.init()
     }
@@ -68,20 +74,20 @@ public class ZLDrawPath: NSObject {
             return CGPoint(x: point.x / ratio, y: point.y / ratio)
         }
         
-        defer {
-            shapeLayer.path = path.cgPath
-        }
-        
         guard points.count >= 4 else {
             path.addLine(to: divRatio(point))
+            bgPath.addLine(to: divRatio(point))
             return
         }
         
         path.removeAllPoints()
+        bgPath.removeAllPoints()
         
         // https://blog.csdn.net/ChasingDreamsCoder/article/details/53015694
         path.move(to: divRatio(points[0]))
         path.addLine(to: divRatio(points[1]))
+        bgPath.move(to: divRatio(points[0]))
+        bgPath.addLine(to: divRatio(points[1]))
         
         let granularity = 4
         for i in 3..<points.count {
@@ -107,15 +113,23 @@ public class ZLDrawPath: NSObject {
                     (3 * p1.y - p0.y - 3 * p2.y + p3.y) * ttt
                 )
                 path.addLine(to: divRatio(point))
+                bgPath.addLine(to: divRatio(point))
             }
             
             path.addLine(to: divRatio(p2))
+            bgPath.addLine(to: divRatio(p2))
         }
         
         path.addLine(to: divRatio(points[points.count - 1]))
+        bgPath.addLine(to: divRatio(points[points.count - 1]))
     }
     
     func drawPath() {
+        if willDelete {
+            UIColor.white.set()
+            bgPath.stroke()
+        }
+        
         pathColor.set()
         path.stroke()
     }
