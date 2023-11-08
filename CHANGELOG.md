@@ -2,6 +2,13 @@
 
 -----
 
+## [2.0.0](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.0) (2023-11-08)
+### Add:
+* Enhancing the drawing tool with an eraser function.
+* The minimum supported system has been upgraded from iOS 9 to iOS 10.
+
+----- 
+
 ## [1.2.1](https://github.com/longitachi/ZLImageEditor/releases/tag/1.2.1) (2023-10-13)
 ### Add:
 * Optimize the undo and redo function in the image editor. All operations support undo and redo.

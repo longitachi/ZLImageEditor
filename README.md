@@ -33,7 +33,9 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 - [x] Adjust (Brightness, Contrast, Saturation).
 
 ### <a id="Requirements"></a>Requirements
- * iOS 9.0
+ | v >= 2.0.0 | iOS 10.0+ |
+ | --- | --- |
+ | v \< 2.0.0 | iOS 9.0+ |
  * Swift 5.x
  * Xcode 12.x
 
@@ -51,6 +53,10 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 2.0.0
+  Add:
+    Enhancing the drawing tool with an eraser function.
+    The minimum supported system has been upgraded from iOS 9 to iOS 10.
 ● 1.2.1
   Add:
     Optimize the undo and redo function in the image editor. All operations support undo and redo.
@@ -61,9 +67,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ● 1.1.8.1, 1.1.8.2 - 1.1.8 Patch
   Fix:
     Disable TextView when user ends editing.
-● 1.1.8
-  Add:
-    Text stickers support display background color.
 ...
 ```
 
@@ -83,7 +86,7 @@ To integrate ZLImageEditor into your Xcode project using CocoaPods, specify it t
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
+platform :ios, '10.0'
 use_frameworks!
 
 target 'MyApp' do
