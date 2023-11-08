@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.author                = {'longitachi' => 'longitachi@163.com'}
   s.source                = {:git => 'https://github.com/longitachi/ZLImageEditor.git', :tag => s.version}
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
 
   s.swift_versions        = ['5.0', '5.1', '5.2']
 
