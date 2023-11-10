@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "material-symbols_crop.png",
+      "filename" : "mingcute_signature-line.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "material-symbols_crop@2x.png",
+      "filename" : "mingcute_signature-line@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "material-symbols_crop@3x.png",
+      "filename" : "mingcute_signature-line@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

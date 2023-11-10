@@ -30,27 +30,46 @@ class ZLEditToolCell: UICollectionViewCell {
     var toolType: ZLImageEditorConfiguration.EditTool = .draw {
         didSet {
             switch toolType {
-            case .draw:
-                icon.image = .zl.getImage("zl_drawLine")
-                icon.highlightedImage = .zl.getImage("zl_drawLine_selected")
             case .clip:
                 icon.image = .zl.getImage("zl_clip")
                 icon.highlightedImage = .zl.getImage("zl_clip")
-            case .imageSticker:
-                icon.image = .zl.getImage("zl_imageSticker")
-                icon.highlightedImage = .zl.getImage("zl_imageSticker")
-            case .textSticker:
-                icon.image = .zl.getImage("zl_textSticker")
-                icon.highlightedImage = .zl.getImage("zl_textSticker")
-            case .mosaic:
-                icon.image = .zl.getImage("zl_mosaic")
-                icon.highlightedImage = .zl.getImage("zl_mosaic_selected")
+                nameLabel.text = "Crop"
             case .filter:
                 icon.image = .zl.getImage("zl_filter")
                 icon.highlightedImage = .zl.getImage("zl_filter_selected")
+                nameLabel.text = "Filters"
             case .adjust:
-                icon.image = .zl.getImage("zl_adjust")
+                if #available(iOS 13.0, *) {
+                    icon.image = .zl.getImage("zl_adjust")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
                 icon.highlightedImage = .zl.getImage("zl_adjust_selected")
+                nameLabel.text = "Adjust"
+            case .draw:
+                icon.image = .zl.getImage("zl_drawLine")
+                icon.highlightedImage = .zl.getImage("zl_drawLine_selected")
+                nameLabel.text = "Draw"
+            case .mosaic:
+                if #available(iOS 13.0, *) {
+                    icon.image = .zl.getImage("zl_mosaic")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
+                icon.highlightedImage = .zl.getImage("zl_mosaic_selected")
+                nameLabel.text = "Blur"
+            case .imageSticker:
+                icon.image = .zl.getImage("zl_imageSticker")
+                icon.highlightedImage = .zl.getImage("zl_imageSticker")
+                nameLabel.text = "Add Image"
+            case .textSticker:
+                if #available(iOS 13.0, *) {
+                    icon.image = .zl.getImage("zl_textSticker")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
+                icon.highlightedImage = .zl.getImage("zl_textSticker")
+                nameLabel.text = "Add Text"
             }
             if let color = UIColor.zl.toolIconHighlightedColor {
                 icon.highlightedImage = icon.highlightedImage?
@@ -59,12 +78,43 @@ class ZLEditToolCell: UICollectionViewCell {
         }
     }
     
-    lazy var icon = UIImageView(frame: contentView.bounds)
+    lazy var nameLabel: UILabel = {
+        let label = UILabel()
+        label.frame = CGRect(x: 0, y: bounds.height - 24, width: bounds.width, height: 24)
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .black
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        label.lineBreakMode = .byCharWrapping
+        return label
+    }()
+    
+    lazy var icon: UIImageView = {
+        let view = UIImageView()
+        view.frame = CGRect(x: (bounds.width - 24) / 2, y: 0, width: 24, height: 24)
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
+        return view
+    }()
+    
+//    lazy var icon = UIImageView(frame: contentView.bounds)
+//    
+//    lazy var nameLabel: UILabel = {
+//        let label = UILabel()
+//        label.frame = CGRect(x: 0, y: bounds.height - 20, width: bounds.width, height: 20)
+//        label.font = .systemFont(ofSize: 12)
+//        label.textColor = .black
+//        label.textAlignment = .center
+//        label.adjustsFontSizeToFitWidth = true
+//        label.minimumScaleFactor = 0.5
+//        return label
+//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addSubview(icon)
+        contentView.addSubview(nameLabel)
     }
     
     @available(*, unavailable)
@@ -86,7 +136,11 @@ class ZLDrawColorCell: UICollectionViewCell {
     
     lazy var bgWhiteView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemGray5
+        } else {
+            // Fallback on earlier versions
+        }
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
         view.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
@@ -163,7 +217,7 @@ class ZLAdjustToolCell: UICollectionViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 0, y: bounds.height - 30, width: bounds.width, height: 30)
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 10)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -188,15 +242,27 @@ class ZLAdjustToolCell: UICollectionViewCell {
         didSet {
             switch adjustTool {
             case .brightness:
-                imageView.image = .zl.getImage("zl_brightness")
+                if #available(iOS 13.0, *) {
+                    imageView.image = .zl.getImage("zl_brightness")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
                 imageView.highlightedImage = .zl.getImage("zl_brightness_selected")
                 nameLabel.text = localLanguageTextValue(.brightness)
             case .contrast:
-                imageView.image = .zl.getImage("zl_contrast")
+                if #available(iOS 13.0, *) {
+                    imageView.image = .zl.getImage("zl_contrast")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
                 imageView.highlightedImage = .zl.getImage("zl_contrast_selected")
                 nameLabel.text = localLanguageTextValue(.contrast)
             case .saturation:
-                imageView.image = .zl.getImage("zl_saturation")
+                if #available(iOS 13.0, *) {
+                    imageView.image = .zl.getImage("zl_saturation")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+                } else {
+                    // Fallback on earlier versions
+                }
                 imageView.highlightedImage = .zl.getImage("zl_saturation_selected")
                 nameLabel.text = localLanguageTextValue(.saturation)
             }

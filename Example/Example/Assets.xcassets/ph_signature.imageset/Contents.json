@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "material-symbols_crop.png",
+      "filename" : "ph_signature.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "material-symbols_crop@2x.png",
+      "filename" : "ph_signature@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "material-symbols_crop@3x.png",
+      "filename" : "ph_signature@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

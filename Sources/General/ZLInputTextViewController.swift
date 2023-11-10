@@ -43,23 +43,39 @@ class ZLInputTextViewController: UIViewController {
     
     private var textStyle: ZLInputTextStyle
     
-    private lazy var cancelBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
-        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
+//    private lazy var cancelBtn: UIButton = {
+//        let btn = UIButton(type: .custom)
+//        btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
+//        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
+//        btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+//        return btn
+//    }()
+//    
+//    private lazy var doneBtn: UIButton = {
+//        let btn = UIButton(type: .custom)
+//        btn.setTitle(localLanguageTextValue(.done), for: .normal)
+//        btn.setTitleColor(.zl.editDoneBtnTitleColor, for: .normal)
+//        btn.backgroundColor = .zl.editDoneBtnBgColor
+//        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
+//        btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
+//        btn.layer.masksToBounds = true
+//        btn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
+//        return btn
+//    }()
+    
+    private lazy var cancelBtn: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setImage(UIImage(named: "back"), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+        btn.enlargeInset = 30
         return btn
     }()
     
-    private lazy var doneBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.setTitle(localLanguageTextValue(.done), for: .normal)
-        btn.setTitleColor(.zl.editDoneBtnTitleColor, for: .normal)
-        btn.backgroundColor = .zl.editDoneBtnBgColor
-        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
+    private lazy var doneBtn: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setImage(UIImage(named: "checkmark"), for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        btn.layer.masksToBounds = true
-        btn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
+        btn.enlargeInset = 30
         return btn
     }()
     
@@ -198,7 +214,7 @@ class ZLInputTextViewController: UIViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         
         let bgImageView = UIImageView(image: image?.zl.blurImage(level: 4))
         bgImageView.frame = view.bounds

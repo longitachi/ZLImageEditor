@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "charm_tick.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

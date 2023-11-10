@@ -24,6 +24,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
+//MARK: - Crop and Rotate
+
 import UIKit
 
 extension ZLClipImageViewController {
@@ -72,7 +74,7 @@ class ZLClipImageViewController: UIViewController {
     
     var imageView: UIImageView!
     
-    var shadowView: ZLClipShadowView!
+//    var shadowView: ZLClipShadowView!
     
     var overlayView: ZLClipOverlayView!
     
@@ -80,7 +82,7 @@ class ZLClipImageViewController: UIViewController {
     
     var bottomToolView: UIView!
     
-    var bottomShadowLayer: CAGradientLayer!
+//    var bottomShadowLayer: CAGradientLayer!
     
     var bottomToolLineView: UIView!
     
@@ -230,12 +232,12 @@ class ZLClipImageViewController: UIViewController {
         shouldLayout = false
         
         scrollView.frame = view.bounds
-        shadowView.frame = view.bounds
+//        shadowView.frame = view.bounds
         
         layoutInitialImage()
         
         bottomToolView.frame = CGRect(x: 0, y: view.bounds.height - ZLClipImageViewController.bottomToolViewH, width: view.bounds.width, height: ZLClipImageViewController.bottomToolViewH)
-        bottomShadowLayer.frame = bottomToolView.bounds
+//        bottomShadowLayer.frame = bottomToolView.bounds
         
         bottomToolLineView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 1 / UIScreen.main.scale)
         let toolBtnH: CGFloat = 25
@@ -262,7 +264,11 @@ class ZLClipImageViewController: UIViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = .black
+        if #available(iOS 11.0, *) {
+            view.backgroundColor = UIColor(named: "bgWhite")
+        } else {
+            // Fallback on earlier versions
+        }
         
         scrollView = UIScrollView()
         scrollView.alwaysBounceVertical = true
@@ -285,10 +291,10 @@ class ZLClipImageViewController: UIViewController {
         imageView.clipsToBounds = true
         containerView.addSubview(imageView)
         
-        shadowView = ZLClipShadowView()
-        shadowView.isUserInteractionEnabled = false
-        shadowView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        view.addSubview(shadowView)
+//        shadowView = ZLClipShadowView()
+//        shadowView.isUserInteractionEnabled = false
+//        shadowView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+//        view.addSubview(shadowView)
         
         overlayView = ZLClipOverlayView()
         overlayView.isUserInteractionEnabled = false
@@ -298,19 +304,23 @@ class ZLClipImageViewController: UIViewController {
         bottomToolView = UIView()
         view.addSubview(bottomToolView)
         
-        let color1 = UIColor.black.withAlphaComponent(0.15).cgColor
-        let color2 = UIColor.black.withAlphaComponent(0.35).cgColor
+//        let color1 = UIColor.black.withAlphaComponent(0.15).cgColor
+//        let color2 = UIColor.black.withAlphaComponent(0.35).cgColor
         
-        bottomShadowLayer = CAGradientLayer()
-        bottomShadowLayer.colors = [color1, color2]
-        bottomShadowLayer.locations = [0, 1]
-        bottomToolView.layer.addSublayer(bottomShadowLayer)
+//        bottomShadowLayer = CAGradientLayer()
+//        bottomShadowLayer.colors = [color1, color2]
+//        bottomShadowLayer.locations = [0, 1]
+//        bottomToolView.layer.addSublayer(bottomShadowLayer)
         
         bottomToolLineView = UIView()
-        bottomToolLineView.backgroundColor = .zl.rgba(240, 240, 240)
+        bottomToolLineView.backgroundColor = .black //.zl.rgba(240, 240, 240)
         bottomToolView.addSubview(bottomToolLineView)
         
-        cancelBtn.setImage(.zl.getImage("zl_close"), for: .normal)
+        if #available(iOS 13.0, *) {
+            cancelBtn.setImage(.zl.getImage("zl_close")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
+        } else {
+            // Fallback on earlier versions
+        }
         cancelBtn.adjustsImageWhenHighlighted = false
         cancelBtn.enlargeInset = 20
         cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
@@ -322,14 +332,22 @@ class ZLClipImageViewController: UIViewController {
         revertBtn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
         revertBtn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(revertBtn)
-        
-        doneBtn.setImage(.zl.getImage("zl_right"), for: .normal)
+        //MARK: - DoneBtn
+        if #available(iOS 13.0, *) {
+            doneBtn.setImage(.zl.getImage("zl_right")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
+        } else {
+            // Fallback on earlier versions
+        }
         doneBtn.adjustsImageWhenHighlighted = false
         doneBtn.enlargeInset = 20
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(doneBtn)
         
-        rotateBtn.setImage(.zl.getImage("zl_rotateimage"), for: .normal)
+        if #available(iOS 13.0, *) {
+            rotateBtn.setImage(.zl.getImage("zl_rotateimage")?.withTintColor(.black, renderingMode: .alwaysTemplate), for: .normal)
+        } else {
+            // Fallback on earlier versions
+        }
         rotateBtn.adjustsImageWhenHighlighted = false
         rotateBtn.enlargeInset = 20
         rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
@@ -484,7 +502,7 @@ class ZLClipImageViewController: UIViewController {
 //        frame.size.height = floor(max(self.minClipSize.height, min(frame.height, maxH)))
         
         clipBoxFrame = frame
-        shadowView.clearRect = frame
+//        shadowView.clearRect = frame
         overlayView.frame = frame.insetBy(dx: -ZLClipOverlayView.cornerLineWidth, dy: -ZLClipOverlayView.cornerLineWidth)
         
         scrollView.contentInset = UIEdgeInsets(top: frame.minY, left: frame.minX, bottom: scrollView.frame.maxY - frame.maxY, right: scrollView.frame.maxX - frame.maxX)
@@ -797,7 +815,7 @@ class ZLClipImageViewController: UIViewController {
     
     func startEditing() {
         cleanTimer()
-        shadowView.alpha = 0
+//        shadowView.alpha = 0
         overlayView.isEditing = true
         if rotateBtn.alpha != 0 {
             rotateBtn.layer.removeAllAnimations()
@@ -863,7 +881,7 @@ class ZLClipImageViewController: UIViewController {
             }
             self.rotateBtn.alpha = 1
             self.clipRatioColView.alpha = 1
-            self.shadowView.alpha = 1
+//            self.shadowView.alpha = 1
             self.changeClipBoxFrame(newFrame: clipRect)
         }
     }
@@ -1048,7 +1066,7 @@ class ZLImageClipRatioCell: UICollectionViewCell {
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: bounds.height - 15, width: bounds.width, height: 12))
         titleLabel.font = UIFont.systemFont(ofSize: 12)
-        titleLabel.textColor = .white
+        titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         titleLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
         titleLabel.layer.shadowOffset = .zero
@@ -1221,8 +1239,12 @@ class ZLClipOverlayView: UIView {
     
     override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        
-        context?.setStrokeColor(UIColor.white.cgColor)
+        //MARK: - Overlay color blue
+        if #available(iOS 11.0, *) {
+            context?.setStrokeColor(UIColor(named: "deepBlue")!.cgColor)
+        } else {
+            // Fallback on earlier versions
+        }
         context?.setLineWidth(1)
         context?.beginPath()
         

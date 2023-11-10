@@ -80,13 +80,13 @@ public class ZLEditImageModel: NSObject {
 open class ZLEditImageViewController: UIViewController {
     static let maxDrawLineImageWidth: CGFloat = 600
     
-    static let shadowColorFrom = UIColor.black.withAlphaComponent(0.35).cgColor
+//    static let shadowColorFrom = UIColor.black.withAlphaComponent(0.35).cgColor
     
-    static let shadowColorTo = UIColor.clear.cgColor
+//    static let shadowColorTo = UIColor.clear.cgColor
     
     public var drawColViewH: CGFloat = 50
     
-    public var filterColViewH: CGFloat = 90
+    public var filterColViewH: CGFloat = 80
     
     public var adjustColViewH: CGFloat = 60
     
@@ -94,7 +94,11 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = .black
+        if #available(iOS 11.0, *) {
+            view.backgroundColor = UIColor(named: "bgWhite")
+        } else {
+            view.backgroundColor = .white
+        }
         view.minimumZoomScale = 1
         view.maximumZoomScale = 3
         view.delegate = self
@@ -112,47 +116,53 @@ open class ZLEditImageViewController: UIViewController {
         let view = UIImageView(image: originalImage)
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         return view
     }()
     
-    open lazy var topShadowView = UIView()
-    
-    open lazy var topShadowLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [ZLEditImageViewController.shadowColorFrom, ZLEditImageViewController.shadowColorTo]
-        layer.locations = [0, 1]
-        return layer
+    open lazy var topShadowView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightText
+        
+        return view
     }()
+    
+//    open lazy var topShadowLayer: CAGradientLayer = {
+//        let layer = CAGradientLayer()
+//        layer.colors = [ZLEditImageViewController.shadowColorFrom, ZLEditImageViewController.shadowColorTo]
+//        layer.locations = [0, 1]
+//        return layer
+//    }()
      
-    open lazy var bottomShadowView = UIView()
-    
-    open lazy var bottomShadowLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [ZLEditImageViewController.shadowColorTo, ZLEditImageViewController.shadowColorFrom]
-        layer.locations = [0, 1]
-        return layer
+    open lazy var bottomShadowView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightText
+        
+        return view
     }()
+    
+//    open lazy var bottomShadowLayer: CAGradientLayer = {
+//        let layer = CAGradientLayer()
+//        layer.colors = [ZLEditImageViewController.shadowColorTo, ZLEditImageViewController.shadowColorFrom]
+//        layer.locations = [0, 1]
+//        return layer
+//    }()
+    
+    //MARK: - Cancel Button
     
     open lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        btn.setTitleColor(.white, for: .normal)
-        btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
+        btn.setImage(UIImage(named: "back"), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.enlargeInset = 30
         return btn
     }()
     
-    open lazy var doneBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        btn.backgroundColor = .zl.editDoneBtnBgColor
-        btn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
-        btn.setTitleColor(.zl.editDoneBtnTitleColor, for: .normal)
+    open lazy var doneBtn: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setImage(UIImage(named: "checkmark"), for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        btn.layer.masksToBounds = true
-        btn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
+        btn.enlargeInset = 30
         return btn
     }()
     
@@ -180,9 +190,9 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var editToolCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 30, height: 30)
-        layout.minimumLineSpacing = 20
-        layout.minimumInteritemSpacing = 20
+        layout.itemSize = CGSize(width: 62, height: 50)
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .horizontal
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -195,11 +205,15 @@ open class ZLEditImageViewController: UIViewController {
         return view
     }()
     
+    //MARK: - CollectonsView
+    
     open var drawColorCollectionView: UICollectionView?
     
     open var filterCollectionView: UICollectionView?
     
     open var adjustCollectionView: UICollectionView?
+    
+    //MARK: - Ластик
     
     open lazy var eraserBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
@@ -221,7 +235,7 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var eraserLineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .zl.rgba(89, 95, 107, 0.8)
+        view.backgroundColor = .black
         view.isHidden = true
         return view
     }()
@@ -460,6 +474,8 @@ open class ZLEditImageViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - viewDidLoad
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         
@@ -469,6 +485,11 @@ open class ZLEditImageViewController: UIViewController {
         if tools.contains(.filter) {
             generateFilterImages()
         }
+        
+        filterCollectionView?.backgroundColor = .white
+        filterCollectionView?.layer.shadowColor = UIColor.gray.cgColor
+        filterCollectionView?.layer.shadowOpacity = 0.3
+        filterCollectionView?.layer.shadowOffset = CGSize(width: -1, height: 1)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -507,20 +528,19 @@ open class ZLEditImageViewController: UIViewController {
         resetContainerViewFrame()
         
         topShadowView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: 150)
-        topShadowLayer.frame = topShadowView.bounds
+//        topShadowLayer.frame = topShadowView.bounds
         cancelBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 150 - insets.bottom, width: view.zl.width, height: 150 + insets.bottom)
-        bottomShadowLayer.frame = bottomShadowView.bounds
+//        bottomShadowLayer.frame = bottomShadowView.bounds
         
-        let cancelBtnW = localLanguageTextValue(.cancel)
-            .zl.boundingRect(
-                font: ZLImageEditorLayout.bottomToolTitleFont,
-                limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 28)
-            ).width
-        cancelBtn.frame = CGRect(x: 20, y: 60, width: cancelBtnW, height: 30)
-        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: 60, width: 30, height: 30)
-        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: 60, width: 30, height: 30)
+        cancelBtn.frame = CGRect(x: 20, y: 60, width: 30, height: 30)
+        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: 110, width: 30, height: 30)
+        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: 110, width: 30, height: 30)
+        
+//        let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
+//        let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
+        doneBtn.frame = CGRect(x: view.zl.width - 20 - 30, y: 60 - 2, width: 30, height: 30)
         
         eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
         eraserBtnBgBlurView.frame = eraserBtn.frame
@@ -541,7 +561,7 @@ open class ZLEditImageViewController: UIViewController {
             )
         }
         
-        filterCollectionView?.frame = CGRect(x: 20, y: 0, width: view.zl.width - 40, height: filterColViewH)
+        filterCollectionView?.frame = CGRect(x: 0, y: -14, width: view.frame.width, height: filterColViewH + 20)
         
         ashbinView.frame = CGRect(
             x: (view.zl.width - ashbinSize.width) / 2,
@@ -558,11 +578,14 @@ open class ZLEditImageViewController: UIViewController {
         
         let toolY: CGFloat = 95
         
-        let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
-        let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
+//        let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
+//        let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
+//        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
         
-        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.zl.width - 20 - 20 - doneBtnW - 20, height: 30)
+//        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: toolY - 60, width: 30, height: 30)
+//        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: toolY - 60, width: 30, height: 30)
+        
+        editToolCollectionView.frame = CGRect(x: 0, y: toolY, width: view.zl.width - 10, height: 50)
         
         if !drawPaths.isEmpty {
             drawLine()
@@ -650,8 +673,10 @@ open class ZLEditImageViewController: UIViewController {
         isScrolling = false
     }
     
+    //MARK: - SetupUI
+    
     func setupUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         
         view.addSubview(mainScrollView)
         mainScrollView.addSubview(containerView)
@@ -660,15 +685,18 @@ open class ZLEditImageViewController: UIViewController {
         containerView.addSubview(stickersContainer)
         
         view.addSubview(topShadowView)
-        topShadowView.layer.addSublayer(topShadowLayer)
+//        topShadowView.layer.addSublayer(topShadowLayer)
         topShadowView.addSubview(cancelBtn)
         topShadowView.addSubview(undoBtn)
         topShadowView.addSubview(redoBtn)
+        topShadowView.addSubview(doneBtn)
         
         view.addSubview(bottomShadowView)
-        bottomShadowView.layer.addSublayer(bottomShadowLayer)
+//        bottomShadowView.layer.addSublayer(bottomShadowLayer)
         bottomShadowView.addSubview(editToolCollectionView)
-        bottomShadowView.addSubview(doneBtn)
+//        bottomShadowView.addSubview(doneBtn)
+//        bottomShadowView.addSubview(undoBtn)
+//        bottomShadowView.addSubview(redoBtn)
         
         if tools.contains(.draw) {
             bottomShadowView.addSubview(eraserBtnBgBlurView)
@@ -686,6 +714,8 @@ open class ZLEditImageViewController: UIViewController {
             drawColorLayout.scrollDirection = .horizontal
             let drawColorTopBottomInset = (drawColViewH - drawColorItemWidth) / 2
             drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 0, bottom: drawColorTopBottomInset, right: 0)
+            
+            //MARK: - DrawCollectionView backgroundColor
             
             let drawCV = UICollectionView(frame: .zero, collectionViewLayout: drawColorLayout)
             drawCV.backgroundColor = .clear
@@ -707,11 +737,11 @@ open class ZLEditImageViewController: UIViewController {
             }
             
             let filterLayout = UICollectionViewFlowLayout()
-            filterLayout.itemSize = CGSize(width: filterColViewH - 30, height: filterColViewH - 10)
+            filterLayout.itemSize = CGSize(width: filterColViewH - 30, height: filterColViewH)
             filterLayout.minimumLineSpacing = 15
             filterLayout.minimumInteritemSpacing = 15
             filterLayout.scrollDirection = .horizontal
-            filterLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+            filterLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
             
             let filterCV = UICollectionView(frame: .zero, collectionViewLayout: filterLayout)
             filterCV.backgroundColor = .clear
@@ -737,9 +767,11 @@ open class ZLEditImageViewController: UIViewController {
             adjustLayout.minimumInteritemSpacing = 10
             adjustLayout.scrollDirection = .horizontal
             
+            //MARK: - Ручной фильтр
+            
             let adjustCV = UICollectionView(frame: .zero, collectionViewLayout: adjustLayout)
             
-            adjustCV.backgroundColor = .clear
+            adjustCV.backgroundColor = .white
             adjustCV.delegate = self
             adjustCV.dataSource = self
             adjustCV.isHidden = true
@@ -791,7 +823,11 @@ open class ZLEditImageViewController: UIViewController {
             imageView.layer.addSublayer(mosaicImageLayer!)
             
             mosaicImageLayerMaskLayer = CAShapeLayer()
-            mosaicImageLayerMaskLayer?.strokeColor = UIColor.blue.cgColor
+            if #available(iOS 11.0, *) {
+                mosaicImageLayerMaskLayer?.strokeColor = UIColor(named: "deepBlue")?.cgColor
+            } else {
+                // Fallback on earlier versions
+            }
             mosaicImageLayerMaskLayer?.fillColor = nil
             mosaicImageLayerMaskLayer?.lineCap = .round
             mosaicImageLayerMaskLayer?.lineJoin = .round
@@ -841,6 +877,8 @@ open class ZLEditImageViewController: UIViewController {
         stickersContainer.transform = transform
     }
     
+    //MARK: - CancelBtnClick
+    
     @objc func cancelBtnClick() {
         dismiss(animated: animateDismiss, completion: nil)
     }
@@ -872,6 +910,8 @@ open class ZLEditImageViewController: UIViewController {
             drawColorCollectionView?.reloadData()
         }
     }
+    
+    //MARK: - Crop and Rotate
     
     func clipBtnClick() {
         preClipStatus = currentClipStatus
@@ -930,6 +970,8 @@ open class ZLEditImageViewController: UIViewController {
         recalculateStickersFrame(oldContainerSize, oldAngle, status.angle)
     }
     
+    //MARK: - image Sticker
+    
     func imageStickerBtnClick() {
         ZLImageEditorConfiguration.default().imageStickerContainerView?.show(in: view)
         setToolView(show: false)
@@ -958,6 +1000,8 @@ open class ZLEditImageViewController: UIViewController {
         setAdjustViews(hidden: true)
     }
     
+    //MARK: - Mosaic button
+    
     func mosaicBtnClick() {
         let isSelected = selectedTool != .mosaic
         if isSelected {
@@ -971,6 +1015,8 @@ open class ZLEditImageViewController: UIViewController {
         setFilterViews(hidden: true)
         setAdjustViews(hidden: true)
     }
+    
+    //MARK: - Filter button
     
     func filterBtnClick() {
         let isSelected = selectedTool != .filter
@@ -1817,20 +1863,20 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
         if collectionView == editToolCollectionView {
             let toolType = tools[indexPath.row]
             switch toolType {
-            case .draw:
-                drawBtnClick()
             case .clip:
                 clipBtnClick()
-            case .imageSticker:
-                imageStickerBtnClick()
-            case .textSticker:
-                textStickerBtnClick()
-            case .mosaic:
-                mosaicBtnClick()
             case .filter:
                 filterBtnClick()
             case .adjust:
                 adjustBtnClick()
+            case .draw:
+                drawBtnClick()
+            case .mosaic:
+                mosaicBtnClick()
+            case .imageSticker:
+                imageStickerBtnClick()
+            case .textSticker:
+                textStickerBtnClick()
             }
         } else if collectionView == drawColorCollectionView {
             currentDrawColor = drawColors[indexPath.row]
@@ -1954,6 +2000,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         undoBtn.isEnabled = !actions.isEmpty
         redoBtn.isEnabled = actions.count != redoActions.count
     }
+    
+    //MARK: - EditorManager
     
     func editorManager(_ manager: ZLEditorManager, undoAction action: ZLEditorAction) {
         switch action {
