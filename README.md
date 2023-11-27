@@ -53,6 +53,9 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 2.0.1
+  Add: 
+    Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
 ● 2.0.0
   Add:
     Enhancing the drawing tool with an eraser function.
@@ -64,9 +67,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
     Supports setting the default font for text stickers.
   Fix:
     Fix the bug that text stickers are not displayed when typing in Arabic.
-● 1.1.8.1, 1.1.8.2 - 1.1.8 Patch
-  Fix:
-    Disable TextView when user ends editing.
 ...
 ```
 
@@ -119,7 +119,7 @@ $ carthage update ZLImageEditor
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.1" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="Support"></a> Support

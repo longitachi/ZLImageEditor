@@ -2,6 +2,12 @@
 
 -----
 
+## [2.0.1](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.1) (2023-11-27)
+### Add:
+*  Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
+
+----- 
+
 ## [2.0.0](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.0) (2023-11-08)
 ### Add:
 * Enhancing the drawing tool with an eraser function.
