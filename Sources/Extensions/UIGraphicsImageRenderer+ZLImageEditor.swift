@@ -1,8 +1,8 @@
 //
-//  ZLImageEditor.swift
+//  UIGraphicsImageRenderer+ZLImageEditor.swift
 //  ZLImageEditor
 //
-//  Created by long on 2020/9/8.
+//  Created by long on 2023/11/27.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,47 +24,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
 import UIKit
 
-let version = "2.0.0"
-
-public struct ZLImageEditorWrapper<Base> {
-    public let base: Base
-    
-    public init(_ base: Base) {
-        self.base = base
+extension ZLImageEditorWrapper where Base: UIGraphicsImageRenderer {
+    static func renderImage(
+        size: CGSize,
+        formatConfig: ((UIGraphicsImageRendererFormat) -> Void)? = nil,
+        imageActions: ((CGContext) -> Void)
+    ) -> UIImage {
+        let format: UIGraphicsImageRendererFormat
+        if #available(iOS 11.0, *) {
+            format = .preferred()
+        } else {
+            format = .default()
+        }
+        formatConfig?(format)
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { context in
+            imageActions(context.cgContext)
+        }
     }
 }
-
-public protocol ZLImageEditorCompatible: AnyObject { }
-
-public protocol ZLImageEditorCompatibleValue { }
-
-extension ZLImageEditorCompatible {
-    public var zl: ZLImageEditorWrapper<Self> {
-        get { ZLImageEditorWrapper(self) }
-        set { }
-    }
-    
-    public static var zl: ZLImageEditorWrapper<Self>.Type {
-        get { ZLImageEditorWrapper<Self>.self }
-        set { }
-    }
-}
-
-extension ZLImageEditorCompatibleValue {
-    public var zl: ZLImageEditorWrapper<Self> {
-        get { ZLImageEditorWrapper(self) }
-        set { }
-    }
-}
-
-extension UIImage: ZLImageEditorCompatible { }
-extension CIImage: ZLImageEditorCompatible { }
-extension UIColor: ZLImageEditorCompatible { }
-extension UIView: ZLImageEditorCompatible { }
-extension UIGraphicsImageRenderer: ZLImageEditorCompatible { }
-
-extension String: ZLImageEditorCompatibleValue { }
-extension CGFloat: ZLImageEditorCompatibleValue { }
