@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ZLImageEditor/ZLWeakProxy.h>
 
 //! Project version number for ZLImageEditor.
 FOUNDATION_EXPORT double ZLImageEditorVersionNumber;

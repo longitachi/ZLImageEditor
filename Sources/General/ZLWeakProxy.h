@@ -1,8 +1,8 @@
 //
-//  ZLWeakProxy.swift
+//  ZLWeakProxy.h
 //  ZLImageEditor
 //
-//  Created by long on 2021/3/10.
+//  Created by long on 2023/12/5.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,29 +24,17 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#if SWIFT_PACKAGE
+#import <Foundation/Foundation.h>
 
-import UIKit
+NS_ASSUME_NONNULL_BEGIN
 
-class ZLWeakProxy: NSObject {
-    private weak var target: NSObjectProtocol?
-    
-    init(target: NSObjectProtocol) {
-        self.target = target
-        super.init()
-    }
-    
-    class func proxy(target: NSObjectProtocol) -> ZLWeakProxy {
-        return ZLWeakProxy(target: target)
-    }
-    
-    override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        return target
-    }
-    
-    override func responds(to aSelector: Selector!) -> Bool {
-        return target?.responds(to: aSelector) ?? false
-    }
-}
+@interface ZLWeakProxy : NSObject
 
-#endif
+@property (nonatomic, weak, readonly, nullable) id target;
+
+- (nonnull instancetype)initWithTarget:(nonnull id)target NS_SWIFT_NAME(init(target:));
++ (nonnull instancetype)proxyWithTarget:(nonnull id)target NS_SWIFT_NAME(proxy(target:));
+
+@end
+
+NS_ASSUME_NONNULL_END
