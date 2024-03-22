@@ -34,6 +34,14 @@ struct ZLImageEditorLayout {
     static let bottomToolBtnCornerRadius: CGFloat = 5
 }
 
+func deviceIsiPhone() -> Bool {
+    return UIDevice.current.userInterfaceIdiom == .phone
+}
+
+func deviceIsiPad() -> Bool {
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
 func deviceSafeAreaInsets() -> UIEdgeInsets {
     var insets: UIEdgeInsets = .zero
     

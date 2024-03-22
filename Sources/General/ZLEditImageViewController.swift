@@ -364,7 +364,9 @@ open class ZLEditImageViewController: UIViewController {
     
     open override var prefersHomeIndicatorAutoHidden: Bool { true }
     
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        deviceIsiPhone() ? .portrait : .all
+    }
     
     deinit {
         cleanToolViewStateTimer()
