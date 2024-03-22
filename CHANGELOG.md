@@ -2,9 +2,18 @@
 
 -----
 
+## [2.0.2](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.1) (2024-03-22)
+### Add:
+* Adapt the text sticker input interface for iPad landscape mode.
+
+### Fix:
+* Fix the bug where cropping square images to circular shape fails.
+
+----- 
+    
 ## [2.0.1](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.1) (2023-11-27)
 ### Add:
-*  Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
+* Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
 
 ----- 
 

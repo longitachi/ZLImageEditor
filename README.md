@@ -53,6 +53,11 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 2.0.2
+  Add:
+    Adapt the text sticker input interface for iPad landscape mode.
+  Fix:
+    Fix the bug where cropping square images to circular shape fails.
 ● 2.0.1
   Add: 
     Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
@@ -60,13 +65,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
   Add:
     Enhancing the drawing tool with an eraser function.
     The minimum supported system has been upgraded from iOS 9 to iOS 10.
-● 1.2.1
-  Add:
-    Optimize the undo and redo function in the image editor. All operations support undo and redo.
-    Dutch support added.
-    Supports setting the default font for text stickers.
-  Fix:
-    Fix the bug that text stickers are not displayed when typing in Arabic.
 ...
 ```
 
@@ -119,7 +117,7 @@ $ carthage update ZLImageEditor
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.1" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.2" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="Support"></a> Support
