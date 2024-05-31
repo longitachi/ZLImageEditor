@@ -200,6 +200,8 @@ class ZLInputTextViewController: UIViewController {
             }
         }
         
+        coverView.frame = bgImageView.bounds
+        
         let btnY = max(deviceSafeAreaInsets().top, 20) + 20
         let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
