@@ -27,9 +27,19 @@
 import UIKit
 
 public struct ZLClipStatus {
-    var angle: CGFloat = 0
     var editRect: CGRect
+    var angle: CGFloat = 0
     var ratio: ZLImageClipRatio?
+    
+    public init(
+        editRect: CGRect,
+        angle: CGFloat = 0,
+        ratio: ZLImageClipRatio? = nil
+    ) {
+        self.editRect = editRect
+        self.angle = angle
+        self.ratio = ratio
+    }
 }
 
 public struct ZLAdjustStatus {
@@ -40,6 +50,16 @@ public struct ZLAdjustStatus {
     var allValueIsZero: Bool {
         brightness == 0 && contrast == 0 && saturation == 0
     }
+    
+    public init(
+        brightness: Float = 0,
+        contrast: Float = 0,
+        saturation: Float = 0
+    ) {
+        self.brightness = brightness
+        self.contrast = contrast
+        self.saturation = saturation
+    }
 }
 
 public class ZLEditImageModel: NSObject {
@@ -47,7 +67,7 @@ public class ZLEditImageModel: NSObject {
     
     public let mosaicPaths: [ZLMosaicPath]
     
-    public let clipStatus: ZLClipStatus
+    public let clipStatus: ZLClipStatus?
     
     public let adjustStatus: ZLAdjustStatus
     
@@ -58,13 +78,13 @@ public class ZLEditImageModel: NSObject {
     public let actions: [ZLEditorAction]
     
     public init(
-        drawPaths: [ZLDrawPath],
-        mosaicPaths: [ZLMosaicPath],
-        clipStatus: ZLClipStatus,
-        adjustStatus: ZLAdjustStatus,
-        selectFilter: ZLFilter,
-        stickers: [ZLBaseStickertState],
-        actions: [ZLEditorAction]
+        drawPaths: [ZLDrawPath] = [],
+        mosaicPaths: [ZLMosaicPath] = [],
+        clipStatus: ZLClipStatus? = nil,
+        adjustStatus: ZLAdjustStatus = ZLAdjustStatus(),
+        selectFilter: ZLFilter? = nil,
+        stickers: [ZLBaseStickertState] = [],
+        actions: [ZLEditorAction] = []
     ) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
@@ -116,7 +136,11 @@ open class ZLEditImageViewController: UIViewController {
         return view
     }()
     
-    open lazy var topShadowView = UIView()
+    open lazy var topShadowView: ZLPassThroughView = {
+        let shadowView = ZLPassThroughView()
+        shadowView.findResponderSticker = findResponderSticker(_:)
+        return shadowView
+    }()
     
     open lazy var topShadowLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
@@ -125,7 +149,11 @@ open class ZLEditImageViewController: UIViewController {
         return layer
     }()
      
-    open lazy var bottomShadowView = UIView()
+    open lazy var bottomShadowView: ZLPassThroughView = {
+        let shadowView = ZLPassThroughView()
+        shadowView.findResponderSticker = findResponderSticker(_:)
+        return shadowView
+    }()
     
     open lazy var bottomShadowLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
@@ -233,7 +261,6 @@ open class ZLEditImageViewController: UIViewController {
         return imageView
     }()
 
-    
     open lazy var ashbinView: UIView = {
         let view = UIView()
         view.backgroundColor = .zl.ashbinNormalBgColor
@@ -362,7 +389,7 @@ open class ZLEditImageViewController: UIViewController {
     
     override open var prefersStatusBarHidden: Bool { true }
     
-    open override var prefersHomeIndicatorAutoHidden: Bool { true }
+    override open var prefersHomeIndicatorAutoHidden: Bool { true }
     
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
@@ -391,7 +418,7 @@ open class ZLEditImageViewController: UIViewController {
                 let m = ZLEditImageModel(
                     drawPaths: [],
                     mosaicPaths: [],
-                    clipStatus: ZLClipStatus(angle: angle, editRect: editRect, ratio: ratio),
+                    clipStatus: ZLClipStatus(editRect: editRect, angle: angle, ratio: ratio),
                     adjustStatus: ZLAdjustStatus(),
                     selectFilter: .normal,
                     stickers: [],
@@ -473,7 +500,7 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
-    open override func viewDidAppear(_ animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         guard tools.contains(.draw) else { return }
@@ -755,7 +782,7 @@ open class ZLEditImageViewController: UIViewController {
             if let selectedAdjustTool = selectedAdjustTool {
                 changeAdjustTool(selectedAdjustTool)
             }
-            adjustSlider?.beginAdjust = {  [weak self] in
+            adjustSlider?.beginAdjust = { [weak self] in
                 guard let `self` = self else { return }
                 self.preAdjustStatus = self.currentAdjustStatus
             }
@@ -836,6 +863,19 @@ open class ZLEditImageViewController: UIViewController {
         stickers.forEach { self.addSticker($0) }
     }
     
+    /// 根据point查找可响应的sticker
+    func findResponderSticker(_ point: CGPoint) -> UIView? {
+        // 倒序查找subview
+        for sticker in stickersContainer.subviews.reversed() {
+            let rect = stickersContainer.convert(sticker.frame, to: view)
+            if rect.contains(point) {
+                return sticker
+            }
+        }
+        
+        return nil
+    }
+    
     func rotationImageView() {
         let transform = CGAffineTransform(rotationAngle: currentClipStatus.angle.zl.toPi)
         imageView.transform = transform
@@ -897,7 +937,7 @@ open class ZLEditImageViewController: UIViewController {
         vc.clipDoneBlock = { [weak self] angle, editRect, selectRatio in
             guard let `self` = self else { return }
             
-            self.clipImage(status: ZLClipStatus(angle: angle, editRect: editRect, ratio: selectRatio))
+            self.clipImage(status: ZLClipStatus(editRect: editRect, angle: angle, ratio: selectRatio))
             self.editorManager.storeAction(.clip(oldStatus: self.preClipStatus, newStatus: self.currentClipStatus))
         }
         
@@ -1433,7 +1473,8 @@ open class ZLEditImageViewController: UIViewController {
             textColor: textColor,
             font: font,
             style: style,
-            image: image, originScale: 1 / scale,
+            image: image,
+            originScale: 1 / scale,
             originAngle: -currentClipStatus.angle,
             originFrame: originFrame
         )
@@ -1677,7 +1718,15 @@ extension ZLEditImageViewController: UIGestureRecognizerDelegate {
         if gestureRecognizer is UITapGestureRecognizer {
             if bottomShadowView.alpha == 1 {
                 let p = gestureRecognizer.location(in: view)
-                return !bottomShadowView.frame.contains(p)
+                let convertP = bottomShadowView.convert(p, from: view)
+                for subview in bottomShadowView.subviews {
+                    if !subview.isHidden,
+                       subview.alpha != 0,
+                       subview.frame.contains(convertP) {
+                        return false
+                    }
+                }
+                return true
             } else {
                 return true
             }
@@ -1848,6 +1897,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
 
 extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: ZLBaseStickerView) {
+        stickersContainer.bringSubviewToFront(sticker)
         preStickerState = sticker.state
         
         setToolView(show: false)
@@ -1914,6 +1964,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
     
     func stickerDidTap(_ sticker: ZLBaseStickerView) {
+        stickersContainer.bringSubviewToFront(sticker)
         stickersContainer.subviews.forEach { view in
             if view !== sticker {
                 (view as? ZLStickerViewAdditional)?.resetState()
@@ -2095,5 +2146,32 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         adjustCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         adjustCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         adjustCollectionView.reloadData()
+    }
+}
+
+// MARK: 手势可透传的自定义view
+
+public class ZLPassThroughView: UIView {
+    var findResponderSticker: ((CGPoint) -> UIView?)?
+    
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard bounds.contains(point) else {
+            return super.hitTest(point, with: event)
+        }
+        
+        for view in subviews.reversed() {
+            let point = convert(point, to: view)
+            if !view.isHidden,
+               view.alpha != 0,
+               view.bounds.contains(point) {
+                return view.hitTest(point, with: event)
+            }
+        }
+        
+        if let sticker = findResponderSticker?(convert(point, to: superview)) {
+            return sticker.hitTest(point, with: event)
+        }
+        
+        return super.hitTest(point, with: event)
     }
 }

@@ -26,7 +26,7 @@
 
 import UIKit
 
-extension ZLImageEditorWrapper where Base: UIGraphicsImageRenderer {
+public extension ZLImageEditorWrapper where Base: UIGraphicsImageRenderer {
     static func renderImage(
         size: CGSize,
         formatConfig: ((UIGraphicsImageRendererFormat) -> Void)? = nil,
