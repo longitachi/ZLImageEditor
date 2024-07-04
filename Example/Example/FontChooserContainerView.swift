@@ -92,7 +92,6 @@ class FontChooserContainerView: UIView, ZLTextFontChooserDelegate {
         }
     }
 
-
     func setupUI() {
         importFonts()
         self.baseView = UIView()

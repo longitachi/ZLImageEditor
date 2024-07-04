@@ -188,6 +188,9 @@ public class ZLImageEditorConfiguration: NSObject {
     
     /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
+    
+    /// Whether to keep clipped area dimmed during adjustments. Defaults to false
+    @objc public var dimClippedAreaDuringAdjustments = false
 }
 
 public extension ZLImageEditorConfiguration {

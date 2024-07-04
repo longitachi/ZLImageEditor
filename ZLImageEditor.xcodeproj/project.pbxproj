@@ -28,6 +28,8 @@
 		FD3073352AD80B7700CFB618 /* ZLBaseStickertState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3073342AD80B7700CFB618 /* ZLBaseStickertState.swift */; };
 		FD3073372AD80D0000CFB618 /* ZLEditorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3073362AD80D0000CFB618 /* ZLEditorManager.swift */; };
 		FD3073392AD80D4000CFB618 /* ZLPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3073382AD80D4000CFB618 /* ZLPaths.swift */; };
+		FD6E25CA2C3528FE00ED5AFD /* ZLClipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E25C92C3528FE00ED5AFD /* ZLClipOverlayView.swift */; };
+		FD6E25CC2C35318400ED5AFD /* ZLAnimationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6E25CB2C35318400ED5AFD /* ZLAnimationUtils.swift */; };
 		FD7E7508284E134600EF34DD /* ZLProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7E7507284E134600EF34DD /* ZLProgressHUD.swift */; };
 		FD8EFA522772026D0067ADF1 /* ZLAdjustSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8EFA512772026D0067ADF1 /* ZLAdjustSlider.swift */; };
 		FD8EFA54277206D30067ADF1 /* ZLEditToolCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */; };
@@ -68,6 +70,8 @@
 		FD3073342AD80B7700CFB618 /* ZLBaseStickertState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLBaseStickertState.swift; sourceTree = "<group>"; };
 		FD3073362AD80D0000CFB618 /* ZLEditorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditorManager.swift; sourceTree = "<group>"; };
 		FD3073382AD80D4000CFB618 /* ZLPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPaths.swift; sourceTree = "<group>"; };
+		FD6E25C92C3528FE00ED5AFD /* ZLClipOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLClipOverlayView.swift; sourceTree = "<group>"; };
+		FD6E25CB2C35318400ED5AFD /* ZLAnimationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLAnimationUtils.swift; sourceTree = "<group>"; };
 		FD7E7507284E134600EF34DD /* ZLProgressHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLProgressHUD.swift; sourceTree = "<group>"; };
 		FD8EFA512772026D0067ADF1 /* ZLAdjustSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLAdjustSlider.swift; sourceTree = "<group>"; };
 		FD8EFA53277206D30067ADF1 /* ZLEditToolCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditToolCells.swift; sourceTree = "<group>"; };
@@ -135,6 +139,7 @@
 				E40208E4256B9F9C0077F5DC /* ZLEditImageViewController.swift */,
 				E40208E9256B9F9C0077F5DC /* ZLClipImageViewController.swift */,
 				E40208E8256B9F9C0077F5DC /* ZLInputTextViewController.swift */,
+				FD6E25C92C3528FE00ED5AFD /* ZLClipOverlayView.swift */,
 				FDC9B2432990D66300963047 /* ZLBaseStickerView.swift */,
 				FD3073342AD80B7700CFB618 /* ZLBaseStickertState.swift */,
 				E40208E5256B9F9C0077F5DC /* ZLImageStickerView.swift */,
@@ -148,6 +153,7 @@
 				FDD5289126C3FFCA00338B06 /* ZLImageEditor.swift */,
 				FDE1A560282E61B500178B0F /* ZLEnlargeButton.swift */,
 				FD7E7507284E134600EF34DD /* ZLProgressHUD.swift */,
+				FD6E25CB2C35318400ED5AFD /* ZLAnimationUtils.swift */,
 				FDC144952BABE0B4004C2BCD /* ZLWeakProxy.h */,
 				FDC144942BABE0B4004C2BCD /* ZLWeakProxy.m */,
 				FDB3113228752F7300845756 /* ZLWeakProxy.swift */,
@@ -272,8 +278,10 @@
 				E40208F7256B9FCB0077F5DC /* CGFloat+ZLImageEditor.swift in Sources */,
 				FDE1A55D282E595C00178B0F /* UIColor+ZLImageEditor.swift in Sources */,
 				FD8EFA562772CF3B0067ADF1 /* ZLImageEditorConfiguration+Chaining.swift in Sources */,
+				FD6E25CA2C3528FE00ED5AFD /* ZLClipOverlayView.swift in Sources */,
 				FD8EFA522772026D0067ADF1 /* ZLAdjustSlider.swift in Sources */,
 				E40208EB256B9F9C0077F5DC /* ZLEditImageViewController.swift in Sources */,
+				FD6E25CC2C35318400ED5AFD /* ZLAnimationUtils.swift in Sources */,
 				E402090E256BA1F40077F5DC /* ZLImageEditorLanguageDefine.swift in Sources */,
 				FDC144962BABE0B4004C2BCD /* ZLWeakProxy.m in Sources */,
 				FDC9B2442990D66300963047 /* ZLBaseStickerView.swift in Sources */,

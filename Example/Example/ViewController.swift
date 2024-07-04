@@ -222,6 +222,7 @@ class ViewController: UIViewController {
             // Provide a image sticker container view
             .imageStickerContainerView(ImageStickerContainerView())
             .fontChooserContainerView(FontChooserContainerView())
+            .clipRatios(ZLImageClipRatio.all)
             // Custom filter
 //            .filters = [.normal]
     }

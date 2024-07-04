@@ -69,7 +69,7 @@ public class ZLEditImageModel: NSObject {
     
     public let clipStatus: ZLClipStatus?
     
-    public let adjustStatus: ZLAdjustStatus
+    public let adjustStatus: ZLAdjustStatus?
     
     public let selectFilter: ZLFilter?
     
@@ -81,7 +81,7 @@ public class ZLEditImageModel: NSObject {
         drawPaths: [ZLDrawPath] = [],
         mosaicPaths: [ZLMosaicPath] = [],
         clipStatus: ZLClipStatus? = nil,
-        adjustStatus: ZLAdjustStatus = ZLAdjustStatus(),
+        adjustStatus: ZLAdjustStatus? = nil,
         selectFilter: ZLFilter? = nil,
         stickers: [ZLBaseStickertState] = [],
         actions: [ZLEditorAction] = []
@@ -391,6 +391,9 @@ open class ZLEditImageViewController: UIViewController {
     
     override open var prefersHomeIndicatorAutoHidden: Bool { true }
     
+    /// 延缓屏幕上下方通知栏弹出，避免手势冲突
+    override open var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
+    
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
     }
@@ -416,13 +419,7 @@ open class ZLEditImageViewController: UIViewController {
             
             vc.clipDoneBlock = { angle, editRect, ratio in
                 let m = ZLEditImageModel(
-                    drawPaths: [],
-                    mosaicPaths: [],
-                    clipStatus: ZLClipStatus(editRect: editRect, angle: angle, ratio: ratio),
-                    adjustStatus: ZLAdjustStatus(),
-                    selectFilter: .normal,
-                    stickers: [],
-                    actions: []
+                    clipStatus: ZLClipStatus(editRect: editRect, angle: angle, ratio: ratio)
                 )
                 completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
@@ -531,13 +528,13 @@ open class ZLEditImageViewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
+        insets.top = max(insets.top, 20)
         
         mainScrollView.frame = view.bounds
         resetContainerViewFrame()
         
         topShadowView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: 150)
         topShadowLayer.frame = topShadowView.bounds
-        cancelBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 150 - insets.bottom, width: view.zl.width, height: 150 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
@@ -547,9 +544,9 @@ open class ZLEditImageViewController: UIViewController {
                 font: ZLImageEditorLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 28)
             ).width
-        cancelBtn.frame = CGRect(x: 20, y: 60, width: cancelBtnW, height: 30)
-        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: 60, width: 30, height: 30)
-        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: 60, width: 30, height: 30)
+        cancelBtn.frame = CGRect(x: 20, y: insets.top, width: cancelBtnW, height: 30)
+        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: insets.top, width: 30, height: 30)
+        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: insets.top, width: 30, height: 30)
         
         eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
         eraserBtnBgBlurView.frame = eraserBtn.frame
