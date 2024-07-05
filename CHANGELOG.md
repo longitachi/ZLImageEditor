@@ -2,7 +2,16 @@
 
 -----
 
-## [2.0.2](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.1) (2024-03-22)
+## [2.0.3](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.3) (2024-07-05)
+### Add:
+* Enhance the user experience of the image cropping interface and optimize the animation effects.
+
+### Fix:
+* Fix the bug that causes a crash when entering the cropping interface while the app only supports landscape mode.
+
+----- 
+    
+## [2.0.2](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.2) (2024-03-22)
 ### Add:
 * Adapt the text sticker input interface for iPad landscape mode.
 
