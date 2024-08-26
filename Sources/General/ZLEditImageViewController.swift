@@ -387,6 +387,8 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
     
+    @objc public var cancelBlock: (() -> Void)?
+    
     override open var prefersStatusBarHidden: Bool { true }
     
     override open var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -408,7 +410,8 @@ open class ZLEditImageViewController: UIViewController {
         animate: Bool = true,
         image: UIImage,
         editModel: ZLEditImageModel? = nil,
-        completion: ((UIImage, ZLEditImageModel?) -> Void)?
+        completion: ((UIImage, ZLEditImageModel?) -> Void)?,
+        cancelBlock: (() -> Void)? = nil
     ) {
         let tools = ZLImageEditorConfiguration.default().tools
         if ZLImageEditorConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
@@ -423,6 +426,9 @@ open class ZLEditImageViewController: UIViewController {
                 )
                 completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
+            vc.cancelClipBlock = {
+                cancelBlock?()
+            }
             vc.animateDismiss = animate
             vc.modalPresentationStyle = .fullScreen
             parentVC?.present(vc, animated: animate, completion: nil)
@@ -430,6 +436,9 @@ open class ZLEditImageViewController: UIViewController {
             let vc = ZLEditImageViewController(image: image, editModel: editModel)
             vc.editFinishBlock = { ei, editImageModel in
                 completion?(ei, editImageModel)
+            }
+            vc.cancelBlock = {
+                cancelBlock?()
             }
             vc.animateDismiss = animate
             vc.modalPresentationStyle = .fullScreen
@@ -881,7 +890,9 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
+        dismiss(animated: animateDismiss) {
+            self.cancelBlock?()
+        }
     }
     
     func drawBtnClick() {
