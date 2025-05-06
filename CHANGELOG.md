@@ -2,6 +2,12 @@
 
 -----
 
+## [2.0.4](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.4) (2025-05-06)
+### Add:
+* Added a callback for cancelling editing.
+    
+-----
+
 ## [2.0.3](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.3) (2024-07-05)
 ### Add:
 * Enhance the user experience of the image cropping interface and optimize the animation effects.
