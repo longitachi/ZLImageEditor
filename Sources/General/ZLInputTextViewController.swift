@@ -248,7 +248,8 @@ class ZLInputTextViewController: UIViewController {
         toolView.addSubview(collectionView)
         
         textView.textAlignment = .left
-        
+        textView.returnKeyType = ZLImageEditorConfiguration.default().textStickerCanLineBreak ? .default : .done
+
         refreshTextViewUI()
     }
     
