@@ -116,4 +116,11 @@ public extension ZLImageEditorUIConfiguration {
         toolIconHighlightedColor = color
         return self
     }
+
+    @discardableResult
+    func customFont(_ font: UIFont) -> ZLImageEditorUIConfiguration {
+        customFont = font
+        return self
+    }
+
 }

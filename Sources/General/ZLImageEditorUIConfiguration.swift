@@ -129,6 +129,10 @@ public class ZLImageEditorUIConfiguration: NSObject {
 
     /// The highlighted color of the tool icon.
     @objc public var toolIconHighlightedColor: UIColor?
+
+    /// The font of the tool title.
+    @objc public var customFont: UIFont? = nil
+
 }
 
 // MARK: Image source deploy
