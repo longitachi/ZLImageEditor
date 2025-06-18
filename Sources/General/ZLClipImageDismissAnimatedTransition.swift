@@ -27,12 +27,21 @@
 import UIKit
 
 class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
+    var presentingEditViewController: ZLEditImageViewController?
+    
+    init(presentingEditViewController: ZLEditImageViewController?) {
+        self.presentingEditViewController = presentingEditViewController
+    }
+    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.25
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLClipImageViewController, let toVC = transitionContext.viewController(forKey: .to) as? ZLEditImageViewController else {
+        guard
+            let fromVC = transitionContext.viewController(forKey: .from) as? ZLClipImageViewController,
+            let toVC = transitionContext.viewController(forKey: .to),
+            let presentingEditViewController else {
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             return
         }
@@ -47,9 +56,9 @@ class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTr
         containerView.addSubview(imageView)
         
         UIView.animate(withDuration: 0.3, animations: {
-            imageView.frame = toVC.originalFrame
+            imageView.frame = presentingEditViewController.originalFrame
         }) { _ in
-            toVC.finishClipDismissAnimate()
+            presentingEditViewController.finishClipDismissAnimate()
             imageView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
