@@ -58,6 +58,8 @@ class ZLClipImageViewController: UIViewController {
     
     var editRect: CGRect
     
+    var presentingEditViewController: ZLEditImageViewController?
+    
     /// 初次进去界面时的动画占位view
     private lazy var animateImageView: UIImageView? = {
         guard let presentAnimateFrame, let presentAnimateImage else {
@@ -284,7 +286,7 @@ class ZLClipImageViewController: UIViewController {
         super.viewDidAppear(animated)
         
         viewDidAppearCount += 1
-        if presentingViewController is ZLEditImageViewController {
+        if presentingEditViewController != nil {
             transitioningDelegate = self
         }
         
@@ -1070,7 +1072,7 @@ extension ZLClipImageViewController: UIScrollViewDelegate {
 
 extension ZLClipImageViewController: UIViewControllerTransitioningDelegate {
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ZLClipImageDismissAnimatedTransition()
+        return ZLClipImageDismissAnimatedTransition(presentingEditViewController: presentingEditViewController)
     }
 }
 

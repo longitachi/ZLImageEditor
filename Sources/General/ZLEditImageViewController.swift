@@ -933,6 +933,7 @@ open class ZLEditImageViewController: UIViewController {
         
         let vc = ZLClipImageViewController(image: currentEditImage, status: currentClipStatus)
         let rect = mainScrollView.convert(containerView.frame, to: view)
+        vc.presentingEditViewController = self
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = currentEditImage.zl
             .clipImage(
