@@ -138,7 +138,9 @@ open class ZLEditImageViewController: UIViewController {
     
     open lazy var topShadowView: ZLPassThroughView = {
         let shadowView = ZLPassThroughView()
-        shadowView.findResponderSticker = findResponderSticker(_:)
+        shadowView.findResponderSticker = { [weak self] point in
+            self?.findResponderSticker(point)
+        }
         return shadowView
     }()
     
@@ -151,7 +153,9 @@ open class ZLEditImageViewController: UIViewController {
      
     open lazy var bottomShadowView: ZLPassThroughView = {
         let shadowView = ZLPassThroughView()
-        shadowView.findResponderSticker = findResponderSticker(_:)
+        shadowView.findResponderSticker = { [weak self] point in
+            self?.findResponderSticker(point)
+        }
         return shadowView
     }()
     
