@@ -539,7 +539,7 @@ open class ZLEditImageViewController: UIViewController {
         zl_debugPrint("edit image layout subviews")
         var insets = UIEdgeInsets.zero
         if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
+            insets = view.safeAreaInsets
         }
         insets.top = max(insets.top, 20)
         
@@ -1290,7 +1290,10 @@ open class ZLEditImageViewController: UIViewController {
                 transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
             }
             transform = transform.concatenating(drawingImageView.transform)
-            eraserCircleView.center = point.applying(transform)
+            let transformedPoint = point.applying(transform)
+            // 将变换后的点转换到 containerView 的坐标系
+            let pointInContainerView = drawingImageView.convert(transformedPoint, to: containerView)
+            eraserCircleView.center = pointInContainerView
             
             var needDraw = false
             for path in drawPaths {

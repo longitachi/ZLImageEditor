@@ -398,7 +398,7 @@ class ZLClipImageViewController: UIViewController {
         thumbnailImage = editImage.zl.resize(size)
     }
     
-    /// 计算做大裁剪范围
+    /// 计算最大裁剪范围
     func calculateMaxClipFrame() -> CGRect {
         var insets = deviceSafeAreaInsets()
         insets.top += 20
