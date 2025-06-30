@@ -2,6 +2,17 @@
 
 -----
 
+## [2.0.5](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.5) (2025-06-30)
+### Add:
+* Support SwiftUI.
+
+### Fix:
+* Changed the UITextView's returnKeyType to default when Configuration's textStickerCanLineBreak is true. [#59](https://github.com/longitachi/ZLImageEditor/pull/59) @nhiroyasu
+* Fix retain cycle in ZLEditImageViewController. [#64](https://github.com/longitachi/ZLImageEditor/pull/64) @olischne
+* Correct eraser misalignment after image cropping.
+
+-----
+
 ## [2.0.4](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.4) (2025-05-06)
 ### Add:
 * Added a callback for cancelling editing.
