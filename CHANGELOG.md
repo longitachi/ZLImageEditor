@@ -2,6 +2,12 @@
 
 -----
 
+## [2.0.6](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.6) (2025-10-17)
+### Fix:
+* Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
+
+-----
+
 ## [2.0.5](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.5) (2025-06-30)
 ### Add:
 * Support SwiftUI.

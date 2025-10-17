@@ -53,6 +53,9 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 2.0.6
+  Fix:
+    Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
 ● 2.0.5
   Add:
     Support SwiftUI.
@@ -62,11 +65,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ● 2.0.4
   Add:
     Added a callback for cancelling editing.
-● 2.0.3
-  Add:
-    Enhance the user experience of the image cropping interface and optimize the animation effects.
-  Fix:
-    Fix the bug that causes a crash when entering the cropping interface while the app only supports landscape mode.
 ...
 ```
 
@@ -119,7 +117,7 @@ $ carthage update ZLImageEditor
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.5" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.6" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="Support"></a> Support
