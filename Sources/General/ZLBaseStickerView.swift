@@ -31,10 +31,12 @@ protocol ZLStickerViewDelegate: NSObject {
     func stickerBeginOperation(_ sticker: ZLBaseStickerView)
     
     /// Called during scale or rotate or move.
-    func stickerOnOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
+    /// - Parameter point: current touch location in the editor view's coordinate space.
+    func stickerOnOperation(_ sticker: ZLBaseStickerView, locationInView point: CGPoint)
     
     /// Called after scale or rotate or move.
-    func stickerEndOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer)
+    /// - Parameter point: last touch location in the editor view's coordinate space, or nil if unavailable.
+    func stickerEndOperation(_ sticker: ZLBaseStickerView, locationInView point: CGPoint?)
     
     /// Called when tap sticker.
     func stickerDidTap(_ sticker: ZLBaseStickerView)
@@ -52,7 +54,7 @@ protocol ZLStickerViewAdditional: NSObject {
     func addScale(_ scale: CGFloat)
 }
 
-class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
+class ZLBaseStickerView: UIView {
     private enum Direction: Int {
         case up = 0
         case right = 90
@@ -60,11 +62,22 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         case left = 270
     }
     
+    private let borderColor: CGColor = UIColor.zl.rgba(240, 240, 240, 0.7).cgColor
+    
     var id: String
     
-    var borderWidth = 1 / UIScreen.main.scale
-    
     var firstLayout = true
+    
+    /// Vector border. Replaces `layer.borderWidth/borderColor` so that when
+    /// the sticker is zoomed via `transform.scaledBy`, we can both:
+    ///   * re-rasterize the stroke at the current pixel density (no aliasing);
+    ///   * keep the stroke visually ~1px thick at any zoom (inverse-scale line width).
+    let borderLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.fillColor = UIColor.clear.cgColor
+        layer.strokeColor = UIColor.clear.cgColor
+        return layer
+    }()
     
     let originScale: CGFloat
     
@@ -90,19 +103,7 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     var originFrame: CGRect
     
-    lazy var tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
-    
-    lazy var pinchGes: UIPinchGestureRecognizer = {
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
-        pinch.delegate = self
-        return pinch
-    }()
-    
-    lazy var panGes: UIPanGestureRecognizer = {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
-        pan.delegate = self
-        return pan
-    }()
+    var lastContentsScale: CGFloat = 0
     
     var state: ZLBaseStickertState {
         fatalError()
@@ -113,6 +114,9 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     weak var delegate: ZLStickerViewDelegate?
+    
+    /// Last reported touch location (in editor view coords) during this gesture sequence.
+    private var lastOperationLocation: CGPoint?
     
     deinit {
         cleanTimer()
@@ -149,21 +153,11 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
         
-        borderView.layer.borderWidth = borderWidth
+        borderView.layer.addSublayer(borderLayer)
         hideBorder()
         if showBorder {
             startTimer()
         }
-        
-        addGestureRecognizer(tapGes)
-        addGestureRecognizer(pinchGes)
-        
-        let rotationGes = UIRotationGestureRecognizer(target: self, action: #selector(rotationAction(_:)))
-        rotationGes.delegate = self
-        addGestureRecognizer(rotationGes)
-        
-        addGestureRecognizer(panGes)
-        tapGes.require(toFail: panGes)
     }
     
     @available(*, unavailable)
@@ -173,6 +167,8 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        updateBorderLayer()
         
         guard firstLayout else {
             return
@@ -211,100 +207,159 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     func setupUIFrameWhenFirstLayout() {}
     
+    /// Effective scale of the sticker relative to the screen. Used both to
+    /// decide the pixel density for re-rasterization and to inverse-scale
+    /// the vector border so its visual thickness stays constant.
+    var effectiveScale: CGFloat {
+        return max(abs(originScale * gesScale), .leastNonzeroMagnitude)
+    }
+    
+    /// Re-lays out the vector border and rasterizes it at the current
+    /// effective scale. Call this after any transform / bounds change.
+    /// Subclasses override to additionally refresh their own content
+    /// (e.g. text vector re-rasterization); must call `super`.
+    @discardableResult
+    @objc func updateBorderLayer(force: Bool = false) -> Bool {
+        guard force || shouldUpdateContentsScale() else {
+            return false
+        }
+        
+        let bounds = borderView.bounds
+        let effective = effectiveScale
+        let lineWidth = min(2.0, max(0.5, 1 / effective))
+        let pxScale = max(UIScreen.main.scale, UIScreen.main.scale * effective)
+        
+        // Disable implicit animations so rapid pinch doesn't smear the border.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        borderLayer.frame = bounds
+        borderLayer.lineWidth = lineWidth
+        let inset = lineWidth / 2
+        borderLayer.path = UIBezierPath(rect: bounds.insetBy(dx: inset, dy: inset)).cgPath
+        if abs(borderLayer.contentsScale - pxScale) > .ulpOfOne {
+            borderLayer.contentsScale = pxScale
+            borderLayer.setNeedsDisplay()
+        }
+        CATransaction.commit()
+        
+        return true
+    }
+    
+    func shouldUpdateContentsScale() -> Bool {
+        let scale = UIScreen.main.scale * effectiveScale
+        // 限制一下，降低更新频率
+        if abs(scale - lastContentsScale) >= 0.5 {
+            lastContentsScale = scale
+            return true
+        } else {
+            return false
+        }
+    }
+    
     private func direction(for angle: CGFloat) -> ZLBaseStickerView.Direction {
         // 将角度转换为0~360，并对360取余
         let angle = ((Int(angle) % 360) + 360) % 360
         return ZLBaseStickerView.Direction(rawValue: angle) ?? .up
     }
     
-    @objc func tapAction(_ ges: UITapGestureRecognizer) {
+    /// Called by `ZLStickerGestureCoordinator` when the user taps on this
+    /// sticker (single tap dispatched from the container-level recognizer).
+    @objc func handleTap() {
         guard gesIsEnabled else { return }
         
         delegate?.stickerDidTap(self)
         startTimer()
     }
     
-    @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
+    // MARK: - Incremental gesture API (driven by ZLStickerGestureCoordinator)
+    
+    /// Called when a gesture sequence targeting this sticker begins.
+    func beginGesture() {
+        lastOperationLocation = nil
+        setOperation(true)
+    }
+    
+    /// Apply incremental scale delta from a pinch gesture (delta = pinch.scale, then reset by caller).
+    func applyIncrementalScale(_ delta: CGFloat, locationInView point: CGPoint? = nil) {
         guard gesIsEnabled else { return }
-        
-        let scale = min(maxGesScale, gesScale * ges.scale)
-        ges.scale = 1
-        
-        var scaleChanged = false
-        if scale != gesScale {
-            gesScale = scale
-            scaleChanged = true
+        let newScale = min(maxGesScale, gesScale * delta)
+        if newScale != gesScale {
+            gesScale = newScale
+            updateTransform()
         }
-        
-        if ges.state == .began {
-            setOperation(true)
-        } else if ges.state == .changed {
-            if scaleChanged {
-                updateTransform()
-            }
-        } else if ges.state == .ended || ges.state == .cancelled {
-            // 当有拖动时，在panAction中执行setOperation(false)
-            if gesTranslationPoint == .zero {
-                setOperation(false)
-            }
+        if let point {
+            lastOperationLocation = point
+            delegate?.stickerOnOperation(self, locationInView: point)
         }
     }
     
-    @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
+    /// Apply incremental rotation delta in radians.
+    func applyIncrementalRotation(_ delta: CGFloat, locationInView point: CGPoint? = nil) {
         guard gesIsEnabled else { return }
-        
-        gesRotation += ges.rotation
-        ges.rotation = 0
-        
-        if ges.state == .began {
-            setOperation(true)
-        } else if ges.state == .changed {
-            updateTransform()
-        } else if ges.state == .ended || ges.state == .cancelled {
-            if gesTranslationPoint == .zero {
-                setOperation(false)
-            }
+        gesRotation += delta
+        updateTransform()
+        if let point {
+            lastOperationLocation = point
+            delegate?.stickerOnOperation(self, locationInView: point)
         }
     }
     
-    @objc func panAction(_ ges: UIPanGestureRecognizer) {
+    /// Apply absolute translation accumulated since pan began. `translation`
+    /// is in the sticker's superview coordinate space (i.e. stickersContainer).
+    func applyIncrementalTranslation(_ translation: CGPoint, locationInView point: CGPoint? = nil) {
         guard gesIsEnabled else { return }
-        
-        let point = ges.translation(in: superview)
-        gesTranslationPoint = CGPoint(x: point.x / originScale, y: point.y / originScale)
-        
-        if ges.state == .began {
-            setOperation(true)
-        } else if ges.state == .changed {
-            updateTransform()
-        } else if ges.state == .ended || ges.state == .cancelled {
-            totalTranslationPoint.x += point.x
-            totalTranslationPoint.y += point.y
-            setOperation(false)
-            let direction = direction(for: originAngle)
-            if direction == .right {
-                originTransform = originTransform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
-            } else if direction == .bottom {
-                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.x, y: -gesTranslationPoint.y)
-            } else if direction == .left {
-                originTransform = originTransform.translatedBy(x: -gesTranslationPoint.y, y: gesTranslationPoint.x)
-            } else {
-                originTransform = originTransform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
-            }
-            gesTranslationPoint = .zero
+        gesTranslationPoint = CGPoint(x: translation.x / originScale, y: translation.y / originScale)
+        updateTransform()
+        if let point {
+            lastOperationLocation = point
+            delegate?.stickerOnOperation(self, locationInView: point)
         }
+    }
+    
+    /// Finalize a gesture sequence: bake current `gesTranslationPoint` into `originTransform`,
+    /// reset transient state and notify the delegate.
+    func endGesture(commitPanLocationInView point: CGPoint?) {
+        // Bake the pan translation into originTransform so subsequent gestures stack correctly.
+        bakeGesTranslation()
+        
+        setOperation(false)
+        let reportPoint = point ?? lastOperationLocation
+        delegate?.stickerEndOperation(self, locationInView: reportPoint)
+        lastOperationLocation = nil
+    }
+    
+    /// Bake `gesTranslationPoint` into `originTransform` (and accumulate it
+    /// into `totalTranslationPoint`), leaving the visible position
+    /// unchanged but resetting the incremental translation back to zero.
+    /// Used during a still-active gesture sequence whenever we need a clean
+    /// translation baseline (anchor snapshot / anchor exit / finger swap).
+    func bakeGesTranslation() {
+        guard gesTranslationPoint != .zero else { return }
+        let direction = direction(for: originAngle)
+        if direction == .right {
+            originTransform = originTransform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
+        } else if direction == .bottom {
+            originTransform = originTransform.translatedBy(x: -gesTranslationPoint.x, y: -gesTranslationPoint.y)
+        } else if direction == .left {
+            originTransform = originTransform.translatedBy(x: -gesTranslationPoint.y, y: gesTranslationPoint.x)
+        } else {
+            originTransform = originTransform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
+        }
+        // Convert back to superview-coords for totalTranslationPoint accounting.
+        totalTranslationPoint.x += gesTranslationPoint.x * originScale
+        totalTranslationPoint.y += gesTranslationPoint.y * originScale
+        gesTranslationPoint = .zero
     }
     
     func setOperation(_ isOn: Bool) {
         if isOn, !onOperation {
             onOperation = true
             cleanTimer()
-            borderView.layer.borderColor = UIColor.white.cgColor
+            borderLayer.strokeColor = borderColor
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
             onOperation = false
             startTimer()
-            delegate?.stickerEndOperation(self, panGes: panGes)
         }
     }
     
@@ -327,16 +382,16 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         transform = transform.rotated(by: gesRotation)
         self.transform = transform
         
-        delegate?.stickerOnOperation(self, panGes: panGes)
+        updateBorderLayer()
     }
     
     @objc private func hideBorder() {
-        borderView.layer.borderColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.clear.cgColor
     }
     
     func startTimer() {
         cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
+        borderLayer.strokeColor = borderColor
         timer = Timer.scheduledTimer(timeInterval: 2, target: ZLWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -344,12 +399,6 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     private func cleanTimer() {
         timer?.invalidate()
         timer = nil
-    }
-    
-    // MARK: UIGestureRecognizerDelegate
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }
 
@@ -410,5 +459,7 @@ extension ZLBaseStickerView: ZLStickerViewAdditional {
         
         gesScale *= scale
         maxGesScale *= scale
+        
+        updateBorderLayer()
     }
 }

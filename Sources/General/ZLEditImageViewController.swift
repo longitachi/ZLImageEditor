@@ -306,6 +306,14 @@ open class ZLEditImageViewController: UIViewController {
     // Show text and image stickers.
     lazy var stickersContainer = UIView()
     
+    private lazy var stickerGestureCoordinator: ZLStickerGestureCoordinator = {
+        let coordinator = ZLStickerGestureCoordinator(container: stickersContainer, reportingView: view)
+        mainScrollView.pinchGestureRecognizer?.require(toFail: coordinator.pinchGesture)
+        mainScrollView.panGestureRecognizer.require(toFail: coordinator.panGesture)
+        panGes.require(toFail: coordinator.panGesture)
+        return coordinator
+    }()
+
     var mosaicImage: UIImage?
     
     // Show mosaic image
@@ -360,6 +368,9 @@ open class ZLEditImageViewController: UIViewController {
     private var editorManager: ZLEditorManager
     
     private lazy var deleteDrawPaths: [ZLDrawPath] = []
+    
+    /// 橡皮擦上一次命中测试使用的坐标（drawPath 坐标系），用于在 pan 事件之间做线段采样
+    private var lastEraserDrawPoint: CGPoint?
     
     private var defaultDrawPathWidth: CGFloat = 0
     
@@ -510,6 +521,19 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Presenting a child VC (clip, text input) may cause UITextView to
+        // recreate internal layers at the default contentsScale. Re-apply the
+        // correct pixel density so zoomed text stickers remain crisp.
+        DispatchQueue.main.async { [weak self] in
+            self?.stickersContainer.subviews.forEach { view in
+                (view as? ZLBaseStickerView)?.updateBorderLayer(force: true)
+            }
+        }
+    }
+
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -857,8 +881,8 @@ open class ZLEditImageViewController: UIViewController {
             }
 
             ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] font in
-                self?.showInputTextVC(font: font, completion: { [weak self] text, textColor, font, image, style in
-                    self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
+                self?.showInputTextVC(font: font, completion: { [weak self] text, textColor, font, style in
+                    self?.addTextStickersView(text, textColor: textColor, font: font, style: style)
                 })
             }
         }
@@ -1002,8 +1026,8 @@ open class ZLEditImageViewController: UIViewController {
             setToolView(show: false)
             fontChooserContainerIsHidden = false
         } else {
-            showInputTextVC(font: ZLImageEditorConfiguration.default().textStickerDefaultFont) { [weak self] text, textColor, font, image, style in
-                self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
+            showInputTextVC(font: ZLImageEditorConfiguration.default().textStickerDefaultFont) { [weak self] text, textColor, font, style in
+                self?.addTextStickersView(text, textColor: textColor, font: font, style: style)
             }
         }
         
@@ -1210,6 +1234,8 @@ open class ZLEditImageViewController: UIViewController {
             } else if pan.state == .cancelled || pan.state == .ended {
                 setToolView(show: true, delay: 0.5)
                 if let path = drawPaths.last {
+                    path.finishDrawing()
+                    drawLine()
                     editorManager.storeAction(.draw(path))
                 }
             }
@@ -1272,9 +1298,17 @@ open class ZLEditImageViewController: UIViewController {
         let pointScale = ratio / originalRatio / toImageScale
         // 转换为drawPath的point
         let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
+        // 橡皮擦半径（drawPath 坐标系）：eraserCircleView 视图尺寸的一半，再换算到 drawPath 坐标系
+        // 注意 eraserCircleView 会随 zoomScale 反向缩放，实际屏幕半径为 (22 / zoomScale)，
+        // 但 drawPoint 已经基于未缩放的 drawingImageView 坐标转换，这里只需转到 drawPath 坐标系
+        let eraserRadiusInView = eraserCircleView.bounds.width / 2 / mainScrollView.zoomScale
+        let eraserRadius = eraserRadiusInView / pointScale
+        
         if pan.state == .began {
+            eraserCircleView.transform = CGAffineTransform(scaleX: 1 / mainScrollView.zoomScale, y: 1 / mainScrollView.zoomScale)
             eraserCircleView.isHidden = false
             impactFeedback?.prepare()
+            lastEraserDrawPoint = nil
         }
         
         if pan.state == .began || pan.state == .changed {
@@ -1282,18 +1316,30 @@ open class ZLEditImageViewController: UIViewController {
             
             var needDraw = false
             for path in drawPaths {
-                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
+                if deleteDrawPaths.contains(path) { continue }
+                
+                let hit: Bool
+                if let last = lastEraserDrawPoint {
+                    hit = path.hitTest(from: last, to: drawPoint, extraRadius: eraserRadius)
+                } else {
+                    hit = path.hitTest(drawPoint, extraRadius: eraserRadius)
+                }
+                
+                if hit {
                     path.willDelete = true
                     deleteDrawPaths.append(path)
                     needDraw = true
                     impactFeedback?.impactOccurred()
                 }
             }
+            lastEraserDrawPoint = drawPoint
             if needDraw {
                 drawLine()
             }
         } else {
+            eraserCircleView.transform = .identity
             eraserCircleView.isHidden = true
+            lastEraserDrawPoint = nil
             if !deleteDrawPaths.isEmpty {
                 editorManager.storeAction(.eraser(deleteDrawPaths))
                 drawPaths.removeAll { deleteDrawPaths.contains($0) }
@@ -1406,7 +1452,7 @@ open class ZLEditImageViewController: UIViewController {
         toolViewStateTimer = nil
     }
     
-    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void) {
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, ZLInputTextStyle) -> Void) {
         var bgImage: UIImage?
         autoreleasepool {
             // Calculate image displayed frame on the screen.
@@ -1427,8 +1473,8 @@ open class ZLEditImageViewController: UIViewController {
         
         let vc = ZLInputTextViewController(image: bgImage, text: text, font: font, textColor: textColor, style: style)
         
-        vc.endInput = { text, textColor, font, image, style in
-            completion(text, textColor, font, image, style)
+        vc.endInput = { text, textColor, font, style in
+            completion(text, textColor, font, style)
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -1462,11 +1508,11 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     /// Add text sticker
-    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage?, style: ZLInputTextStyle) {
-        guard !text.isEmpty, let image = image else { return }
+    func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, style: ZLInputTextStyle) {
+        guard !text.isEmpty else { return }
         
         let scale = mainScrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(image: image)
+        let size = ZLTextStickerView.calculateSize(text: text, font: font, style: style)
         let originFrame = getStickerOriginFrame(size)
         
         let textSticker = ZLTextStickerView(
@@ -1474,7 +1520,6 @@ open class ZLEditImageViewController: UIViewController {
             textColor: textColor,
             font: font,
             style: style,
-            image: image,
             originScale: 1 / scale,
             originAngle: -currentClipStatus.angle,
             originFrame: originFrame
@@ -1507,9 +1552,7 @@ open class ZLEditImageViewController: UIViewController {
     
     private func configSticker(_ sticker: ZLBaseStickerView) {
         sticker.delegate = self
-        mainScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
-        mainScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
-        panGes.require(toFail: sticker.panGes)
+        stickerGestureCoordinator.bindSticker(sticker)
     }
     
     func recalculateStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
@@ -1921,8 +1964,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
-    func stickerOnOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
-        let point = panGes.location(in: view)
+    func stickerOnOperation(_ sticker: ZLBaseStickerView, locationInView point: CGPoint) {
         if ashbinView.frame.contains(point) {
             ashbinView.backgroundColor = .zl.ashbinTintBgColor
             ashbinImgView.isHighlighted = true
@@ -1944,14 +1986,14 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
         }
     }
     
-    func stickerEndOperation(_ sticker: ZLBaseStickerView, panGes: UIPanGestureRecognizer) {
+    func stickerEndOperation(_ sticker: ZLBaseStickerView, locationInView point: CGPoint?) {
         setToolView(show: true)
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = true
         
         var endState: ZLBaseStickertState? = sticker.state
-        let point = panGes.location(in: view)
-        if ashbinView.frame.contains(point) {
+        
+        if let point, ashbinView.frame.contains(point) {
             sticker.moveToAshbin()
             endState = nil
         }
@@ -1974,8 +2016,8 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
     
     func sticker(_ textSticker: ZLTextStickerView, editText text: String) {
-        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, image, style in
-            guard let image = image, !text.isEmpty else {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, style in
+            guard !text.isEmpty else {
                 textSticker.moveToAshbin()
                 return
             }
@@ -1987,9 +2029,8 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
             textSticker.text = text
             textSticker.textColor = textColor
             textSticker.style = style
-            textSticker.image = image
             textSticker.font = font
-            let newSize = ZLTextStickerView.calculateSize(image: image)
+            let newSize = ZLTextStickerView.calculateSize(text: text, font: font, style: style)
             textSticker.changeSize(to: newSize)
         }
     }

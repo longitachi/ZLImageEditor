@@ -29,7 +29,7 @@ import UIKit
 class ZLImageStickerView: ZLBaseStickerView {
     private let image: UIImage
     
-    private static let edgeInset: CGFloat = 20
+    private static let edgeInset: CGFloat = 10
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView(image: image)
@@ -50,6 +50,10 @@ class ZLImageStickerView: ZLBaseStickerView {
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint
         )
+    }
+
+    override func setupUIFrameWhenFirstLayout() {
+        imageView.frame = bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
     }
     
     deinit {
@@ -101,9 +105,7 @@ class ZLImageStickerView: ZLBaseStickerView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setupUIFrameWhenFirstLayout() {
-        imageView.frame = bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
-    }
+
     
     class func calculateSize(image: UIImage, width: CGFloat) -> CGSize {
         let maxSide = width / 2

@@ -37,11 +37,15 @@ class ZLInputTextViewController: UIViewController {
     
     private var currentColor: UIColor {
         didSet {
-            refreshTextViewUI()
+            contentView.textColor = currentColor
         }
     }
     
-    private var textStyle: ZLInputTextStyle
+    private var textStyle: ZLInputTextStyle {
+        didSet {
+            contentView.style = textStyle
+        }
+    }
     
     private lazy var bgImageView: UIImageView = {
         let view = UIImageView(image: image?.zl.blurImage(level: 4))
@@ -75,23 +79,21 @@ class ZLInputTextViewController: UIViewController {
         btn.layer.cornerRadius = ZLImageEditorLayout.bottomToolBtnCornerRadius
         return btn
     }()
-    
-    private lazy var textView: UITextView = {
-        let textView = UITextView()
-        textView.keyboardAppearance = .dark
-        textView.returnKeyType = .done
-        textView.delegate = self
-        textView.backgroundColor = .clear
-        textView.tintColor = .zl.editDoneBtnBgColor
-        textView.textColor = currentColor
-        textView.text = text
-        textView.font = font
-        textView.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
-        textView.textContainer.lineFragmentPadding = 0
-        textView.layoutManager.delegate = self
-        return textView
+
+    private lazy var contentView: ZLTextStickerContentView = {
+        let view = ZLTextStickerContentView()
+        view.isEditable = true
+        view.textView.keyboardAppearance = .dark
+        view.textView.returnKeyType = ZLImageEditorConfiguration.default().textStickerCanLineBreak ? .default : .done
+        view.textView.tintColor = .zl.editDoneBtnBgColor
+        view.textViewDelegate = self
+        return view
     }()
-    
+
+    private var textView: UITextView {
+        return contentView.textView
+    }
+
     private lazy var toolView = UIView(frame: CGRect(
         x: 0,
         y: view.zl.height - Self.toolViewHeight,
@@ -127,15 +129,9 @@ class ZLInputTextViewController: UIViewController {
     }()
     
     private var shouldLayout = true
-    
-    private lazy var textLayer = CAShapeLayer()
-    
-    private let textLayerRadius: CGFloat = 10
-    
-    private let maxTextCount = 100
-    
-    /// text, textColor, font, image, style
-    var endInput: ((String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void)?
+
+    /// text, textColor, font, style
+    var endInput: ((String, UIColor, UIFont, ZLInputTextStyle) -> Void)?
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
@@ -209,7 +205,7 @@ class ZLInputTextViewController: UIViewController {
         let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
-        textView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
+        contentView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
         
         textStyleBtn.frame = CGRect(
             x: 12,
@@ -223,7 +219,7 @@ class ZLInputTextViewController: UIViewController {
             width: view.zl.width - textStyleBtn.zl.right - 5 - 24,
             height: Self.toolViewHeight
         )
-        
+
         if let index = ZLImageEditorConfiguration.default().textStickerTextColors.firstIndex(where: { $0 == self.currentColor }) {
             collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
@@ -239,48 +235,25 @@ class ZLInputTextViewController: UIViewController {
         
         view.addSubview(bgImageView)
         bgImageView.addSubview(coverView)
-        
         view.addSubview(cancelBtn)
         view.addSubview(doneBtn)
-        view.addSubview(textView)
+        view.addSubview(contentView)
         view.addSubview(toolView)
         toolView.addSubview(textStyleBtn)
         toolView.addSubview(collectionView)
-        
-        textView.textAlignment = .left
-        textView.returnKeyType = ZLImageEditorConfiguration.default().textStickerCanLineBreak ? .default : .done
 
-        refreshTextViewUI()
+        contentView.configure(text: text, textColor: currentColor, font: font, style: textStyle)
+        refreshTextStyleBtn()
     }
-    
-    private func refreshTextViewUI() {
+
+    private func refreshTextStyleBtn() {
         textStyleBtn.setImage(textStyle.btnImage, for: .normal)
         textStyleBtn.setImage(textStyle.btnImage, for: .highlighted)
-        
-        drawTextBackground()
-        
-        guard textStyle == .bg else {
-            textView.textColor = currentColor
-            return
-        }
-        
-        if currentColor == .white {
-            textView.textColor = .black
-        } else if currentColor == .black {
-            textView.textColor = .white
-        } else {
-            textView.textColor = .white
-        }
     }
     
     @objc private func textStyleBtnClick() {
-        if textStyle == .normal {
-            textStyle = .bg
-        } else {
-            textStyle = .normal
-        }
-        
-        refreshTextViewUI()
+        textStyle = textStyle.next
+        refreshTextStyleBtn()
     }
     
     @objc func cancelBtnClick() {
@@ -289,26 +262,9 @@ class ZLInputTextViewController: UIViewController {
     
     @objc func doneBtnClick() {
         textView.tintColor = .clear
-        textView.resignFirstResponder()
-        
-        var image: UIImage?
-        
-        if !textView.text.isEmpty {
-            for subview in textView.subviews {
-                if NSStringFromClass(subview.classForCoder) == "_UITextContainerView" {
-                    let size = textView.sizeThatFits(subview.frame.size)
-                    image = UIGraphicsImageRenderer.zl.renderImage(size: size) { context in
-                        if textStyle == .bg {
-                            textLayer.render(in: context)
-                        }
-                        
-                        subview.layer.render(in: context)
-                    }
-                }
-            }
-        }
-        
-        endInput?(textView.text, currentColor, font, image, textStyle)
+        textView.endEditing(true)
+
+        endInput?(textView.text ?? "", currentColor, font, textStyle)
         dismiss(animated: true, completion: nil)
     }
     
@@ -323,13 +279,13 @@ class ZLInputTextViewController: UIViewController {
             width: view.zl.width,
             height: Self.toolViewHeight
         )
-        
-        var textViewFrame = textView.frame
-        textViewFrame.size.height = toolViewFrame.minY - textViewFrame.minY - 20
-        
+
+        var contentFrame = contentView.frame
+        contentFrame.size.height = toolViewFrame.minY - contentFrame.minY - 20
+
         UIView.animate(withDuration: max(duration, 0.25)) {
             self.toolView.frame = toolViewFrame
-            self.textView.frame = textViewFrame
+            self.contentView.frame = contentFrame
         }
     }
     
@@ -342,13 +298,13 @@ class ZLInputTextViewController: UIViewController {
             width: view.zl.width,
             height: Self.toolViewHeight
         )
-        
-        var textViewFrame = textView.frame
-        textViewFrame.size.height = toolViewFrame.minY - textViewFrame.minY - 20
-        
+
+        var contentFrame = contentView.frame
+        contentFrame.size.height = toolViewFrame.minY - contentFrame.minY - 20
+
         UIView.animate(withDuration: max(duration, 0.25)) {
             self.toolView.frame = toolViewFrame
-            self.textView.frame = textViewFrame
+            self.contentView.frame = contentFrame
         }
     }
 }
@@ -381,137 +337,7 @@ extension ZLInputTextViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
-// MARK: Draw text layer
-
-extension ZLInputTextViewController {
-    private func drawTextBackground() {
-        guard textStyle == .bg, !textView.text.isEmpty else {
-            textLayer.removeFromSuperlayer()
-            return
-        }
-        
-        let rects = calculateTextRects()
-        
-        let path = UIBezierPath()
-        for (index, rect) in rects.enumerated() {
-            if index == 0 {
-                path.move(to: CGPoint(x: rect.minX, y: rect.minY + textLayerRadius))
-                path.addArc(withCenter: CGPoint(x: rect.minX + textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi, endAngle: .pi * 1.5, clockwise: true)
-                path.addLine(to: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY))
-                path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
-            } else {
-                let preRect = rects[index - 1]
-                if rect.maxX > preRect.maxX {
-                    path.addLine(to: CGPoint(x: preRect.maxX, y: rect.minY - textLayerRadius))
-                    path.addArc(withCenter: CGPoint(x: preRect.maxX + textLayerRadius, y: rect.minY - textLayerRadius), radius: textLayerRadius, startAngle: -.pi, endAngle: -.pi * 1.5, clockwise: false)
-                    path.addLine(to: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY))
-                    path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
-                } else if rect.maxX < preRect.maxX {
-                    path.addLine(to: CGPoint(x: preRect.maxX, y: preRect.maxY - textLayerRadius))
-                    path.addArc(withCenter: CGPoint(x: preRect.maxX - textLayerRadius, y: preRect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
-                    path.addLine(to: CGPoint(x: rect.maxX + textLayerRadius, y: preRect.maxY))
-                    path.addArc(withCenter: CGPoint(x: rect.maxX + textLayerRadius, y: preRect.maxY + textLayerRadius), radius: textLayerRadius, startAngle: -.pi / 2, endAngle: -.pi, clockwise: false)
-                } else {
-                    path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + textLayerRadius))
-                }
-            }
-            
-            if index == rects.count - 1 {
-                path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - textLayerRadius))
-                path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
-                path.addLine(to: CGPoint(x: rect.minX + textLayerRadius, y: rect.maxY))
-                path.addArc(withCenter: CGPoint(x: rect.minX + textLayerRadius, y: rect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: .pi / 2, endAngle: .pi, clockwise: true)
-                
-                let firstRect = rects[0]
-                path.addLine(to: CGPoint(x: firstRect.minX, y: firstRect.minY + textLayerRadius))
-                path.close()
-            }
-        }
-        
-        textLayer.path = path.cgPath
-        textLayer.fillColor = currentColor.cgColor
-        if textLayer.superlayer == nil {
-            textView.layer.insertSublayer(textLayer, at: 0)
-        }
-    }
-    
-    private func calculateTextRects() -> [CGRect] {
-        let layoutManager = textView.layoutManager
-        
-        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-        
-        var rects: [CGRect] = []
-        
-        let insetLeft = textView.textContainerInset.left
-        let insetTop = textView.textContainerInset.top
-        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, range, _ in
-            rects.append(CGRect(x: usedRect.minX - 10 + insetLeft, y: usedRect.minY - 8 + insetTop, width: usedRect.width + 20, height: usedRect.height + 16))
-        }
-        
-        guard rects.count > 1 else {
-            return rects
-        }
-        
-        for i in 1..<rects.count {
-            processRects(&rects, index: i, maxIndex: i)
-        }
-        
-        return rects
-    }
-    
-    private func processRects(_ rects: inout [CGRect], index: Int, maxIndex: Int) {
-        guard rects.count > 1, index > 0, index <= maxIndex else {
-            return
-        }
-        
-        var preRect = rects[index - 1]
-        var currRect = rects[index]
-        
-        var preChanged = false
-        var currChanged = false
-        
-        // 当前rect宽度大于上方的rect，但差值小于2倍圆角
-        if currRect.width > preRect.width, currRect.width - preRect.width < 2 * textLayerRadius {
-            var size = preRect.size
-            size.width = currRect.width
-            preRect = CGRect(origin: preRect.origin, size: size)
-            preChanged = true
-        }
-        
-        if currRect.width < preRect.width, preRect.width - currRect.width < 2 * textLayerRadius {
-            var size = currRect.size
-            size.width = preRect.width
-            currRect = CGRect(origin: currRect.origin, size: size)
-            currChanged = true
-        }
-        
-        if preChanged {
-            rects[index - 1] = preRect
-            processRects(&rects, index: index - 1, maxIndex: maxIndex)
-        }
-        
-        if currChanged {
-            rects[index] = currRect
-            processRects(&rects, index: index + 1, maxIndex: maxIndex)
-        }
-    }
-}
-
 extension ZLInputTextViewController: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        let markedTextRange = textView.markedTextRange
-        guard markedTextRange == nil || (markedTextRange?.isEmpty ?? true) else {
-            return
-        }
-        
-        let text = textView.text ?? ""
-        if text.count > maxTextCount {
-            let endIndex = text.index(text.startIndex, offsetBy: maxTextCount)
-            textView.text = String(text[..<endIndex])
-        }
-    }
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if !ZLImageEditorConfiguration.default().textStickerCanLineBreak && text == "\n" {
             doneBtnClick()
@@ -521,19 +347,18 @@ extension ZLInputTextViewController: UITextViewDelegate {
     }
 }
 
-extension ZLInputTextViewController: NSLayoutManagerDelegate {
-    func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
-        guard layoutFinishedFlag else {
-            return
-        }
-        
-        drawTextBackground()
-    }
-}
-
 public enum ZLInputTextStyle {
     case normal
     case bg
+    case shadow
+    
+    fileprivate var next: ZLInputTextStyle {
+        switch self {
+        case .normal: return .bg
+        case .bg: return .shadow
+        case .shadow: return .normal
+        }
+    }
     
     fileprivate var btnImage: UIImage? {
         switch self {
@@ -541,7 +366,8 @@ public enum ZLInputTextStyle {
             return .zl.getImage("zl_input_font")
         case .bg:
             return .zl.getImage("zl_input_font_bg")
+        case .shadow:
+            return .zl.getImage("zl_input_font_shadow")
         }
     }
 }
-
