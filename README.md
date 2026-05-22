@@ -53,6 +53,11 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 3.0.0
+  Add:
+    Improved sticker editing interactions with coordinated gesture handling.
+    Added dedicated text sticker content rendering for a clearer editing experience.
+    Improved doodle smoothing and eraser hit detection for smoother drawing and more reliable stroke removal.
 ● 2.0.6
   Fix:
     Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
@@ -62,9 +67,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
   Fix:
     Fix retain cycle in ZLEditImageViewController.
     Correct eraser misalignment after image cropping.
-● 2.0.4
-  Add:
-    Added a callback for cancelling editing.
 ...
 ```
 
@@ -117,7 +119,7 @@ $ carthage update ZLImageEditor
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "2.0.6" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "3.0.0" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="Support"></a> Support

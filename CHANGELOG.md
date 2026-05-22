@@ -2,6 +2,14 @@
 
 -----
 
+## [3.0.0](https://github.com/longitachi/ZLImageEditor/releases/tag/3.0.0) (2026-05-22)
+### Add:
+* Improved sticker editing interactions with coordinated gesture handling.
+* Added dedicated text sticker content rendering for a clearer editing experience.
+* Improved doodle smoothing and eraser hit detection for smoother drawing and more reliable stroke removal.
+
+-----
+
 ## [2.0.6](https://github.com/longitachi/ZLImageEditor/releases/tag/2.0.6) (2025-10-17)
 ### Fix:
 * Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
