@@ -133,12 +133,15 @@ class ZLInputTextViewController: UIViewController {
     /// text, textColor, font, style
     var endInput: ((String, UIColor, UIFont, ZLInputTextStyle) -> Void)?
     
+    override var prefersStatusBarHidden: Bool { true }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
+    
+    /// 延缓屏幕上下方通知栏弹出，避免手势冲突
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
     }
     
     init(image: UIImage?, text: String? = nil, font: UIFont? = nil, textColor: UIColor? = nil, style: ZLInputTextStyle = .normal) {
@@ -189,7 +192,7 @@ class ZLInputTextViewController: UIViewController {
         
         // iPad图片由竖屏切换到横屏时候填充方式会有点异常，这里重置下
         if deviceIsiPad() {
-            if UIApplication.shared.statusBarOrientation.isLandscape {
+            if UIApplication.shared.zl.isLandscape {
                 bgImageView.contentMode = .scaleAspectFill
             } else {
                 bgImageView.contentMode = .scaleAspectFit
@@ -199,13 +202,23 @@ class ZLInputTextViewController: UIViewController {
         coverView.frame = bgImageView.bounds
         
         let btnY = max(deviceSafeAreaInsets().top, 20) + 20
-        let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
+        let cancelBtnW = localLanguageTextValue(.cancel)
+            .zl.boundingRect(
+                font: ZLImageEditorLayout.bottomToolTitleFont,
+                limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)
+            ).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
         let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
         contentView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
+        toolView.frame = CGRect(
+            x: 0,
+            y: view.zl.height - deviceSafeAreaInsets().bottom - Self.toolViewHeight,
+            width: view.zl.width,
+            height: Self.toolViewHeight
+        )
         
         textStyleBtn.frame = CGRect(
             x: 12,
@@ -269,10 +282,22 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc private func keyboardWillShow(_ notify: Notification) {
-        let rect = notify.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? CGRect
-        let keyboardH = rect?.height ?? 366
-        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+        guard let keyboardScreenFrame = notify.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? CGRect,
+              let window = view.window else {
+            return
+        }
         
+        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+        // 适配iPad多窗口，将键盘 frame 从屏幕坐标系转换到当前 view 的坐标系
+        let keyboardInView = view.convert(keyboardScreenFrame, from: window.screen.coordinateSpace)
+        let overlap = view.bounds.intersection(keyboardInView)
+        
+        guard !overlap.isNull else {
+            // 键盘未遣挡当前 view，不做任何调整
+            return
+        }
+        
+        let keyboardH = overlap.height
         let toolViewFrame = CGRect(
             x: 0,
             y: view.zl.height - keyboardH - Self.toolViewHeight,

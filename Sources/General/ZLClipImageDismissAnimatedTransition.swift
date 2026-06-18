@@ -46,6 +46,8 @@ class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTr
             return
         }
         
+        // 适配iPad自定义窗口大小，这里需要把fromVC.view隐藏，不然可能会漏出来一部分
+        fromVC.view.isHidden = true
         let containerView = transitionContext.containerView
         containerView.addSubview(toVC.view)
         

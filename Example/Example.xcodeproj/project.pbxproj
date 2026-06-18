@@ -73,6 +73,7 @@
 		E4020990256BAC560077F5DC /* ZLImageEditor.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E402098E256BAC560077F5DC /* ZLImageEditor.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4020999256BB2480077F5DC /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */; };
 		E4CAF827256CACE800C7B04E /* CustomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CAF826256CACE800C7B04E /* CustomFilter.swift */; };
+		FD5212BB2FE3CC8F00027B9C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5212BA2FE3CC8F00027B9C /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -158,6 +159,7 @@
 		E402098E256BAC560077F5DC /* ZLImageEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZLImageEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		E4CAF826256CACE800C7B04E /* CustomFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFilter.swift; sourceTree = "<group>"; };
+		FD5212BA2FE3CC8F00027B9C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		FD88C1F628C739C100C0C0F2 /* Example-bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-bridge.h"; sourceTree = "<group>"; };
 		FDB3113428756E8100845756 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		FDB3113528756E8100845756 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				985A2D56282A85B4007AE0C6 /* Fonts */,
 				E402093E256BAA420077F5DC /* SnapKit */,
 				E4020927256BA9D70077F5DC /* AppDelegate.swift */,
+				FD5212BA2FE3CC8F00027B9C /* SceneDelegate.swift */,
 				E402092B256BA9D70077F5DC /* ViewController.swift */,
 				E4020998256BB2480077F5DC /* ImageStickerContainerView.swift */,
 				985A2D7D282A8BC5007AE0C6 /* FontChooserContainerView.swift */,
@@ -432,6 +435,7 @@
 				E402097E256BAA420077F5DC /* ConstraintRelation.swift in Sources */,
 				E4CAF827256CACE800C7B04E /* CustomFilter.swift in Sources */,
 				E402097C256BAA420077F5DC /* ConstraintMakerEditable.swift in Sources */,
+				FD5212BB2FE3CC8F00027B9C /* SceneDelegate.swift in Sources */,
 				E4020989256BAA420077F5DC /* ConstraintMakerRelatable.swift in Sources */,
 				E4020968256BAA420077F5DC /* ConstraintMakerPriortizable.swift in Sources */,
 				E4020984256BAA420077F5DC /* ConstraintRelatableTarget.swift in Sources */,

@@ -1,8 +1,8 @@
 //
-//  ZLImageEditor.swift
+//  UIApplication+ZLImageEditor.swift
 //  ZLImageEditor
 //
-//  Created by long on 2020/9/8.
+//  Created by long on 2026/6/17.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,48 +24,31 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
 import UIKit
 
-let version = "3.0.0"
-
-public struct ZLImageEditorWrapper<Base> {
-    public let base: Base
-    
-    public init(_ base: Base) {
-        self.base = base
-    }
-}
-
-public protocol ZLImageEditorCompatible: AnyObject { }
-
-public protocol ZLImageEditorCompatibleValue { }
-
-extension ZLImageEditorCompatible {
-    public var zl: ZLImageEditorWrapper<Self> {
-        get { ZLImageEditorWrapper(self) }
-        set { }
+extension ZLImageEditorWrapper where Base: UIApplication {
+    @available(iOS 13.0, *)
+    var connectedWindowScene: UIWindowScene? {
+        base.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first
     }
     
-    public static var zl: ZLImageEditorWrapper<Self>.Type {
-        get { ZLImageEditorWrapper<Self>.self }
-        set { }
+    var interfaceOrientation: UIInterfaceOrientation {
+        if #available(iOS 27.0, *) {
+            return connectedWindowScene?.effectiveGeometry.interfaceOrientation ?? .portrait
+        } else if #available(iOS 13.0, *) {
+            return connectedWindowScene?.interfaceOrientation ?? .portrait
+        } else {
+            return base.statusBarOrientation
+        }
+    }
+    
+    var isPortrait: Bool {
+        interfaceOrientation.isPortrait
+    }
+    
+    var isLandscape: Bool {
+        interfaceOrientation.isLandscape
     }
 }
-
-extension ZLImageEditorCompatibleValue {
-    public var zl: ZLImageEditorWrapper<Self> {
-        get { ZLImageEditorWrapper(self) }
-        set { }
-    }
-}
-
-extension UIImage: ZLImageEditorCompatible { }
-extension CIImage: ZLImageEditorCompatible { }
-extension UIColor: ZLImageEditorCompatible { }
-extension UIView: ZLImageEditorCompatible { }
-extension UIApplication: ZLImageEditorCompatible { }
-extension UIGraphicsImageRenderer: ZLImageEditorCompatible { }
-
-extension String: ZLImageEditorCompatibleValue { }
-extension CGFloat: ZLImageEditorCompatibleValue { }
