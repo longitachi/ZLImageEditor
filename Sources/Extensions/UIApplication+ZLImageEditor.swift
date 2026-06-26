@@ -34,6 +34,18 @@ extension ZLImageEditorWrapper where Base: UIApplication {
             .first
     }
     
+    var activeWindow: UIWindow? {
+        if #available(iOS 13.0, *) {
+            base.connectedScenes
+                .first(where: { $0.activationState == .foregroundActive })
+                .flatMap { $0 as? UIWindowScene }?
+                .windows
+                .first { $0.isKeyWindow }
+        } else {
+            base.keyWindow
+        }
+    }
+    
     var interfaceOrientation: UIInterfaceOrientation {
         if #available(iOS 27.0, *) {
             return connectedWindowScene?.effectiveGeometry.interfaceOrientation ?? .portrait

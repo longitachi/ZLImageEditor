@@ -38,7 +38,7 @@ public class ZLImageEditorUIConfiguration: NSObject {
     }
     
     /// HUD style. Defaults to dark.
-    @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
+    @objc public var hudStyle: ZLProgressHUD.Style = .dark
     
     /// Adjust Slider Type
     @objc public var adjustSliderType: ZLAdjustSliderType = .vertical

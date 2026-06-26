@@ -27,15 +27,43 @@
 import UIKit
 
 public class ZLProgressHUD: UIView {
-    private let style: ZLProgressHUD.HUDStyle
+    private let style: ZLProgressHUD.Style
+    
+    private lazy var containerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: 135))
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 12
+        view.backgroundColor = style.bgColor
+        view.clipsToBounds = true
+        view.center = center
+        return view
+    }()
     
     private lazy var loadingView = UIImageView(image: style.icon)
     
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        label.textColor = style.textColor
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text = localLanguageTextValue(.hudProcessing)
+        label.lineBreakMode = .byWordWrapping
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
+    private var timer: Timer?
+    
+    public var timeoutBlock: (() -> Void)?
+    
     deinit {
         zl_debugPrint("ZLProgressHUD deinit")
+        cleanTimer()
     }
     
-    @objc public init(style: ZLProgressHUD.HUDStyle) {
+    @objc public init(style: ZLProgressHUD.Style) {
         self.style = style
         super.init(frame: UIScreen.main.bounds)
         setupUI()
@@ -46,32 +74,29 @@ public class ZLProgressHUD: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        if let superview {
+            frame = superview.bounds
+            containerView.center = center
+        }
+    }
+    
     private func setupUI() {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: 135))
-        view.layer.masksToBounds = true
-        view.layer.cornerRadius = 12
-        view.backgroundColor = style.bgColor
-        view.clipsToBounds = true
-        view.center = center
-        
         if let effectStyle = style.blurEffectStyle {
             let effect = UIBlurEffect(style: effectStyle)
             let effectView = UIVisualEffectView(effect: effect)
-            effectView.frame = view.bounds
-            view.addSubview(effectView)
+            effectView.frame = containerView.bounds
+            containerView.addSubview(effectView)
         }
         
-        loadingView.frame = CGRect(x: 135 / 2 - 22, y: 25, width: 44, height: 44)
-        view.addSubview(loadingView)
+        loadingView.frame = CGRect(x: 135 / 2 - 20, y: 27, width: 40, height: 40)
+        containerView.addSubview(loadingView)
         
-        let label = UILabel(frame: CGRect(x: 0, y: 85, width: view.bounds.width, height: 30))
-        label.textAlignment = .center
-        label.textColor = style.textColor
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = localLanguageTextValue(.hudProcessing)
-        view.addSubview(label)
+        titleLabel.frame = CGRect(x: 10, y: 70, width: containerView.bounds.width - 20, height: 60)
+        containerView.addSubview(titleLabel)
         
-        addSubview(view)
+        addSubview(containerView)
     }
     
     private func startAnimation() {
@@ -85,33 +110,69 @@ public class ZLProgressHUD: UIView {
         loadingView.layer.add(animation, forKey: nil)
     }
     
-    @objc public func show(in view: UIView? = UIApplication.shared.keyWindow) {
-        guard Thread.isMainThread else {
+    public func show(
+        toast: ZLProgressHUD.Toast = .processing,
+        in view: UIView? = nil,
+        timeout: TimeInterval = 100
+    ) {
+        if !Thread.isMainThread {
             DispatchQueue.main.async {
-                self.show(in: view)
+                self.show(toast: toast, in: view, timeout: timeout)
             }
             return
         }
         
+        let sv = view ?? UIApplication.shared.zl.activeWindow
+        titleLabel.text = toast.value
         startAnimation()
-        view?.addSubview(self)
+        sv?.addSubview(self)
+        
+        if timeout > 0 {
+            cleanTimer()
+            timer = Timer.scheduledTimer(timeInterval: timeout, target: ZLWeakProxy(target: self), selector: #selector(timeout(_:)), userInfo: nil, repeats: false)
+            RunLoop.current.add(timer!, forMode: .default)
+        }
     }
     
     @objc public func hide() {
-        guard Thread.isMainThread else {
+        if !Thread.isMainThread {
             DispatchQueue.main.async {
                 self.hide()
             }
             return
         }
         
+        cleanTimer()
         loadingView.layer.removeAllAnimations()
         removeFromSuperview()
+    }
+    
+    @objc func timeout(_ timer: Timer) {
+        timeoutBlock?()
+        hide()
+    }
+    
+    func cleanTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 
 public extension ZLProgressHUD {
-    @objc enum HUDStyle: Int {
+    class func show(
+        toast: ZLProgressHUD.Toast = .processing,
+        in view: UIView? = nil,
+        timeout: TimeInterval = 100
+    ) -> ZLProgressHUD {
+        let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
+        hud.show(toast: toast, in: view, timeout: timeout)
+        return hud
+    }
+}
+
+public extension ZLProgressHUD {
+    @objc(ZLProgressHUDStyle)
+    enum Style: Int {
         case light
         case lightBlur
         case dark
@@ -156,6 +217,20 @@ public extension ZLProgressHUD {
                 return .extraLight
             case .darkBlur:
                 return .dark
+            }
+        }
+    }
+    
+    enum Toast {
+        case processing
+        case custom(String)
+        
+        var value: String {
+            switch self {
+            case .processing:
+                return localLanguageTextValue(.hudProcessing)
+            case let .custom(text):
+                return text
             }
         }
     }

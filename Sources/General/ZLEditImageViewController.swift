@@ -1148,7 +1148,7 @@ open class ZLEditImageViewController: UIViewController {
         
         autoreleasepool {
             let hud = ZLProgressHUD(style: ZLImageEditorUIConfiguration.default().hudStyle)
-            hud.show(in: view)
+            hud.show(in: view.window)
             
             DispatchQueue.main.async { [self] in
                 resImage = buildImage()

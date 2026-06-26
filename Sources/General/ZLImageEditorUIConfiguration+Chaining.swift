@@ -28,7 +28,7 @@ import UIKit
 
 public extension ZLImageEditorUIConfiguration {
     @discardableResult
-    func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLImageEditorUIConfiguration {
+    func hudStyle(_ style: ZLProgressHUD.Style) -> ZLImageEditorUIConfiguration {
         hudStyle = style
         return self
     }
