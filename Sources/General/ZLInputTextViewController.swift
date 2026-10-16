@@ -201,16 +201,17 @@ class ZLInputTextViewController: UIViewController {
         
         coverView.frame = bgImageView.bounds
         
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         let btnY = max(deviceSafeAreaInsets().top, 20) + 20
         let cancelBtnW = localLanguageTextValue(.cancel)
             .zl.boundingRect(
                 font: ZLImageEditorLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)
             ).width + 20
-        cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
+        cancelBtn.frame = CGRect(x: insets.left + 15, y: btnY, width: cancelBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
         let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLImageEditorLayout.bottomToolBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
+        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW - insets.right, y: btnY, width: doneBtnW, height: ZLImageEditorLayout.bottomToolBtnH)
         
         contentView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
         toolView.frame = CGRect(

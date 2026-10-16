@@ -79,9 +79,7 @@ class ZLClipImageViewController: UIViewController {
         view.alwaysBounceHorizontal = true
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .never
-        }
+        view.contentInsetAdjustmentBehavior = .never
         view.delegate = self
         return view
     }()
@@ -97,7 +95,7 @@ class ZLClipImageViewController: UIViewController {
     }()
     
     lazy var overlayView: ZLClipOverlayView = {
-        let view = ZLClipOverlayView(frame: view.frame)
+        let view = ZLClipOverlayView(frame: .zero)
         view.isUserInteractionEnabled = false
         view.isCircle = selectedRatio.isCircle
         return view
@@ -128,9 +126,11 @@ class ZLClipImageViewController: UIViewController {
     }()
     
     lazy var cancelBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_close"), for: .normal)
-        btn.adjustsImageWhenHighlighted = false
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_close")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
@@ -147,18 +147,22 @@ class ZLClipImageViewController: UIViewController {
     }()
     
     lazy var doneBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_right"), for: .normal)
-        btn.adjustsImageWhenHighlighted = false
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_right")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         return btn
     }()
     
     lazy var rotateBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_rotateimage"), for: .normal)
-        btn.adjustsImageWhenHighlighted = false
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_rotateimage")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         return btn
@@ -323,6 +327,7 @@ class ZLClipImageViewController: UIViewController {
         guard shouldLayout else { return }
         shouldLayout = false
         
+        overlayView.frame = view.bounds
         scrollView.frame = view.bounds
         
         layoutInitialImage(animate: true)

@@ -55,7 +55,7 @@ class ZLClipOverlayView: UIView {
         layer.strokeColor = UIColor.white.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = ZLClipOverlayView.cornerLineWidth
-        layer.contentsScale = UIScreen.main.scale
+        layer.contentsScale = traitCollection.displayScale
         return layer
     }()
     
@@ -70,8 +70,8 @@ class ZLClipOverlayView: UIView {
         layer.strokeColor = UIColor.white.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = 1.2
-        layer.contentsScale = UIScreen.main.scale
-        layer.shadowOffset = CGSize.zero
+        layer.contentsScale = traitCollection.displayScale
+        layer.shadowOffset = .zero
         layer.shadowOpacity = 1
         layer.shadowRadius = 2
         layer.shadowColor = UIColor.black.withAlphaComponent(0.7).cgColor
@@ -90,7 +90,7 @@ class ZLClipOverlayView: UIView {
         layer.strokeColor = UIColor.white.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = 0.5
-        layer.contentsScale = UIScreen.main.scale
+        layer.contentsScale = traitCollection.displayScale
         return layer
     }()
     
@@ -103,6 +103,14 @@ class ZLClipOverlayView: UIView {
             }
             
             shadowMaskLayer.path = getShadowMaskLayerPath().cgPath
+        }
+    }
+    
+    override var frame: CGRect {
+        didSet {
+            if oldValue != frame {
+                updateSubviewsFrame()
+            }
         }
     }
     

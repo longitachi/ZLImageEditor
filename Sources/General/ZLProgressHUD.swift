@@ -65,7 +65,7 @@ public class ZLProgressHUD: UIView {
     
     @objc public init(style: ZLProgressHUD.Style) {
         self.style = style
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: .zero)
         setupUI()
     }
     

@@ -167,10 +167,17 @@ open class ZLEditImageViewController: UIViewController {
     }()
     
     open lazy var cancelBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        btn.setTitleColor(.white, for: .normal)
-        btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.title = localLanguageTextValue(.cancel)
+        config.contentInsets = .zero
+        config.baseForegroundColor = .white
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = ZLImageEditorLayout.bottomToolTitleFont
+            return outgoing
+        }
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.enlargeInset = 30
         return btn
@@ -189,24 +196,42 @@ open class ZLEditImageViewController: UIViewController {
     }()
     
     open lazy var undoBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_undo_disable"), for: .disabled)
-        btn.setImage(.zl.getImage("zl_undo"), for: .normal)
-        btn.adjustsImageWhenHighlighted = false
+        let normalImage: UIImage? = .zl.getImage("zl_undo")
+        let disabledImage: UIImage? = .zl.getImage("zl_undo_disable")
+        
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.isEnabled = !editorManager.actions.isEmpty
         btn.enlargeInset = 8
         btn.addTarget(self, action: #selector(undoBtnClick), for: .touchUpInside)
+        // 按可用状态切换图片（替代原先按 .normal / .disabled 的 setImage）
+        btn.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.image = button.isEnabled ? normalImage : disabledImage
+            button.configuration = updated
+        }
         return btn
     }()
     
     open lazy var redoBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_redo"), for: .normal)
-        btn.setImage(.zl.getImage("zl_redo_disable"), for: .disabled)
-        btn.adjustsImageWhenHighlighted = false
+        let normalImage: UIImage? = .zl.getImage("zl_redo")
+        let disabledImage: UIImage? = .zl.getImage("zl_redo_disable")
+        
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.isEnabled = editorManager.actions.count != editorManager.redoActions.count
         btn.enlargeInset = 8
         btn.addTarget(self, action: #selector(redoBtnClick), for: .touchUpInside)
+        // 按可用状态切换图片（替代原先按 .normal / .disabled 的 setImage）
+        btn.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.image = button.isEnabled ? normalImage : disabledImage
+            button.configuration = updated
+        }
         return btn
     }()
     
@@ -571,16 +596,25 @@ open class ZLEditImageViewController: UIViewController {
         
         shouldLayout = false
         zl_debugPrint("edit image layout subviews")
-        var insets = UIEdgeInsets.zero
-        if #available(iOS 11.0, *) {
-            insets = view.safeAreaInsets
-        }
-        insets.top = max(insets.top, 20)
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         
         let windowBounds = CGRect(origin: .zero, size: size)
         
         mainScrollView.frame = windowBounds
+        // 记录重算前贴纸容器尺寸：横竖屏切换 / 折叠屏内外屏切换会改变容器尺寸，
+        // 需要据此等比缩放贴纸，保持其相对图片的位置不变。
+        let oldStickersContainerSize = stickersContainer.frame.size
         resetContainerViewFrame()
+        // 仅在已有有效旧尺寸、且尺寸确实变化、且存在贴纸时才重算，避免首次布局除零。
+        let newStickersContainerSize = stickersContainer.frame.size
+        if oldStickersContainerSize.width > 0,
+           oldStickersContainerSize.height > 0,
+           newStickersContainerSize != oldStickersContainerSize,
+           !stickersContainer.subviews.isEmpty {
+            // 设备旋转不改变裁剪角度，传入相同角度即按宽度等比缩放。
+            let angle = currentClipStatus.angle
+            recalculateStickersFrame(oldStickersContainerSize, angle, angle)
+        }
         
         topShadowView.frame = CGRect(x: 0, y: 0, width: windowBounds.width, height: 150)
         topShadowLayer.frame = topShadowView.bounds
@@ -593,8 +627,8 @@ open class ZLEditImageViewController: UIViewController {
                 font: ZLImageEditorLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 28)
             ).width + 20
-        cancelBtn.frame = CGRect(x: 15, y: insets.top, width: cancelBtnW, height: 30)
-        redoBtn.frame = CGRect(x: windowBounds.width - 15 - 30, y: insets.top, width: 30, height: 30)
+        cancelBtn.frame = CGRect(x: insets.left + 15, y: insets.top, width: cancelBtnW, height: 30)
+        redoBtn.frame = CGRect(x: windowBounds.width - 15 - 30 - insets.right, y: insets.top, width: 30, height: 30)
         undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: insets.top, width: 30, height: 30)
         
         eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
