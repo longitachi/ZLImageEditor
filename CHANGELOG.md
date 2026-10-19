@@ -2,6 +2,14 @@
 
 -----
 
+## [4.0.0](https://github.com/longitachi/ZLImageEditor/releases/tag/4.0.0) (2026-10-19)
+### Add:
+* Adapted UI for iPhone Duo and updated APIs to iOS 15.0.
+* Optimized UI for iPad with multi-scene and custom app-window sizes for a smoother experience.
+* Demo now supports iPad multi-window.
+
+-----
+
 ## [3.0.0](https://github.com/longitachi/ZLImageEditor/releases/tag/3.0.0) (2026-05-22)
 ### Add:
 * Improved sticker editing interactions with coordinated gesture handling.

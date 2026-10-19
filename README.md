@@ -33,11 +33,10 @@ ZLImageEditor is extracted from [ZLPhotoBrowser](https://github.com/longitachi/Z
 - [x] Adjust (Brightness, Contrast, Saturation).
 
 ### <a id="Requirements"></a>Requirements
- | v >= 2.0.0 | iOS 10.0+ |
- | --- | --- |
- | v \< 2.0.0 | iOS 9.0+ |
- * Swift 5.x
- * Xcode 12.x
+ |version|iOS|Xcode|
+|---|---|---|
+|>=4.0.0|15.0|27|
+|<4.0.0|10.0|26|
 
 ### <a id="Usage"></a>Usage
 ```swift
@@ -53,6 +52,11 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLImageEditor/blob/master/CHANGELOG.md)
 ```
+● 4.0.0
+  Add:
+    Adapted UI for iPhone Duo and updated APIs to iOS 15.0.
+    Optimized UI for iPad with multi-scene and custom app-window sizes for a smoother experience.
+    Demo now supports iPad multi-window.
 ● 3.0.0
   Add:
     Improved sticker editing interactions with coordinated gesture handling.
@@ -61,12 +65,6 @@ ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editMode
 ● 2.0.6
   Fix:
     Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
-● 2.0.5
-  Add:
-    Support SwiftUI.
-  Fix:
-    Fix retain cycle in ZLEditImageViewController.
-    Correct eraser misalignment after image cropping.
 ...
 ```
 
@@ -119,7 +117,7 @@ $ carthage update ZLImageEditor
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLImageEditor.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "3.0.0" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.0" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLImageEditor" library and add it to your app target.
 
 ### <a id="Support"></a> Support
